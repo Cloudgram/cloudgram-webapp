@@ -1,0 +1,10 @@
+.navigation-bar-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*height: 7.18rem;*/
+    height: 15%;
+    width: 100%;
+    border-radius: 1.26rem 1.26rem 0rem 0rem;
+    background: #FFF;
+}

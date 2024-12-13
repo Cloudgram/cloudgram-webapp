@@ -1,0 +1,119 @@
+.files-container *,
+.files-container *:before,
+.files-container *:after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.files-container {
+    /*width: 17rem;*/
+    /*height: 28.25rem;*/
+    width: 80%;
+    height: 70%;
+    margin-bottom: 1.1rem;
+    max-width: 100%;
+    overflow-y: hidden;
+    /*transition: .4s ease-out transform;*/
+
+    /*&:active {*/
+    /*    transform: scale(.99);*/
+    /*}*/
+
+    ul {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 4%;
+    }
+}
+
+.slides {
+    display: flex;
+    list-style: none;
+    will-change: transform;
+    user-select: none;
+
+    &:hover {
+        cursor: grab;
+    }
+
+    &:active {
+        cursor: grabbing;
+    }
+
+    li {
+        transition: .6s ease-out transform;
+
+        &:active {
+            transform: scale(.95);
+        }
+
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .file-container {
+            /*width: 7.8rem;*/
+            /*height: 6.55rem;*/
+            width: 9rem;
+            height: 7rem;
+            border-radius: 0.55rem;
+            background: #F9F9F9;
+            box-shadow: 0 4px 4px 0 rgba(62, 58, 58, 0.10);
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+
+            .file-icon-container {
+                /*width: 3.9rem;*/
+                /*height: 3.4rem;*/
+                width: 4.4rem;
+                height: 4rem;
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+
+            .file-title-container {
+                display: flex;
+                justify-content: center;
+            }
+
+            text {
+                color: rgba(2, 5, 39, 0.90);
+                /*font-size: 0.59306rem;*/
+                font-size: 0.7rem;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 117.287%; /* 0.69563rem */
+                letter-spacing: 0.03556rem;
+            }
+        }
+    }
+}
+
+/*.why-so-sirious {*/
+/*    width: 100%;*/
+/*    top: -8rem;*/
+/*    height: 3rem;*/
+/*    position: absolute;*/
+/*    list-style-type: none;*/
+/*    background: url("../../images/Content/whySoSerious.gif");*/
+/*    background-position: center;*/
+/*    background-size: cover;*/
+/*    background-repeat: no-repeat;*/
+/*}*/
+
+.easter-egg.code {
+    width: 100%;
+    top: -8rem;
+    height: 3rem;
+    position: absolute;
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+}
