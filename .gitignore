@@ -1,0 +1,9 @@
+# Project cache
+**/.idea/
+**/__pycache__/
+
+# Environment
+**/node_modules/
+
+# Files not for server
+**/package-dev.json
