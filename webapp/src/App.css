@@ -1,11 +1,9 @@
 #root-div {
     height: 100vh;
     width: 100%;
+    -webkit-tap-highlight-color: transparent;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    -webkit-tap-highlight-color: transparent;
 }
 
 text {
@@ -14,26 +12,20 @@ text {
 
 .bg-color-container {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     position: absolute;
     background: rgba(0, 0, 0, 0.6);
     transition: opacity 0.5s;
-    z-index: 1;
 }
 
-.bg-color-container.top {
-    z-index: 3;
+.invisible {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
 }
 
-button {
-    cursor: pointer;
-    user-select: none;
-}
-
-button:active {
-    transition: .1s ease-out transform;
-
-    &:active {
-        transform: scale(.98);
-    }
+.center-inside {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

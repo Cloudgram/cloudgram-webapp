@@ -2,34 +2,29 @@ import "./Content.css";
 
 import Files from './Files';
 import ActionsButtons from './ActionsButtons';
-import EditMenu from "../EditMenu/EditMenu";
+import EditMenu from "./EditMenu";
+import Path from "../Content/Path";
 import React, {useEffect, useState} from "react";
 
 
-function Content({ toggleEditMenuState, toggleTopBgColor, editMenuOpacity, editMenuPointerEvents }) {
-    const [contentContainerHeight, setContentContainerHeight] = useState("80%")
-
-    useEffect(() => {
-        if (window.innerHeight <= 650) {
-            setContentContainerHeight("75%");
-        }
-    }, [])
+function Content({ toggleBgColor }) {
+    const [toggleEditMenuVisible, setToggleEditMenuVisible] = useState(null)
+    const [filterFiles, setFilterFiles] = useState(null)
 
     return(
-        <div
-            className="content-container"
-            style={{height: contentContainerHeight}}
-        >
+        <div className="content-container">
             <EditMenu
-                editMenuOpacity={editMenuOpacity}
-                editMenuPointerEvents={editMenuPointerEvents}
-                toggleEditMenuState={toggleEditMenuState}
-                toggleTopBgColor={toggleTopBgColor}
+                toggleBgColor={toggleBgColor}
+                setToggleEditMenuVisible={setToggleEditMenuVisible}
             />
-            <ActionsButtons/>
+            <Path/>
             <Files
-                toggleEditMenuState={toggleEditMenuState}
-                toggleBgColor={toggleTopBgColor}
+                toggleEditMenuVisible={toggleEditMenuVisible}
+                toggleBgColor={toggleBgColor}
+                setFilterFiles={setFilterFiles}
+            />
+            <ActionsButtons
+                filterFiles={filterFiles}
             />
         </div>
     )

@@ -8,7 +8,7 @@
     gap: 0.8rem;
     user-select: none;
 
-    input{
+    input {
         width: 12.1rem;
         background: #FFF;
         border: none;
@@ -16,23 +16,20 @@
         padding: 0 1.2rem 0 1.2rem;
     }
 
-    button{
+    button {
         width: 4rem;
         background: #5AC8FB;
         border: none;
-    }
+        padding: 1.2rem;
 
-    text {
-        color: #FFF;
-        font-size: 2.062rem;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 117.287%; /* 2.4185rem */
-        letter-spacing: 0.12375rem;
+        div {
+            width: 100%;
+            height: 100%;
+        }
     }
 }
 
-.button {
-    box-shadow: 0px 4px 4px 0px rgba(62, 58, 58, 0.25);
-    border-radius: 0.5rem;
-}
+/*.button {*/
+/*    box-shadow: 0px 4px 4px 0px rgba(62, 58, 58, 0.25);*/
+/*    border-radius: 0.5rem;*/
+/*}*/

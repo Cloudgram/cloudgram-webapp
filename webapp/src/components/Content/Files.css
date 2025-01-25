@@ -7,18 +7,11 @@
 }
 
 .files-container {
-    /*width: 17rem;*/
-    /*height: 28.25rem;*/
     width: 80%;
-    height: 70%;
+    height: 85%;
     margin-bottom: 1.1rem;
     max-width: 100%;
     overflow-y: hidden;
-    /*transition: .4s ease-out transform;*/
-
-    /*&:active {*/
-    /*    transform: scale(.99);*/
-    /*}*/
 
     ul {
         display: grid;
@@ -27,7 +20,7 @@
     }
 }
 
-.slides {
+.files-slides {
     display: flex;
     list-style: none;
     will-change: transform;
@@ -54,8 +47,6 @@
         align-items: center;
 
         .file-container {
-            /*width: 7.8rem;*/
-            /*height: 6.55rem;*/
             width: 9rem;
             height: 7rem;
             border-radius: 0.55rem;
@@ -69,8 +60,6 @@
             gap: 0.7rem;
 
             .file-icon-container {
-                /*width: 3.9rem;*/
-                /*height: 3.4rem;*/
                 width: 4.4rem;
                 height: 4rem;
                 background-size: cover;
@@ -95,18 +84,6 @@
         }
     }
 }
-
-/*.why-so-sirious {*/
-/*    width: 100%;*/
-/*    top: -8rem;*/
-/*    height: 3rem;*/
-/*    position: absolute;*/
-/*    list-style-type: none;*/
-/*    background: url("../../images/Content/whySoSerious.gif");*/
-/*    background-position: center;*/
-/*    background-size: cover;*/
-/*    background-repeat: no-repeat;*/
-/*}*/
 
 .easter-egg.code {
     width: 100%;

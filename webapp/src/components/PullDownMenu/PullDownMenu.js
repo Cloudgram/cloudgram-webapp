@@ -38,25 +38,27 @@ function PullDownMenu({ toggleBgColor }) {
     }
 
     return (
-        <motion.div
-            ref={containerRef}
-            initial={{y: 0}}
-            animate={
-                isOpen ? (isButtonClick ? { y: ButtonClickDistance } : { y: toggleMenuDistance }) : { y: 0 }
-            }
-            transition={{type: 'spring', stiffness: 40}}
-            className="pull-down-menu-container"
-        >
-            <PullDownMenuTop
-                toggleMenuComeback={toggleMenuComeback}
-            />
+        <div className="pull-down-menu-zone-container center-inside">
+            <motion.div
+                ref={containerRef}
+                initial={{y: 0}}
+                animate={
+                    isOpen ? (isButtonClick ? {y: ButtonClickDistance} : {y: toggleMenuDistance}) : {y: 0}
+                }
+                transition={{type: 'spring', stiffness: 40}}
+                className="pull-down-menu-container"
+            >
+                <PullDownMenuTop
+                    toggleMenuComeback={toggleMenuComeback}
+                />
 
-            <PullDownMenuBottom
-                toggleMenu={toggleMenu}
-                clickButtonAnimation={clickButtonAnimation}
-            />
+                <PullDownMenuBottom
+                    toggleMenu={toggleMenu}
+                    clickButtonAnimation={clickButtonAnimation}
+                />
 
-        </motion.div>
+            </motion.div>
+        </div>
     )
 }
 

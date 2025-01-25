@@ -1,28 +1,30 @@
 import "./Files.css";
 
 import {motion} from 'framer-motion'
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import defaultImg from "../../images/Content/default.svg";
 import fileImg from "../../images/Content/file.svg";
 import folderImg from "../../images/Content/folder.svg";
+
+import Image from "../UI/Image";
 
 
 const FILES = [
     {
         id: 0,
         type: 'file',
-        title: 'Title'
+        title: 'Hi'
     },
     {
         id: 1,
         type: 'folder',
-        title: 'Title'
+        title: 'Hi my name'
     },
     {
         id: 2,
         type: 'file',
-        title: 'Title'
+        title: 'Hi i am file'
     },
     {
         id: 3,
@@ -62,12 +64,13 @@ const FILES = [
 ]
 
 
-function Files({ toggleEditMenuState, toggleBgColor}) {
+function Files({toggleEditMenuVisible, toggleBgColor, setFilterFiles}) {
     const containerRef = useRef(null)
     const slidesRef = useRef(null)
 
     const [containerHeight, setContainerHeights] = useState(0)
     const [slidesHeight, setSlidesHeights] = useState(0)
+    const [files, setFiles] = useState(FILES)
     const mouseUpRef = useRef(true);
 
     useEffect(() => {
@@ -85,8 +88,23 @@ function Files({ toggleEditMenuState, toggleBgColor}) {
             setSlidesHeights(slidesSumHeight)
         }
 
+        const filterFiles = (filter) => {
+            let filteredFiles = []
+
+            for (const file of files) {
+                if (!file.title.toLowerCase().includes(filter.toLowerCase())) {
+                    continue
+                }
+
+                filteredFiles.push(file)
+            }
+
+            setFiles(filteredFiles)
+        }
+
         measureSliderHeight()
         measureSlidesHeight()
+        setFilterFiles(() => filterFiles)
 
         window.addEventListener("resize", measureSliderHeight)
         window.addEventListener("resize", measureSlidesHeight)
@@ -95,25 +113,29 @@ function Files({ toggleEditMenuState, toggleBgColor}) {
             window.removeEventListener("resize", measureSliderHeight)
             window.removeEventListener("resize", measureSlidesHeight)
         }
-    }, [containerHeight, slidesHeight])
+    }, [containerHeight, slidesHeight, setFilterFiles])
 
     const handleMouseDown = () => {
         mouseUpRef.current = false;
-        console.log('click')
 
         setTimeout(() => {
             if (mouseUpRef.current === true) {
                 return
             }
-            console.log('Long click')
 
-            toggleEditMenuState()
+            toggleEditMenuVisible()
             toggleBgColor()
         }, 600)
-    };
+    }
 
     const handleMouseUp = () => {
         mouseUpRef.current = true;
+    }
+
+    const handleRightClick = (event) => {
+        event.preventDefault()
+        toggleEditMenuVisible()
+        toggleBgColor()
     }
 
     let top = -((slidesHeight - containerHeight) - 250)
@@ -129,11 +151,10 @@ function Files({ toggleEditMenuState, toggleBgColor}) {
                 }}
                 dragElastic={0.5}
                 dragTransition={{bounceDamping: 100}}
-                className="slides"
+                className="files-slides"
             >
-                {/*<div className="easter-egg why-so-sirious"/>*/}
-                <div className="easter-egg code">1342</div>
-                {FILES.map(image => {
+                {/*<div className="easter-egg code">1342</div>*/}
+                {files.map(image => {
                     let src
 
                     switch (image.type) {
@@ -150,22 +171,23 @@ function Files({ toggleEditMenuState, toggleBgColor}) {
                     return (
                         <li key={image.id}>
                             <div className="file-container">
-                                <div
+                                <Image
                                     className="file-icon-container"
-                                    style={{backgroundImage: `url(${src})`}}
+                                    img={src}
                                     onMouseUp={handleMouseUp}
                                     onMouseLeave={handleMouseUp}
                                     onMouseDown={handleMouseDown}
                                     onTouchStart={handleMouseDown}
                                     onTouchEnd={handleMouseUp}
                                     onTouchMove={handleMouseUp}
+                                    onContextMenu={handleRightClick}
                                 />
                                 <div className="file-title-container">
                                     <text>{image.title}</text>
                                 </div>
                             </div>
                         </li>
-                    );
+                    )
                 })}
 
             </motion.ul>
