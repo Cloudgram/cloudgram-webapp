@@ -1,0 +1,82 @@
+.list__filter {
+    font-size: 15px;
+    font-weight: 600;
+    font-family: "GR", sans-serif;
+    color: rgba(34, 33, 91, 1);
+}
+
+.resently__svg {
+    margin-left: 10px;
+}
+
+.list__container {
+    z-index: 1;
+    margin-bottom: 200px;
+}
+
+.list__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 30px 0;
+}
+
+.list__orientation {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.list__item {
+    padding: 16px;
+    max-width: 150px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: "GR", sans-serif;
+}
+
+.folders__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.folder__icons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.folder__title {
+    margin-bottom: 10px;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.folder__descr {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.folder__createdAt {
+    margin-right: 10px;
+}
+
+.view__container {
+    display: flex;
+    gap: 5px;
+}
+
+.view__svg {
+    width: 10px;
+    height: 10px;
+
+    path {
+        stroke: #FFB110;
+    }
+}
