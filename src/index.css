@@ -239,6 +239,7 @@ button,
 [type="button"],
 [type="reset"],
 [type="submit"] {
+    appearance: button;
     -webkit-appearance: button;
 }
 
@@ -339,6 +340,7 @@ textarea {
    */
 
 [type="search"] {
+    appearance: textfield;
     -webkit-appearance: textfield;
     /* 1 */
     outline-offset: -2px;
@@ -405,42 +407,42 @@ template {
 
 @font-face {
     font-family: "GR";
-    src: url("./app/fonts/gilroy/gilroy-regular.ttf");
+    src: url("/src/fonts/gilroy/gilroy-regular.ttf") format("truetype");
     font-style: normal;
     font-weight: 400;
 }
 
 @font-face {
     font-family: "GR";
-    src: url("./app/fonts/gilroy/gilroy-medium.ttf");
+    src: url("/src/fonts/gilroy/gilroy-medium.ttf") format("truetype");
     font-style: medium;
     font-weight: 500;
 }
 
 @font-face {
     font-family: "GR";
-    src: url("./app/fonts/gilroy/gilroy-bold.ttf");
+    src: url("/src/fonts/gilroy/gilroy-bold.ttf") format("truetype");
     font-style: bold;
     font-weight: 700;
 }
 
 @font-face {
     font-family: "RB";
-    src: url("./app/fonts/roboto/Roboto-regular.ttf");
+    src: url("/src/fonts/roboto/Roboto-regular.ttf") format("truetype");
     font-style: normal;
     font-weight: 400;
 }
 
 @font-face {
     font-family: "RB";
-    src: url("./app/fonts/roboto/Roboto-medium.ttf");
+    src: url("/src/fonts/roboto/Roboto-medium.ttf") format("truetype");
     font-style: medium;
     font-weight: 500;
 }
 
 @font-face {
     font-family: "RB";
-    src: url("./app/fonts/roboto/Roboto-bold.ttf");
+    src: url("/src/fonts/roboto/Roboto-bold.ttf") format("truetype");
     font-style: bold;
     font-weight: 700;
 }

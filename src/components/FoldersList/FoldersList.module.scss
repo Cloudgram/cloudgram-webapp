@@ -1,8 +1,14 @@
-.list__filter {
-    font-size: 15px;
-    font-weight: 600;
+.main__container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+}
+
+.list__title {
+    font-size: 20px;
+    font-weight: 500;
     font-family: "GR", sans-serif;
-    color: rgba(34, 33, 91, 1);
+    color: black;
 }
 
 .resently__svg {
@@ -11,14 +17,16 @@
 
 .list__container {
     z-index: 1;
-    margin-bottom: 200px;
+    padding: 30px 30px;
+    width: 100%;
+    // box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 .list__header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 30px 0;
+    margin-bottom: 30px;
 }
 
 .list__orientation {
@@ -33,12 +41,33 @@
     border-radius: 20px;
     cursor: pointer;
     font-family: "GR", sans-serif;
+
+    &_line {
+        padding: 15px;
+        border-radius: 10px;
+        background-color: rgba(0, 0, 0, 0.1) !important;
+    }
 }
 
 .folders__list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 15px;
+
+    &_line {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+.folders__item {
+    &_line {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        color: black;
+    }
 }
 
 .folder__icons {
@@ -47,12 +76,31 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
+
+    &_line {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+}
+
+.more__actions__button {
+    &_line {
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+    }
 }
 
 .folder__title {
     margin-bottom: 10px;
     font-size: 17px;
     font-weight: 500;
+
+    &_line {
+        width: 200px;
+        // color: black;
+    }
 }
 
 .folder__descr {
@@ -61,22 +109,64 @@
     justify-content: space-between;
     font-size: 12px;
     font-weight: 400;
+
+    &_line {
+        display: flex;
+        flex-direction: row;
+    }
 }
 
 .folder__createdAt {
     margin-right: 10px;
+
+    &_line {
+        display: flex;
+        align-items: center;
+    }
 }
 
 .view__container {
     display: flex;
+    align-items: center;
     gap: 5px;
+
+    &_line {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+        align-items: center;
+        // justify-content: center;
+    }
 }
 
 .view__svg {
     width: 10px;
     height: 10px;
+}
 
+.block__orientation {
+    // width: 20px;
+    // height: 20px;
+
+    rect {
+        stroke: #b0c0d0;
+    }
+}
+
+.line__orientation {
     path {
-        stroke: #FFB110;
+        stroke: #b0c0d0;
+    }
+}
+
+.block__orientation_active {
+    rect {
+        stroke: black;
+    }
+}
+
+.line__orientation_active {
+    path {
+        stroke: black;
     }
 }

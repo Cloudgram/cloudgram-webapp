@@ -1,13 +1,13 @@
 import { FoldersList } from "../../components/FoldersList/FoldersList"
-import { Footer } from "../../components/Footer/Footer"
 import { Header } from "../../components/Header/Header"
+import styles from "./MainPage.module.scss"
 
 export const MainPage = () => {
     return (
-        <section className="main">
+        <section className={styles.main}>
             <Header />
             <FoldersList />
-            <Footer />
+            {/* <Footer /> */}
         </section>
     )
 }
