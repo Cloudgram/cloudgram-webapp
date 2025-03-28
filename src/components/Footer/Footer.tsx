@@ -1,5 +1,4 @@
-import styles from './Footer.module.scss'
-import { profile, premium, home } from './index.ts'
+import { profile, premium, home, styles } from './index.ts'
 
 export const Footer = () => {
     return (

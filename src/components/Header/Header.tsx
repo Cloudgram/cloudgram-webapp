@@ -1,9 +1,6 @@
-import { useEffect, useState } from 'react'
-import { profile, home, styles, avatar, bot, getUser } from './index.ts'
 import { UserType } from '../../types/UserType';
-import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
-// import { AxiosError } from 'axios';
+import { profile, home, avatar, styles, bot, getUser, useEffect, useState, useMutation, useNavigate } from './index'
+
 
 export const Header = () => {
     const navigate = useNavigate();

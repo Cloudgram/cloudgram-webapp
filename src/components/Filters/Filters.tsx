@@ -1,18 +1,52 @@
-import { useState } from 'react';
-import { styles } from './index';
+import React from 'react';
+import { uploadFile } from '../../api/Files';
+import { styles, useState, CreateFolderModal, useParams } from './index';
+import { queryClient } from '../CreateFolder';
 
 export const Filters = () => {
     const [isPanelVisible, setIsPanelVisible] = useState(false);
+    const [createModal, setCreateModal] = useState(false);
+    const { folderId = '' } = useParams();
 
     const togglePanel = () => {
         setIsPanelVisible(!isPanelVisible);
     };
 
+    const openModal = () => {
+        setCreateModal(true);
+        setIsPanelVisible(false);
+    }
+
+    const closeModal = () => {
+        setCreateModal(false);
+    }
+
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        setIsPanelVisible(false);
+        const file = e.target.files?.[0];
+        if (!folderId) {
+            console.error('Не удалось получить folder_id из URL');
+            return;
+        }
+
+        try {
+            if (!file) {
+                console.error('Файл не выбран');
+                return;
+            }
+            const response = await uploadFile(file, folderId);
+            console.log('Файл успешно загружен:', response);
+            queryClient.invalidateQueries({ queryKey: ['folders', folderId] });
+        } catch (error) {
+            console.error('Ошибка при загрузке файла:', error);
+        }
+    }
+
     return (
         <div className={styles.filters}>
             <div className={styles.filters__up}>
                 <div className={styles.create__container}>
-                    <button 
+                    <button
                         className={styles.create__button}
                         onClick={togglePanel}
                     >
@@ -22,14 +56,26 @@ export const Filters = () => {
                     </button>
                     {isPanelVisible && (
                         <div className={styles.create__panel}>
-                            <button className={styles.create__file}>
+                            <button
+                                className={styles.create__file}
+                                onClick={() => document.getElementById('fileInput')?.click()}
+                            >
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M17.5 12.5V15.8333C17.5 16.2754 17.3244 16.6993 17.0118 17.0118C16.6993 17.3244 16.2754 17.5 15.8333 17.5H4.16667C3.72464 17.5 3.30072 17.3244 2.98816 17.0118C2.67559 16.6993 2.5 16.2754 2.5 15.8333V12.5M14.1667 6.66667L10 2.5M10 2.5L5.83333 6.66667M10 2.5V12.5" stroke="#7B7F9E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M17.5 12.5V15.8333C17.5 16.2754 17.3244 16.6993 17.0118 17.0118C16.6993 17.3244 16.2754 17.5 15.8333 17.5H4.16667C3.72464 17.5 3.30072 17.3244 2.98816 17.0118C2.67559 16.6993 2.5 16.2754 2.5 15.8333V12.5M14.1667 6.66667L10 2.5M10 2.5L5.83333 6.66667M10 2.5V12.5" stroke="#7B7F9E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </button>
-                            <button className={styles.create__folder}>
+                            <input
+                                id="fileInput"
+                                type="file"
+                                style={{ display: 'none' }}
+                                onChange={handleFileUpload}
+                            />
+                            <button
+                                className={styles.create__folder}
+                                onClick={openModal}
+                            >
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18.3334 15.8333C18.3334 16.2754 18.1578 16.6993 17.8453 17.0118C17.5327 17.3244 17.1088 17.5 16.6667 17.5H3.33341C2.89139 17.5 2.46746 17.3244 2.1549 17.0118C1.84234 16.6993 1.66675 16.2754 1.66675 15.8333V4.16667C1.66675 3.72464 1.84234 3.30072 2.1549 2.98816C2.46746 2.67559 2.89139 2.5 3.33341 2.5H7.50008L9.16675 5H16.6667C17.1088 5 17.5327 5.17559 17.8453 5.48816C18.1578 5.80072 18.3334 6.22464 18.3334 6.66667V15.8333Z" stroke="#7B7F9E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M18.3334 15.8333C18.3334 16.2754 18.1578 16.6993 17.8453 17.0118C17.5327 17.3244 17.1088 17.5 16.6667 17.5H3.33341C2.89139 17.5 2.46746 17.3244 2.1549 17.0118C1.84234 16.6993 1.66675 16.2754 1.66675 15.8333V4.16667C1.66675 3.72464 1.84234 3.30072 2.1549 2.98816C2.46746 2.67559 2.89139 2.5 3.33341 2.5H7.50008L9.16675 5H16.6667C17.1088 5 17.5327 5.17559 17.8453 5.48816C18.1578 5.80072 18.3334 6.22464 18.3334 6.66667V15.8333Z" stroke="#7B7F9E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </button>
                         </div>
@@ -75,6 +121,7 @@ export const Filters = () => {
                     </li>
                 </ul>
             </div>
+            {createModal && <CreateFolderModal onClose={closeModal} />}
         </div>
     )
 }

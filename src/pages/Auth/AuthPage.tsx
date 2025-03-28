@@ -1,9 +1,4 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
-import { queryClient } from '../../api/queryClient'
-import { styles, getAuth, AxiosError } from './index';
-import { AuthCodeInput } from '../../components/AuthCodeInput/AuthCodeInput';
+import { styles, getAuth, AxiosError, useState, useNavigate, useMutation, queryClient, AuthCodeInput } from './index';
 
 export const AuthPage = () => {
     const navigate = useNavigate();

@@ -1,0 +1,44 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+    &__input {
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+
+        &:focus-visible {
+            outline: 1px solid #1967d2;
+            border: 1px solid #1967d2;
+        }
+    }
+
+    &__title {
+        font-size: 24px;
+        font-weight: 500;
+        font-family: "GR", sans-serif;
+        color: black;
+    }
+
+    &__buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+        gap: 10px;
+    }
+    
+    .create__button {
+        color: #1967d2;
+        padding: 10px 10px;
+
+        &:disabled {
+            color: #a0a0a0;
+        }
+    }
+
+    .cancel__button {
+        color: #1967d2;
+        padding: 10px 10px;
+    }
+}
