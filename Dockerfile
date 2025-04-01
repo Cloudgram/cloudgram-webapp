@@ -7,7 +7,7 @@ COPY tsconfig.json .
 
 RUN npm install\
     && npm install typescript -g\
-    && npm install vite -g
+    && npm install vite @vitejs/plugin-react
 
 COPY . .
 
