@@ -3,8 +3,7 @@ version: '3.8'
 services:
   webapp:
     build: .
-    restart: always
     expose:
       - "8002"
     volumes:
-      - ./dist/index.html:/app/dist/index.html
+      - ./:/app
