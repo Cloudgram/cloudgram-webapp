@@ -11,6 +11,8 @@ RUN npm i -g serve
 COPY . .
 
 RUN npm run build
+
+CMD ["tail", "-f", "/dev/null"]
 #
 #EXPOSE 3000
 #
