@@ -10,9 +10,9 @@ RUN npm i -g serve
 
 COPY . .
 
-RUN npm run build
+RUN npm run dev
 
-CMD ["tail", "-f", "/dev/null"]
+#CMD ["tail", "-f", "/dev/null"]
 #
 #EXPOSE 3000
 #
