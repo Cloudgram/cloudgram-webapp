@@ -11,6 +11,8 @@ RUN npm install\
 
 RUN npm install --save-dev @types/react @types/react-dom
 
+RUN npm i -S @vitejs/plugin-react
+
 COPY . .
 
 RUN tsc
