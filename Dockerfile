@@ -1,12 +1,9 @@
-FROM node:16-alpine
+FROM node:22.13.1-alpine
 
-WORKDIR /webapp
-
-#COPY webapp/package.json .
-#COPY webapp/package-lock.json .
+WORKDIR /app
 
 COPY . .
 
 RUN npm install
 
-CMD npm start
+CMD npm run build
