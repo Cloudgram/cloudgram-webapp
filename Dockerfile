@@ -15,4 +15,4 @@ COPY . .
 
 RUN tsc
 
-CMD npm run build
+CMD npm run dev
