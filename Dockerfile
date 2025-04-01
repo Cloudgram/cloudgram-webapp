@@ -1,17 +1,13 @@
-FROM node:18
+FROM node:18-alpine
 
 WORKDIR /app
 
 COPY package.json .
 
-RUN npm install\
-    && npm install typescript -g\
-    && npm install -g vite
-
-RUN npm install --save-dev @types/react @types/react-dom
+RUN npm install
 
 COPY . .
 
-RUN tsc
+EXPOSE 8080
 
-CMD npm run dev
+CMD [ "npm", "run", "dev" ]
