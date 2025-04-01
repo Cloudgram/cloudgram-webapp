@@ -47,8 +47,39 @@
     &_line {
         padding: 15px;
         border-radius: 10px;
-        background-color: rgba(0, 0, 0, 0.1) !important;
+        background-color: rgba(0, 0, 0, 0.1);
         text-decoration: none;
+    }
+}
+
+.actions__menu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    width: 80px;
+    // gap: 10px;
+}
+
+.action__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 100px;
+    transition: background-color .1s ease-in-out;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+
+    svg {
+        width: 20px;
+        height: 20px;
     }
 }
 
@@ -69,7 +100,7 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        color: black;
+        // color: black;
     }
 }
 
@@ -97,7 +128,10 @@
 
 .folder__title {
     display: block;
-    margin-bottom: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 5px;
     font-size: 17px;
     font-weight: 500;
     width: 100%;
@@ -105,7 +139,9 @@
 
     &_line {
         width: 500px;
-        // color: black;
+        // font-size: 17px;
+        font-weight: 500;
+        color: black;
     }
 }
 
@@ -114,12 +150,12 @@
     flex-direction: row;
     justify-content: space-between;
     font-size: 12px;
-    margin-top: 10px;
     font-weight: 400;
 
     &_line {
         display: flex;
         flex-direction: row;
+        color: black;
     }
 }
 
@@ -129,6 +165,7 @@
     &_line {
         display: flex;
         align-items: center;
+        color: black;
     }
 }
 
@@ -142,6 +179,7 @@
         flex-direction: row;
         gap: 5px;
         align-items: center;
+        color: black;
         // justify-content: center;
     }
 }
@@ -149,6 +187,11 @@
 .view__svg {
     width: 10px;
     height: 10px;
+
+    &_line {
+        width: 15px;
+        height: 15px;
+    }
 }
 
 .block__orientation {

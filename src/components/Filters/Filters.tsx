@@ -1,12 +1,21 @@
 import React from 'react';
 import { uploadFile } from '../../api/Files';
 import { styles, useState, CreateFolderModal, useParams } from './index';
+import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../CreateFolder';
+import { Load } from '../Loader/Load';
+import { useClickOutside } from '../../hooks/useClickOutside';
 
 export const Filters = () => {
     const [isPanelVisible, setIsPanelVisible] = useState(false);
     const [createModal, setCreateModal] = useState(false);
     const { folderId = '' } = useParams();
+
+    const closeMenu = () => {
+        setIsPanelVisible(false);
+    }
+
+    const menuRef = useClickOutside(closeMenu);
 
     const togglePanel = () => {
         setIsPanelVisible(!isPanelVisible);
@@ -21,29 +30,29 @@ export const Filters = () => {
         setCreateModal(false);
     }
 
+    const uploadMutation = useMutation({
+        mutationFn: (file: File) => uploadFile(file, folderId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['folders', folderId] });
+        },
+        onError: (error: Error) => {
+            console.error(error);
+        }
+    });
+
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         setIsPanelVisible(false);
         const file = e.target.files?.[0];
-        if (!folderId) {
-            console.error('Не удалось получить folder_id из URL');
-            return;
-        }
-
-        try {
-            if (!file) {
-                console.error('Файл не выбран');
-                return;
-            }
-            const response = await uploadFile(file, folderId);
-            console.log('Файл успешно загружен:', response);
-            queryClient.invalidateQueries({ queryKey: ['folders', folderId] });
-        } catch (error) {
-            console.error('Ошибка при загрузке файла:', error);
+        if (file) {
+            uploadMutation.mutate(file);
+        } else {
+            console.error('No file selected');
         }
     }
 
     return (
         <div className={styles.filters}>
+            {uploadMutation.status === 'pending' && <Load type="box-rotate-z" bgColor={'black'} color={'black'} title={'LOADING...'} size={100} />}
             <div className={styles.filters__up}>
                 <div className={styles.create__container}>
                     <button
@@ -55,7 +64,7 @@ export const Filters = () => {
                         </svg>
                     </button>
                     {isPanelVisible && (
-                        <div className={styles.create__panel}>
+                        <div className={styles.create__panel} ref={menuRef}>
                             <button
                                 className={styles.create__file}
                                 onClick={() => document.getElementById('fileInput')?.click()}

@@ -1,18 +1,29 @@
 import { useNavigate } from 'react-router-dom'
 import { deleteFile, downloadFile } from '../../api/Files'
 import { RootFolderType } from '../../types/RootType'
-import { cutTitle } from '../../utils/cutTitle'
 import { styles, getFolders, dateFormat, Filters, useEffect, useState, useQuery, Link, useParams, queryClient, deleteFolder } from './index'
-import { ActionMenu } from '../ActionMenu/ActionMenu';
+import { FileActionMenu } from '../FileActionMenu/FileActionMenu';
+import { useClickOutside } from '../../hooks/useClickOutside'
+import { FolderActionMenu } from '../FolderActionMenu copy/FolderActionMenu'
+import { getFileIcon } from '../../utils/getFileIcon'
+import { getFileColor } from '../../utils/getFileColor'
 
 
 export const FoldersList = () => {
     const [foldersList, setFoldersList] = useState<RootFolderType | null>(null)
     const [filesList, setFilesList] = useState<RootFolderType | null>(null)
     const [listOrientation, setListOrientation] = useState<boolean>(true)
-    const [activeMenuId, setActiveMenuId] = useState<number | null>(null);
+    const [activeFileMenuId, setActiveFileMenuId] = useState<number | null>(null);
+    const [activeFolderMenuId, setActiveFolderMenuId] = useState<number | null>(null);
     const { folderId = '0' } = useParams();
     const navigate = useNavigate();
+
+    const closeMenu = () => {
+        setActiveFileMenuId(null);
+        setActiveFolderMenuId(null);
+    }
+
+    const menuRef = useClickOutside(closeMenu);
 
     const { data } = useQuery<RootFolderType>({
         queryKey: ['folders', folderId],
@@ -37,8 +48,9 @@ export const FoldersList = () => {
         queryClient.invalidateQueries({ queryKey: ['folders', folderId] });
     }
 
-    const handleFileDownload = async (id: string) => {
-        await downloadFile(id);
+    const handleFileDownload = async (id: string, name: string, extension: string) => {
+        await downloadFile(id, name, extension);
+        setActiveFileMenuId(null);
     }
 
     const handleDoubleClick = (e: React.MouseEvent, link: string) => {
@@ -46,8 +58,12 @@ export const FoldersList = () => {
         navigate(link);
     };
 
-    const toggleActionMenu = (id: number) => {
-        setActiveMenuId(activeMenuId === id ? null : id);
+    const toggleFileActionMenu = (id: number) => {
+        setActiveFileMenuId(activeFileMenuId === id ? null : id);
+    };
+
+    const toggleFolderActionMenu = (id: number) => {
+        setActiveFolderMenuId(activeFolderMenuId === id ? null : id);
     };
 
 
@@ -101,89 +117,91 @@ export const FoldersList = () => {
                                                 </svg>
                                                 <button
                                                     className={styles.more__actions__button}
+                                                    onClick={() => toggleFolderActionMenu(folder.id)}
                                                 >
                                                     <svg width="3" height="15" viewBox="0 0 3 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path fillRule="evenodd" clipRule="evenodd" d="M3 1.5C3 2.32843 2.32843 3 1.5 3C0.671573 3 0 2.32843 0 1.5C0 0.671573 0.671573 0 1.5 0C2.32843 0 3 0.671573 3 1.5ZM3 7.5C3 8.32843 2.32843 9 1.5 9C0.671573 9 0 8.32843 0 7.5C0 6.67157 0.671573 6 1.5 6C2.32843 6 3 6.67157 3 7.5ZM1.5 15C2.32843 15 3 14.3284 3 13.5C3 12.6716 2.32843 12 1.5 12C0.671573 12 0 12.6716 0 13.5C0 14.3284 0.671573 15 1.5 15Z" fill={folder.color.back_hex} />
                                                     </svg>
                                                 </button>
                                             </div>
-                                            <span className={styles.folder__title}>{cutTitle(folder.title, 20)}</span>
+                                            <span className={styles.folder__title}>{folder.title}</span>
                                             <div className={styles.folder__descr}>
                                                 <p className={styles.folder__createdAt}>
                                                     {dateFormat(folder.created_at)}
                                                 </p>
                                                 {(folder.share !== 'private') &&
                                                     <div className={styles.view__container}>
-                                                        <svg className={styles.view__svg} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z" stroke={folder.color.back_hex} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                                            <path d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z" stroke={folder.color.back_hex} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                        <svg className={styles.view__svg} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                                            <g fill="currentColor">
+                                                                <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
+                                                                <path d="M8 5.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0a3.5 3.5 0 0 1-7 0" />
+                                                            </g>
                                                         </svg>
                                                         {folder.views}
                                                     </div>
                                                 }
                                             </div>
                                         </div>
-                                        <button
-                                            className="tempDeleteButto"
-                                            onClick={() => handleFolderDelete(folder.id)}
-                                        >
-                                            DELETE
-                                        </button>
+                                        {activeFolderMenuId === folder.id && (
+                                            <FolderActionMenu
+                                                menuRef={menuRef}
+                                                onDelete={() => handleFolderDelete(folder.id)}
+                                            />
+                                        )}
                                     </Link>
                                 </li>
                             ))}
-                            {Array.isArray(filesList) && filesList.map((file, index) => (
-                                <li style={{ backgroundColor: file.color.background_hex, color: file.color.back_hex }} className={styles.list__item} key={index}>
-                                    <div className={styles.folders__item}>
-                                        <div className={styles.folder__icons}>
-                                            <svg width="31" height="35" viewBox="0 0 31 35" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <g opacity="0.3">
-                                                    <path opacity="1" d="M21.6473 7.68199H21.6478H24.9854V27.5803C24.9854 28.0256 24.8922 28.4673 24.7103 28.8806C24.5283 29.2939 24.2607 29.6715 23.9212 29.991C23.5815 30.3105 23.1767 30.5655 22.7291 30.74C22.2814 30.9144 21.8007 31.0045 21.3145 31.0045H4.1724H4.17222C3.68597 31.0047 3.20506 30.9147 2.75724 30.7403C2.30945 30.5659 1.90449 30.311 1.56473 29.9915C1.22503 29.672 0.957293 29.2943 0.775244 28.8809C0.593231 28.4676 0.5 28.0257 0.5 27.5803V3.9242C0.5 3.47881 0.593229 3.03697 0.775244 2.62364C0.957293 2.21023 1.22503 1.83257 1.56473 1.51307C1.9045 1.19351 2.30947 0.938564 2.75724 0.764197C3.20504 0.589817 3.68595 0.49983 4.17222 0.5H4.1724H17.9518V4.17502V4.17553C17.9528 5.11539 18.3503 6.00985 19.0462 6.66456C19.741 7.31831 20.677 7.68111 21.6473 7.68199Z" fill={file.color.hex} stroke={file.color.hex} />
-                                                </g>
-                                                <path d="M25.4855 7.18199H21.6478C20.8005 7.18122 19.9881 6.86415 19.3889 6.30041C18.7897 5.73666 18.4527 4.97228 18.4519 4.17502V0L25.4855 7.18199Z" fill={file.color.back_hex} />
-                                                <path d="M20.242 12.2102H4.24056C4.08682 12.2102 3.93939 12.1527 3.83068 12.0504C3.72197 11.9481 3.66089 11.8094 3.66089 11.6648C3.66069 11.593 3.67554 11.5219 3.70458 11.4556C3.73362 11.3893 3.77628 11.329 3.83013 11.2782C3.88398 11.2274 3.94795 11.1871 4.01838 11.1596C4.08881 11.1321 4.16431 11.1179 4.24056 11.1179H20.242C20.3961 11.1179 20.544 11.1755 20.653 11.2781C20.762 11.3806 20.8232 11.5197 20.8232 11.6648C20.8228 11.8096 20.7614 11.9483 20.6524 12.0505C20.5435 12.1528 20.3959 12.2102 20.242 12.2102Z" fill={file.color.back_hex} />
-                                                <path d="M20.242 15.4722H4.24056C4.08682 15.4722 3.93939 15.4148 3.83068 15.3125C3.72197 15.2102 3.66089 15.0715 3.66089 14.9269C3.66069 14.8551 3.67554 14.784 3.70458 14.7177C3.73362 14.6514 3.77628 14.5911 3.83013 14.5403C3.88398 14.4895 3.94795 14.4492 4.01838 14.4217C4.08881 14.3942 4.16431 14.38 4.24056 14.38H20.242C20.3961 14.38 20.544 14.4376 20.653 14.5401C20.762 14.6427 20.8232 14.7818 20.8232 14.9269C20.8228 15.0716 20.7614 15.2103 20.6524 15.3126C20.5435 15.4148 20.3959 15.4723 20.242 15.4722Z" fill={file.color.back_hex} />
-                                                <path d="M20.242 18.7345H4.24056C4.16431 18.7345 4.08881 18.7203 4.01838 18.6928C3.94795 18.6653 3.88398 18.625 3.83013 18.5742C3.77628 18.5234 3.73362 18.4631 3.70458 18.3968C3.67554 18.3304 3.66069 18.2593 3.66089 18.1876C3.66089 18.043 3.72197 17.9042 3.83068 17.802C3.93939 17.6997 4.08682 17.6422 4.24056 17.6422H20.242C20.3959 17.6422 20.5435 17.6996 20.6524 17.8019C20.7614 17.9041 20.8228 18.0428 20.8232 18.1876C20.8232 18.3326 20.762 18.4717 20.653 18.5743C20.544 18.6768 20.3961 18.7345 20.242 18.7345Z" fill={file.color.back_hex} />
-                                                <path d="M13.9307 21.9965H4.24056C4.16431 21.9965 4.08881 21.9824 4.01838 21.9549C3.94795 21.9274 3.88398 21.8871 3.83013 21.8363C3.77628 21.7855 3.73362 21.7252 3.70458 21.6589C3.67554 21.5925 3.66069 21.5214 3.66089 21.4497C3.66089 21.305 3.72197 21.1663 3.83068 21.064C3.93939 20.9617 4.08682 20.9043 4.24056 20.9043H13.9307C14.0844 20.9043 14.2319 20.9617 14.3406 21.064C14.4493 21.1663 14.5103 21.305 14.5103 21.4497C14.5106 21.5214 14.4957 21.5925 14.4667 21.6589C14.4376 21.7252 14.395 21.7855 14.3411 21.8363C14.2873 21.8871 14.2233 21.9274 14.1529 21.9549C14.0824 21.9824 14.0069 21.9965 13.9307 21.9965Z" fill={file.color.back_hex} />
-                                                <path d="M28.5108 24.8796H9.13052C7.75579 24.8796 6.64136 25.9282 6.64136 27.2216V32.6581C6.64136 33.9515 7.75579 35.0001 9.13052 35.0001H28.5108C29.8855 35.0001 30.9999 33.9515 30.9999 32.6581V27.2216C30.9999 25.9282 29.8855 24.8796 28.5108 24.8796Z" fill={file.color.back_hex} />
-                                                <path d="M11.8136 31.1166V32.1767H10.6465V31.1166H11.8136Z" fill="white" />
-                                                <path d="M16.299 31.1196C16.105 31.4511 15.8118 31.7219 15.4559 31.8983C15.0553 32.091 14.6099 32.1868 14.1601 32.1768H12.3994V27.7918H14.1601C14.6103 27.7813 15.0563 27.875 15.459 28.0645C15.8135 28.2377 16.1057 28.5055 16.299 28.8345C16.4994 29.1845 16.6003 29.5773 16.592 29.9748C16.5999 30.3737 16.4991 30.7678 16.299 31.1196ZM15.087 30.8994C15.213 30.7777 15.3106 30.6326 15.3736 30.4734C15.4366 30.3142 15.4635 30.1444 15.4528 29.9748C15.4636 29.8055 15.4367 29.6358 15.3737 29.4769C15.3107 29.3179 15.213 29.1731 15.087 29.0517C14.8046 28.8188 14.4358 28.7003 14.0609 28.7222H13.5293V31.2275H14.0625C14.4365 31.2487 14.8044 31.1309 15.087 30.8994Z" fill="white" />
-                                                <path d="M20.6434 28.012C20.998 28.2015 21.2911 28.4782 21.4912 28.8126C21.7009 29.1656 21.8078 29.5645 21.8012 29.969C21.8083 30.3744 21.7013 30.7743 21.4912 31.1283C21.2904 31.4639 20.9963 31.7417 20.6403 31.9318C20.278 32.1265 19.8672 32.2271 19.4499 32.2234C19.0327 32.2269 18.622 32.1263 18.2596 31.9318C17.9037 31.7421 17.61 31.4642 17.4103 31.1283C17.1994 30.7746 17.0924 30.3744 17.1003 29.969C17.0922 29.5644 17.1993 29.1652 17.4103 28.8126C17.611 28.4782 17.9046 28.2014 18.2596 28.012C18.622 27.8175 19.0327 27.7168 19.4499 27.7203C19.8682 27.7166 20.28 27.8172 20.6434 28.012ZM18.5665 29.0473C18.3379 29.3047 18.2215 29.6341 18.241 29.969C18.2215 30.3025 18.3379 30.6306 18.5665 30.8862C18.6779 31.0001 18.8144 31.0897 18.9665 31.1486C19.1186 31.2076 19.2825 31.2345 19.4469 31.2274C19.6107 31.234 19.774 31.2069 19.9255 31.148C20.0771 31.0891 20.2131 30.9997 20.3241 30.8862C20.5538 30.631 20.6714 30.3029 20.6527 29.969C20.6713 29.6355 20.555 29.3078 20.3272 29.0517C20.2159 28.9377 20.0794 28.8481 19.9273 28.7892C19.7752 28.7302 19.6112 28.7033 19.4469 28.7105C19.283 28.7034 19.1194 28.7298 18.9674 28.788C18.8154 28.8461 18.6786 28.9346 18.5665 29.0473Z" fill="white" />
-                                                <path d="M26.0357 28.1884C26.4288 28.4893 26.6961 28.9113 26.7905 29.3798H25.5971C25.5165 29.1856 25.3755 29.0189 25.1925 28.9015C24.9996 28.7833 24.7732 28.7228 24.5431 28.728C24.3912 28.7234 24.2401 28.7518 24.1017 28.8109C23.9633 28.8701 23.8412 28.9585 23.7449 29.0692C23.5291 29.3289 23.4191 29.6527 23.4349 29.9821C23.4191 30.3101 23.5292 30.6325 23.7449 30.8906C23.842 31.0002 23.9643 31.0874 24.1026 31.1458C24.2409 31.2042 24.3916 31.2321 24.5431 31.2274C24.7733 31.2332 24.9999 31.1727 25.1925 31.0539C25.3745 30.9386 25.5154 30.7745 25.5971 30.5829H26.7905C26.6946 31.05 26.4274 31.4706 26.0357 31.7714C25.6141 32.0742 25.0933 32.229 24.5633 32.2089C24.1456 32.2171 23.7334 32.1194 23.3698 31.9259C23.0295 31.7399 22.7535 31.4655 22.5747 31.1356C22.3826 30.7737 22.2868 30.3733 22.2957 29.9689C22.287 29.5646 22.3827 29.1642 22.5747 28.8023C22.7535 28.4724 23.0295 28.198 23.3698 28.012C23.7334 27.8185 24.1456 27.7207 24.5633 27.729C25.096 27.7158 25.6169 27.8783 26.0357 28.1884Z" fill="white" />
-                                            </svg>
-                                            <button 
-                                                className={styles.more__actions__button}
-                                                onClick={() => toggleActionMenu(file.id)}
-                                            >
-                                                <svg width="3" height="15" viewBox="0 0 3 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fillRule="evenodd" clipRule="evenodd" d="M3 1.5C3 2.32843 2.32843 3 1.5 3C0.671573 3 0 2.32843 0 1.5C0 0.671573 0.671573 0 1.5 0C2.32843 0 3 0.671573 3 1.5ZM3 7.5C3 8.32843 2.32843 9 1.5 9C0.671573 9 0 8.32843 0 7.5C0 6.67157 0.671573 6 1.5 6C2.32843 6 3 6.67157 3 7.5ZM1.5 15C2.32843 15 3 14.3284 3 13.5C3 12.6716 2.32843 12 1.5 12C0.671573 12 0 12.6716 0 13.5C0 14.3284 0.671573 15 1.5 15Z" fill={file.color.back_hex} />
-                                                </svg>
-                                            </button>
-                                            {activeMenuId === file.id && (
-                                                <ActionMenu
-                                                    onDownload={() => handleFileDownload(file.id.toString())}
-                                                    onDelete={() => handleFileDelete(file.id)}
-                                                />
-                                            )}
-                                        </div>
-                                        <span className={styles.folder__title}>{cutTitle(file.title, 20)}</span>
-                                        <div className={styles.folder__descr}>
-                                            <p className={styles.folder__createdAt}>
-                                                {dateFormat(file.created_at)}
-                                            </p>
-                                            {(file.share !== 'private') &&
-                                                <div className={styles.view__container}>
-                                                    <svg className={styles.view__svg} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z" stroke={file.color.back_hex} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                                        <path d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z" stroke={file.color.back_hex} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            {Array.isArray(filesList) && filesList.map((file, index) => {
+                                const fileColors = getFileColor(file.extension);
+                                return (
+                                    <li
+                                        style={{
+                                            backgroundColor: fileColors?.backgroundColor || 'gray',
+                                            color: fileColors?.color || '',
+                                        }}
+                                        className={styles.list__item}
+                                        key={index}
+                                    >
+                                        <div className={styles.folders__item}>
+                                            <div className={styles.folder__icons}>
+                                                {getFileIcon(file.extension)}
+                                                <button
+                                                    className={styles.more__actions__button}
+                                                    onClick={() => toggleFileActionMenu(file.id)}
+                                                >
+                                                    <svg width="3" height="15" viewBox="0 0 3 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fillRule="evenodd" clipRule="evenodd" d="M3 1.5C3 2.32843 2.32843 3 1.5 3C0.671573 3 0 2.32843 0 1.5C0 0.671573 0.671573 0 1.5 0C2.32843 0 3 0.671573 3 1.5ZM3 7.5C3 8.32843 2.32843 9 1.5 9C0.671573 9 0 8.32843 0 7.5C0 6.67157 0.671573 6 1.5 6C2.32843 6 3 6.67157 3 7.5ZM1.5 15C2.32843 15 3 14.3284 3 13.5C3 12.6716 2.32843 12 1.5 12C0.671573 12 0 12.6716 0 13.5C0 14.3284 0.671573 15 1.5 15Z" fill='black' />
                                                     </svg>
-                                                    {file.views}
-                                                </div>
-                                            }
+                                                </button>
+                                                {activeFileMenuId === file.id && (
+                                                    <FileActionMenu
+                                                        menuRef={menuRef}
+                                                        onDownload={() => handleFileDownload(file.id.toString(), file.title, file.extension)}
+                                                        onDelete={() => handleFileDelete(file.id)}
+                                                    />
+                                                )}
+                                            </div>
+                                            <span className={styles.folder__title}>{file.title}</span>
+                                            <div className={styles.folder__descr}>
+                                                <p className={styles.folder__createdAt}>
+                                                    {dateFormat(file.created_at)}
+                                                </p>
+                                                {(file.share !== 'private') &&
+                                                    <div className={styles.view__container}>
+                                                        <svg className={styles.view__svg} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                                            <g fill="currentColor">
+                                                                <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
+                                                                <path d="M8 5.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0a3.5 3.5 0 0 1-7 0" />
+                                                            </g>
+                                                        </svg>
+                                                        {file.views}
+                                                    </div>
+                                                }
+                                            </div>
                                         </div>
-                                    </div>
-                                </li>
-                            ))}
+                                    </li>
+                                );
+                            })}
                         </ul>
                     ) : (
                         <ul className={styles.folders__list_line}>
@@ -209,61 +227,88 @@ export const FoldersList = () => {
                                             </p>
                                         </div>
                                         <div className={styles.view__container_line}>
-                                            <svg className={styles.view__svg} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z" stroke='black' strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                                <path d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z" stroke='black' strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                            <svg className={styles.view__svg_line} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                                <g fill="currentColor">
+                                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
+                                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0a3.5 3.5 0 0 1-7 0" />
+                                                </g>
                                             </svg>
                                             {folder.views}
                                         </div>
-                                        <button className={styles.more__actions__button_line}>
-                                            <svg width="3" height="15" viewBox="0 0 3 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path fillRule="evenodd" clipRule="evenodd" d="M3 1.5C3 2.32843 2.32843 3 1.5 3C0.671573 3 0 2.32843 0 1.5C0 0.671573 0.671573 0 1.5 0C2.32843 0 3 0.671573 3 1.5ZM3 7.5C3 8.32843 2.32843 9 1.5 9C0.671573 9 0 8.32843 0 7.5C0 6.67157 0.671573 6 1.5 6C2.32843 6 3 6.67157 3 7.5ZM1.5 15C2.32843 15 3 14.3284 3 13.5C3 12.6716 2.32843 12 1.5 12C0.671573 12 0 12.6716 0 13.5C0 14.3284 0.671573 15 1.5 15Z" fill='black' />
-                                            </svg>
-                                        </button>
+                                        <div className={styles.actions__menu}>
+                                            <button
+                                                className={styles.action__button}
+                                                onClick={() => handleFolderDelete(folder.id.toString())}
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+                                                    <path fill="currentColor" fillOpacity=".15" d="M292.7 840h438.6l24.2-512h-487z" />
+                                                    <path fill="currentColor" d="M864 256H736v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32m-504-72h304v72H360zm371.3 656H292.7l-24.2-512h487z" />
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
                                 </Link>
                             ))}
-                            {Array.isArray(filesList) && filesList.map((file, index) => (
-                                <li style={{ backgroundColor: file.color.background_hex, color: file.color.back_hex }} className={styles.list__item_line} key={index}>
-                                    <div className={styles.folders__item_line}>
-                                        <div className={styles.folder__icons_line}>
-                                            <svg width="31" height="35" viewBox="0 0 31 35" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <g opacity="0.3">
-                                                    <path opacity="1" d="M21.6473 7.68199H21.6478H24.9854V27.5803C24.9854 28.0256 24.8922 28.4673 24.7103 28.8806C24.5283 29.2939 24.2607 29.6715 23.9212 29.991C23.5815 30.3105 23.1767 30.5655 22.7291 30.74C22.2814 30.9144 21.8007 31.0045 21.3145 31.0045H4.1724H4.17222C3.68597 31.0047 3.20506 30.9147 2.75724 30.7403C2.30945 30.5659 1.90449 30.311 1.56473 29.9915C1.22503 29.672 0.957293 29.2943 0.775244 28.8809C0.593231 28.4676 0.5 28.0257 0.5 27.5803V3.9242C0.5 3.47881 0.593229 3.03697 0.775244 2.62364C0.957293 2.21023 1.22503 1.83257 1.56473 1.51307C1.9045 1.19351 2.30947 0.938564 2.75724 0.764197C3.20504 0.589817 3.68595 0.49983 4.17222 0.5H4.1724H17.9518V4.17502V4.17553C17.9528 5.11539 18.3503 6.00985 19.0462 6.66456C19.741 7.31831 20.677 7.68111 21.6473 7.68199Z" fill={file.color.hex} stroke={file.color.hex} />
-                                                </g>
-                                                <path d="M25.4855 7.18199H21.6478C20.8005 7.18122 19.9881 6.86415 19.3889 6.30041C18.7897 5.73666 18.4527 4.97228 18.4519 4.17502V0L25.4855 7.18199Z" fill={file.color.back_hex} />
-                                                <path d="M20.242 12.2102H4.24056C4.08682 12.2102 3.93939 12.1527 3.83068 12.0504C3.72197 11.9481 3.66089 11.8094 3.66089 11.6648C3.66069 11.593 3.67554 11.5219 3.70458 11.4556C3.73362 11.3893 3.77628 11.329 3.83013 11.2782C3.88398 11.2274 3.94795 11.1871 4.01838 11.1596C4.08881 11.1321 4.16431 11.1179 4.24056 11.1179H20.242C20.3961 11.1179 20.544 11.1755 20.653 11.2781C20.762 11.3806 20.8232 11.5197 20.8232 11.6648C20.8228 11.8096 20.7614 11.9483 20.6524 12.0505C20.5435 12.1528 20.3959 12.2102 20.242 12.2102Z" fill={file.color.back_hex} />
-                                                <path d="M20.242 15.4722H4.24056C4.08682 15.4722 3.93939 15.4148 3.83068 15.3125C3.72197 15.2102 3.66089 15.0715 3.66089 14.9269C3.66069 14.8551 3.67554 14.784 3.70458 14.7177C3.73362 14.6514 3.77628 14.5911 3.83013 14.5403C3.88398 14.4895 3.94795 14.4492 4.01838 14.4217C4.08881 14.3942 4.16431 14.38 4.24056 14.38H20.242C20.3961 14.38 20.544 14.4376 20.653 14.5401C20.762 14.6427 20.8232 14.7818 20.8232 14.9269C20.8228 15.0716 20.7614 15.2103 20.6524 15.3126C20.5435 15.4148 20.3959 15.4723 20.242 15.4722Z" fill={file.color.back_hex} />
-                                                <path d="M20.242 18.7345H4.24056C4.16431 18.7345 4.08881 18.7203 4.01838 18.6928C3.94795 18.6653 3.88398 18.625 3.83013 18.5742C3.77628 18.5234 3.73362 18.4631 3.70458 18.3968C3.67554 18.3304 3.66069 18.2593 3.66089 18.1876C3.66089 18.043 3.72197 17.9042 3.83068 17.802C3.93939 17.6997 4.08682 17.6422 4.24056 17.6422H20.242C20.3959 17.6422 20.5435 17.6996 20.6524 17.8019C20.7614 17.9041 20.8228 18.0428 20.8232 18.1876C20.8232 18.3326 20.762 18.4717 20.653 18.5743C20.544 18.6768 20.3961 18.7345 20.242 18.7345Z" fill={file.color.back_hex} />
-                                                <path d="M13.9307 21.9965H4.24056C4.16431 21.9965 4.08881 21.9824 4.01838 21.9549C3.94795 21.9274 3.88398 21.8871 3.83013 21.8363C3.77628 21.7855 3.73362 21.7252 3.70458 21.6589C3.67554 21.5925 3.66069 21.5214 3.66089 21.4497C3.66089 21.305 3.72197 21.1663 3.83068 21.064C3.93939 20.9617 4.08682 20.9043 4.24056 20.9043H13.9307C14.0844 20.9043 14.2319 20.9617 14.3406 21.064C14.4493 21.1663 14.5103 21.305 14.5103 21.4497C14.5106 21.5214 14.4957 21.5925 14.4667 21.6589C14.4376 21.7252 14.395 21.7855 14.3411 21.8363C14.2873 21.8871 14.2233 21.9274 14.1529 21.9549C14.0824 21.9824 14.0069 21.9965 13.9307 21.9965Z" fill={file.color.back_hex} />
-                                                <path d="M28.5108 24.8796H9.13052C7.75579 24.8796 6.64136 25.9282 6.64136 27.2216V32.6581C6.64136 33.9515 7.75579 35.0001 9.13052 35.0001H28.5108C29.8855 35.0001 30.9999 33.9515 30.9999 32.6581V27.2216C30.9999 25.9282 29.8855 24.8796 28.5108 24.8796Z" fill={file.color.back_hex} />
-                                                <path d="M11.8136 31.1166V32.1767H10.6465V31.1166H11.8136Z" fill="white" />
-                                                <path d="M16.299 31.1196C16.105 31.4511 15.8118 31.7219 15.4559 31.8983C15.0553 32.091 14.6099 32.1868 14.1601 32.1768H12.3994V27.7918H14.1601C14.6103 27.7813 15.0563 27.875 15.459 28.0645C15.8135 28.2377 16.1057 28.5055 16.299 28.8345C16.4994 29.1845 16.6003 29.5773 16.592 29.9748C16.5999 30.3737 16.4991 30.7678 16.299 31.1196ZM15.087 30.8994C15.213 30.7777 15.3106 30.6326 15.3736 30.4734C15.4366 30.3142 15.4635 30.1444 15.4528 29.9748C15.4636 29.8055 15.4367 29.6358 15.3737 29.4769C15.3107 29.3179 15.213 29.1731 15.087 29.0517C14.8046 28.8188 14.4358 28.7003 14.0609 28.7222H13.5293V31.2275H14.0625C14.4365 31.2487 14.8044 31.1309 15.087 30.8994Z" fill="white" />
-                                                <path d="M20.6434 28.012C20.998 28.2015 21.2911 28.4782 21.4912 28.8126C21.7009 29.1656 21.8078 29.5645 21.8012 29.969C21.8083 30.3744 21.7013 30.7743 21.4912 31.1283C21.2904 31.4639 20.9963 31.7417 20.6403 31.9318C20.278 32.1265 19.8672 32.2271 19.4499 32.2234C19.0327 32.2269 18.622 32.1263 18.2596 31.9318C17.9037 31.7421 17.61 31.4642 17.4103 31.1283C17.1994 30.7746 17.0924 30.3744 17.1003 29.969C17.0922 29.5644 17.1993 29.1652 17.4103 28.8126C17.611 28.4782 17.9046 28.2014 18.2596 28.012C18.622 27.8175 19.0327 27.7168 19.4499 27.7203C19.8682 27.7166 20.28 27.8172 20.6434 28.012ZM18.5665 29.0473C18.3379 29.3047 18.2215 29.6341 18.241 29.969C18.2215 30.3025 18.3379 30.6306 18.5665 30.8862C18.6779 31.0001 18.8144 31.0897 18.9665 31.1486C19.1186 31.2076 19.2825 31.2345 19.4469 31.2274C19.6107 31.234 19.774 31.2069 19.9255 31.148C20.0771 31.0891 20.2131 30.9997 20.3241 30.8862C20.5538 30.631 20.6714 30.3029 20.6527 29.969C20.6713 29.6355 20.555 29.3078 20.3272 29.0517C20.2159 28.9377 20.0794 28.8481 19.9273 28.7892C19.7752 28.7302 19.6112 28.7033 19.4469 28.7105C19.283 28.7034 19.1194 28.7298 18.9674 28.788C18.8154 28.8461 18.6786 28.9346 18.5665 29.0473Z" fill="white" />
-                                                <path d="M26.0357 28.1884C26.4288 28.4893 26.6961 28.9113 26.7905 29.3798H25.5971C25.5165 29.1856 25.3755 29.0189 25.1925 28.9015C24.9996 28.7833 24.7732 28.7228 24.5431 28.728C24.3912 28.7234 24.2401 28.7518 24.1017 28.8109C23.9633 28.8701 23.8412 28.9585 23.7449 29.0692C23.5291 29.3289 23.4191 29.6527 23.4349 29.9821C23.4191 30.3101 23.5292 30.6325 23.7449 30.8906C23.842 31.0002 23.9643 31.0874 24.1026 31.1458C24.2409 31.2042 24.3916 31.2321 24.5431 31.2274C24.7733 31.2332 24.9999 31.1727 25.1925 31.0539C25.3745 30.9386 25.5154 30.7745 25.5971 30.5829H26.7905C26.6946 31.05 26.4274 31.4706 26.0357 31.7714C25.6141 32.0742 25.0933 32.229 24.5633 32.2089C24.1456 32.2171 23.7334 32.1194 23.3698 31.9259C23.0295 31.7399 22.7535 31.4655 22.5747 31.1356C22.3826 30.7737 22.2868 30.3733 22.2957 29.9689C22.287 29.5646 22.3827 29.1642 22.5747 28.8023C22.7535 28.4724 23.0295 28.198 23.3698 28.012C23.7334 27.8185 24.1456 27.7207 24.5633 27.729C25.096 27.7158 25.6169 27.8783 26.0357 28.1884Z" fill="white" />
-                                            </svg>
-                                            <span className={styles.folder__title_line}>{`${file.title}${file.extension}`}</span>
+                            {Array.isArray(filesList) && filesList.map((file, index) => {
+                                const fileColors = getFileColor(file.extension);
+                                return (
+                                    <li
+                                        style={{
+                                            backgroundColor: fileColors?.backgroundColor || 'gray',
+                                            color: fileColors?.color || '',
+                                        }}
+                                        className={styles.list__item_line}
+                                        key={index}
+                                    >
+                                        <div className={styles.folders__item_line}>
+                                            <div className={styles.folder__icons_line}>
+                                                {getFileIcon(file.extension)}
+                                                <span className={styles.folder__title_line}>{`${file.title}.${file.extension}`}</span>
+                                            </div>
+                                            <div className={styles.folder__descr_line}>
+                                                <p className={styles.folder__createdAt_line}>
+                                                    {dateFormat(file.created_at)}
+                                                </p>
+                                            </div>
+                                            <div className={styles.view__container_line}>
+                                                <svg className={styles.view__svg_line} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                                                    <g fill="currentColor">
+                                                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
+                                                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0a3.5 3.5 0 0 1-7 0" /></g>
+                                                </svg>
+                                                {/* <svg className={styles.view__svg_line} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z" stroke='black' strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                    <path d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z" stroke='black' strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                </svg> */}
+                                                {file.views}
+                                            </div>
+                                            <div className={styles.actions__menu}>
+                                                <button
+                                                    className={styles.action__button}
+                                                    onClick={() => handleFileDownload(file.id.toString(), file.title, file.extension)}
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                        <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                                                            <path d="M12 22v-9m0 9l-2.5-2m2.5 2l2.5-2M5.034 9.117A4.002 4.002 0 0 0 6 17h1" />
+                                                            <path d="M15.83 7.138a5.5 5.5 0 0 0-10.796 1.98S5.187 10 5.5 10.5" />
+                                                            <path d="M17 17a5 5 0 1 0-1.17-9.862L14.5 7.5" />
+                                                        </g>
+                                                    </svg>
+                                                </button>
+                                                <button
+                                                    className={styles.action__button}
+                                                    onClick={() => handleFileDelete(file.id.toString())}
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+                                                        <path fill="currentColor" fillOpacity=".15" d="M292.7 840h438.6l24.2-512h-487z" />
+                                                        <path fill="currentColor" d="M864 256H736v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32m-504-72h304v72H360zm371.3 656H292.7l-24.2-512h487z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div className={styles.folder__descr_line}>
-                                            <p className={styles.folder__createdAt_line}>
-                                                {dateFormat(file.created_at)}
-                                            </p>
-                                        </div>
-                                        <div className={styles.view__container_line}>
-                                            <svg className={styles.view__svg} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z" stroke='black' strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                                <path d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z" stroke='black' strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                            </svg>
-                                            {file.views}
-                                        </div>
-                                        <button className={styles.more__actions__button_line}>
-                                            <svg width="3" height="15" viewBox="0 0 3 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path fillRule="evenodd" clipRule="evenodd" d="M3 1.5C3 2.32843 2.32843 3 1.5 3C0.671573 3 0 2.32843 0 1.5C0 0.671573 0.671573 0 1.5 0C2.32843 0 3 0.671573 3 1.5ZM3 7.5C3 8.32843 2.32843 9 1.5 9C0.671573 9 0 8.32843 0 7.5C0 6.67157 0.671573 6 1.5 6C2.32843 6 3 6.67157 3 7.5ZM1.5 15C2.32843 15 3 14.3284 3 13.5C3 12.6716 2.32843 12 1.5 12C0.671573 12 0 12.6716 0 13.5C0 14.3284 0.671573 15 1.5 15Z" fill='black' />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </li>
-                            ))}
+                                    </li>
+                                )
+                            })}
                         </ul>
                     )}
                 </div>
