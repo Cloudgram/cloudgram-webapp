@@ -1,9 +1,10 @@
-FROM node:22.13.1-alpine
+FROM node:22
 
 WORKDIR /app
 
-COPY . .
-
+COPY package*.json ./
 RUN npm install
+
+COPY . .
 
 CMD npm run build
