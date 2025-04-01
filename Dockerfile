@@ -6,12 +6,9 @@ COPY package.json .
 COPY tsconfig.json .
 
 RUN npm install\
-    && npm install typescript -g\
-    && npm install vite @vitejs/plugin-react
+    && npm install typescript -g
 
 RUN npm install --save-dev @types/react @types/react-dom
-
-RUN npm i -S @vitejs/plugin-react
 
 COPY . .
 
