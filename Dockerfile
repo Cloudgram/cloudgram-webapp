@@ -9,6 +9,8 @@ RUN npm install\
     && npm install typescript -g\
     && npm install vite @vitejs/plugin-react
 
+RUN npm install --save-dev @types/vite
+
 COPY . .
 
 RUN tsc
