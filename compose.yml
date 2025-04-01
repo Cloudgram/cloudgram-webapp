@@ -6,4 +6,5 @@ services:
     expose:
       - "8002"
     volumes:
-      - ./:/app/
+      - ./dist:/app/dist
+    command: npm run build
