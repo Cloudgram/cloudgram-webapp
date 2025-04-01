@@ -2,11 +2,12 @@ FROM node:22
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install
-RUN npm install --save-dev typescript
+COPY package*.json .
+RUN npm install\
+    && npm install typescript -g
 
 COPY . .
 
-RUN npx tsc -b
+RUN tsc
+
 CMD npm run build
