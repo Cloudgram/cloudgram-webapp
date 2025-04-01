@@ -9,7 +9,7 @@ RUN npm install\
     && npm install typescript -g\
     && npm install vite @vitejs/plugin-react
 
-RUN npm install --save-dev @types/vite
+RUN npm install --save-dev @types/react @types/react-dom
 
 COPY . .
 
