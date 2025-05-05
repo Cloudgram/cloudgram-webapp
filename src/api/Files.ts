@@ -1,5 +1,5 @@
-import { validateResponse } from "../utils/responseValidator";
-import { apiUrl } from "./api_url";
+import { validateResponse } from '../utils/responseValidator';
+import { apiUrl } from './api_url';
 
 export const uploadFile = async (file: File, folderId: string) => {
     const queryParams = new URLSearchParams({
@@ -14,13 +14,12 @@ export const uploadFile = async (file: File, folderId: string) => {
         body: file,
         headers: {
             'Content-Disposition': `attachment; filename="${file.name}"`,
-            'Content-Type': file.type
-        }
+            'Content-Type': file.type,
+        },
     })
         .then(res => validateResponse(res))
         .then(res => res.json());
 };
-
 
 export const deleteFile = async (fileId: string): Promise<void> => {
     return fetch(`${apiUrl}/file/${fileId}`, {
@@ -29,9 +28,13 @@ export const deleteFile = async (fileId: string): Promise<void> => {
     })
         .then(res => validateResponse(res))
         .then(undefined);
-}
+};
 
-export const downloadFile = async (fileId: string, fileName: string, fileExtension: string): Promise<void> => {
+export const downloadFile = async (
+    fileId: string,
+    fileName: string,
+    fileExtension: string,
+): Promise<void> => {
     const response = await fetch(`${apiUrl}/file/${fileId}`, {
         method: 'GET',
         credentials: 'include',
@@ -42,7 +45,8 @@ export const downloadFile = async (fileId: string, fileName: string, fileExtensi
     }
 
     const contentDisposition = response.headers.get('Content-Disposition');
-    const suggestedFileName = contentDisposition?.match(/filename="?(.+?)"?$/)?.[1] || `${fileName}.${fileExtension}`;
+    const suggestedFileName =
+        contentDisposition?.match(/filename="?(.+?)"?$/)?.[1] || `${fileName}.${fileExtension}`;
 
     const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);
@@ -53,4 +57,4 @@ export const downloadFile = async (fileId: string, fileName: string, fileExtensi
     a.click();
     a.remove();
     window.URL.revokeObjectURL(url);
-}
+};

@@ -1,4 +1,4 @@
-import { archiveExtensions, excelExtensions, imageExtensions, powerpointExtensions, programmingExtensions, videoExtensions, wordExtensions } from "./fileExtensions";
+import { archiveExtensions, excelExtensions, exeExtension, imageExtensions, powerpointExtensions, programmingExtensions, videoExtensions, wordExtensions } from "./fileExtensions";
 
 export const getFileIcon = (extension: string) => {
     const size = 35;
@@ -44,7 +44,7 @@ export const getFileIcon = (extension: string) => {
     if (videoExtensions.includes(extension)) {
         return (
             <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 16 16">
-                <path fill="currentColor" fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2z" />
+                <path fill="currentColor" fillRule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2z" />
             </svg>
         )
     }
@@ -87,14 +87,21 @@ export const getFileIcon = (extension: string) => {
         )
     }
 
+    if (exeExtension.includes(extension)) {
+        return (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 16 16">
+                <path fill="currentColor" fillRule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM2.575 15.202H.785v-1.073H2.47v-.606H.785v-1.025h1.79v-.648H0v3.999h2.575zM6.31 11.85h-.893l-.823 1.439h-.036l-.832-1.439h-.931l1.227 1.983l-1.239 2.016h.861l.853-1.415h.035l.85 1.415h.908l-1.254-1.992zm1.025 3.352h1.79v.647H6.548V11.85h2.576v.648h-1.79v1.025h1.684v.606H7.334v1.073Z" />
+            </svg>
+        )
+    }
+
 
 
     const icon = fileTypeMap[extension.toLowerCase()];
 
     return icon || (
-        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M12 2L3 6v12l9 4 9-4V6z" />
-            <text x="12" y="16" fill="#FFFFFF" fontSize="10" fontWeight="bold" textAnchor="middle">FILE</text>
+        <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 16 16">
+            <path fill="currentColor" d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1" />
         </svg>
     );
 };

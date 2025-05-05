@@ -1,12 +1,25 @@
+// import { useUserQuery } from '../../hooks/useUserQuery';
 import { UserType } from '../../types/UserType';
 import { SearchInput } from '../SearchInput/SearchInput';
-import { profile, home, avatar, styles, bot, getUser, useEffect, useState, useMutation, useNavigate } from './index'
+import { UserPanel } from '../UserPanel/UserPanel';
 
+import {
+    home,
+    avatar,
+    styles,
+    bot,
+    useEffect,
+    useNavigate,
+    useMutation,
+    useState,
+    getUser,
+} from './index';
 
 export const Header = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState<UserType>();
-    
+    const [userPanel, setUserPanel] = useState(false);
+
     const userMutation = useMutation({
         mutationFn: () => getUser(),
         onSuccess(data: UserType) {
@@ -15,56 +28,72 @@ export const Header = () => {
         onError() {
             navigate('/auth', { replace: true });
             throw new Error('Сессия истекла или была заблокирована');
-        }
-    })
+        },
+    });
 
     useEffect(() => {
         userMutation.mutate();
     }, []);
 
+    const toggleUserPanel = () => {
+        setUserPanel(!userPanel);
+    };
+
     return (
         <header className={styles.header}>
             <div className={styles.header__left}>
-                <div className={styles.header__user}>
+                <div className={styles.header__user} onClick={() => toggleUserPanel()}>
                     <div className={styles.icon__container}>
                         {user?.avatar ? (
                             <img
                                 src={`data:image/jpeg;base64,${user.avatar}`}
-                                alt="user icon"
+                                alt='user icon'
                                 className={styles.user__icon}
                             />
                         ) : (
-                            <img
-                                src={avatar}
-                                alt="user icon"
-                                className={styles.user__icon}
-                            />
+                            <img src={avatar} alt='user icon' className={styles.user__icon} />
                         )}
                     </div>
                     <div className={styles.header__username}>
-                        <span className={styles.full__name}>{user?.full_name}</span>
+                        <span className={styles.full__name}>
+                            {user?.full_name}
+                            {user?.subscriber && (
+                                <svg
+                                    width='23'
+                                    height='23'
+                                    viewBox='0 0 28 28'
+                                    fill='none'
+                                    xmlns='http://www.w3.org/2000/svg'
+                                >
+                                    <path
+                                        d='M21.2501 3C21.4925 3 21.7176 3.11688 21.8574 3.30983L21.9119 3.39706L25.9186 10.9098L25.9615 11.0122L25.9731 11.05L25.9901 11.1273L25.9994 11.2153L25.9973 11.3147L26.0001 11.25C26.0001 11.3551 25.9785 11.4552 25.9394 11.5461L25.9106 11.6057L25.87 11.6723L25.8173 11.7408L14.6 24.7047C14.4999 24.8391 14.3628 24.9277 14.2139 24.9703L14.1559 24.9844L14.0585 24.9979L13.9999 25L13.8993 24.9932L13.8142 24.9771L13.7109 24.9432L13.6852 24.931C13.5949 24.8911 13.5119 24.8316 13.4425 24.7535L2.17081 11.7263L2.1087 11.6387L2.06079 11.5456L2.02611 11.4463L2.00297 11.3152L2.00269 11.1878L2.01755 11.0891L2.02714 11.0499L2.06104 10.9538L2.08838 10.8971L6.08838 3.39706C6.20243 3.18321 6.41149 3.0396 6.64753 3.00704L6.75014 3H21.2501ZM17.9061 12H10.0911L14.0011 22.16L17.9061 12ZM8.48514 12H4.38914L11.7621 20.518L8.48514 12ZM23.6081 12H19.5151L16.2421 20.511L23.6081 12ZM10.0241 4.499H7.19914L3.99814 10.5H8.42314L10.0241 4.499ZM16.4231 4.499H11.5761L9.97514 10.5H18.0231L16.4231 4.499ZM20.8001 4.499H17.9751L19.5761 10.5H23.9991L20.8001 4.499Z'
+                                        fill='#212121'
+                                    />
+                                </svg>
+                            )}
+                        </span>
                         <span className={styles.user__name}>{`@${user?.username}`}</span>
                     </div>
                 </div>
             </div>
+            {userPanel && <UserPanel />}
             <SearchInput />
             <ul className={styles.header__list}>
                 <li className={styles.header__item}>
-                    <a href="/" className={styles.header__button}>
-                        <img src={home} alt="home_page" className={styles.header__icon} />
+                    <a href='/' className={styles.header__button}>
+                        <img src={home} alt='home_page' className={styles.header__icon} />
                     </a>
                 </li>
                 <li className={styles.header__item}>
-                    <a href="/" className={styles.header__button}>
-                        <img src={profile} alt="profile_page" className={styles.header__icon} />
-                    </a>
-                </li>
-                <li className={styles.header__item}>
-                    <a href="https://t.me/CloudgramWeb_bot" target="_blank" className={styles.header__button}>
-                        <img src={bot} alt="bot_link" className={styles.header__icon} />
+                    <a
+                        href='https://t.me/CloudgramWeb_bot'
+                        target='_blank'
+                        className={styles.header__button}
+                    >
+                        <img src={bot} alt='bot_link' className={styles.header__icon} />
                     </a>
                 </li>
             </ul>
         </header>
-    )
-}
+    );
+};
