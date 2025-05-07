@@ -24,6 +24,10 @@
 
     &__user {
         display: flex;
+        user-select: none;
+        -webkit-user-select: none; // для Safari
+        -moz-user-select: none; // для Firefox
+        -ms-user-select: none; // для IE/Edge
         max-height: 60px;
         align-items: center;
         gap: 15px;

@@ -1,5 +1,6 @@
 // import { useUserQuery } from '../../hooks/useUserQuery';
 import { UserType } from '../../types/UserType';
+import { useClickOutside } from '../Filters';
 import { SearchInput } from '../SearchInput/SearchInput';
 import { UserPanel } from '../UserPanel/UserPanel';
 
@@ -30,6 +31,12 @@ export const Header = () => {
             throw new Error('Сессия истекла или была заблокирована');
         },
     });
+
+    const closeCard = () => {
+        setUserPanel(false);
+    };
+
+    const cardRef = useClickOutside(closeCard);
 
     useEffect(() => {
         userMutation.mutate();
@@ -76,7 +83,7 @@ export const Header = () => {
                     </div>
                 </div>
             </div>
-            {userPanel && <UserPanel />}
+            {userPanel && <UserPanel menuRef={cardRef} />}
             <SearchInput />
             <ul className={styles.header__list}>
                 <li className={styles.header__item}>

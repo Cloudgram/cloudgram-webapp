@@ -1,13 +1,13 @@
 .user {
     display: flex;
     position: absolute;
-    top: 20%;
+    top: 12%;
     left: 1.5%;
     z-index: 100;
 
     &__top {
         font-weight: 500;
-        font-size: 17px;
+        font-size: 15px;
         font-family: "RB", sans-serif;
     }
 
@@ -50,8 +50,8 @@
         display: flex;
         align-items: center;
         padding: 10px 15px;
-        // border: 1px solid rgb(0, 0, 0, 0.5);
-        background-color: white;
+        border: 1px solid rgb(0, 0, 0, 0.5);
+        // background-color: white;
         gap: 3px;
         border-radius: 100px;
         font-size: 21px;
@@ -94,6 +94,12 @@
         width: 100%;
         box-sizing: border-box;
         font-weight: 500;
+
+        &_value {
+            gap: 7px;
+            display: flex;
+            align-items: center;
+        }
     }
 
     &__logout {
@@ -103,5 +109,14 @@
         padding: 10px 0;
         font-weight: 500;
         font-size: 20px;
+        transition: background-color 0.1s ease-in-out;
+
+        &:hover {
+            background-color: rgba(11, 87, 208, 0.08);
+        }
+
+        &:active {
+            background-color: rgba(11, 87, 208, 0.2);
+        }
     }
 }

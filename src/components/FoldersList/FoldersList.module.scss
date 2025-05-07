@@ -40,21 +40,48 @@
     padding: 16px;
     // max-width: 250px;
     border-radius: 20px;
-    cursor: pointer;
     font-family: "GR", sans-serif;
     text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none; // для Safari
+    -moz-user-select: none; // для Firefox
+    -ms-user-select: none;
     transition:
-        scale 0.2s ease-in-out,
-        box-shadow 0.2s ease-in-out;
+        transform 0.1s ease-in-out,
+        box-shadow 0.1s ease-in-out;
 
     &_line {
         padding: 15px;
         border-radius: 10px;
         background-color: rgba(0, 0, 0, 0.1);
         text-decoration: none;
+        user-select: none;
+        -webkit-user-select: none; // для Safari
+        -moz-user-select: none; // для Firefox
+        -ms-user-select: none;
+        transition:
+            transform 0.1s ease-in-out,
+            box-shadow 0.1s ease-in-out;
+
+        &__folder {
+            cursor: pointer;
+
+            &:hover {
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            }
+
+            &:active {
+                transform: scale(0.99);
+            }
+        }
+
+        &:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
     }
 
     &__folder {
+        cursor: pointer;
         &:hover {
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             transform: scale(1.01);
@@ -63,6 +90,9 @@
         &:active {
             transform: scale(0.99);
         }
+    }
+    &:hover {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
 }
 
