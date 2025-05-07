@@ -1,10 +1,7 @@
-import React from 'react';
-import { uploadFile } from '../../api/Files';
-import { styles, useState, CreateFolderModal, useParams } from './index';
+import { useEffect } from 'react';
+import { styles, useState, CreateFolderModal, useParams, uploadFile, Load, useClickOutside, animatePanel } from './index';
 import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../CreateFolder';
-import { Load } from '../Loader/Load';
-import { useClickOutside } from '../../hooks/useClickOutside';
 
 export const Filters = () => {
     const [isPanelVisible, setIsPanelVisible] = useState(false);
@@ -13,13 +10,17 @@ export const Filters = () => {
 
     const closeMenu = () => {
         setIsPanelVisible(false);
-    }
+    } 
 
     const menuRef = useClickOutside(closeMenu);
 
     const togglePanel = () => {
         setIsPanelVisible(!isPanelVisible);
     };
+
+    useEffect(() => {
+        animatePanel(menuRef, isPanelVisible);
+    }, [isPanelVisible, menuRef]);
 
     const openModal = () => {
         setCreateModal(true);
@@ -42,9 +43,10 @@ export const Filters = () => {
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         setIsPanelVisible(false);
-        const file = e.target.files?.[0];
+        const file = e.target.files;
         if (file) {
-            uploadMutation.mutate(file);
+            const fileArray = Array.from(file);
+            await Promise.all(fileArray.map((file) => uploadMutation.mutateAsync(file)));
         } else {
             console.error('No file selected');
         }
@@ -76,6 +78,7 @@ export const Filters = () => {
                             <input
                                 id="fileInput"
                                 type="file"
+                                multiple
                                 style={{ display: 'none' }}
                                 onChange={handleFileUpload}
                             />

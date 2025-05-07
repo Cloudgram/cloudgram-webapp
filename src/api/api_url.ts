@@ -1,1 +1,1 @@
-export const apiUrl = 'https://api.cloudgram.online'
+export const apiUrl = "https://api.cloudgram.online";

@@ -1,5 +1,5 @@
 // import { Load } from '../../components/Loader/Load'
-import { FoldersList, Header, styles } from './index'
+import { FoldersList, Header, styles } from './index';
 
 export const MainPage = () => {
     return (
@@ -8,5 +8,5 @@ export const MainPage = () => {
             <Header />
             <FoldersList />
         </section>
-    )
-}
+    );
+};

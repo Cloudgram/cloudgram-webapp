@@ -41,10 +41,27 @@
     &__button {
         padding: 15px 0;
         border-radius: 10px;
+        transition:
+            color 0.1s ease,
+            background-color 0.1s ease;
 
         &_login {
-            background-color: #5AC8FB;
+            background-color: #5ac8fb;
             color: white;
+
+            &:hover {
+                background-color: #4da8e0;
+            }
+
+            &:focus {
+                outline: 2px solid #3b91c4;
+                outline-offset: 2px;
+            }
+
+            &:active {
+                background-color: #3b91c4;
+                transform: scale(0.98);
+            }
         }
 
         &_bot {
@@ -52,6 +69,22 @@
             text-align: center;
             color: black;
             border: 2px solid #080808;
+
+            &:hover {
+                background-color: #080808;
+                color: white;
+            }
+
+            &:focus {
+                outline: 2px solid #080808;
+                outline-offset: 2px;
+            }
+
+            &:active {
+                background-color: #080808;
+                color: white;
+                transform: scale(0.98); 
+            }
         }
     }
 }

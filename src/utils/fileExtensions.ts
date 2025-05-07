@@ -25,6 +25,7 @@ export const programmingExtensions = [
     'coffee', 'litcoffee', 'elm', 'clj', 'cljs', 'edn', 'groovy', 'jl', 'mat', 'm', 'v', 'sv', 'svh', 'vhd', 'vhdl'
 ];
 
+export const exeExtension = 'exe';
 export const imageExtensions = ['svg', 'png', 'jpg', 'jpeg'];
 export const videoExtensions = ['mp4', 'mov', 'avi', 'wmv', 'flv'];
 export const wordExtensions = ['doc', 'docx', 'docm', 'dot', 'dotx', 'dotm'];
