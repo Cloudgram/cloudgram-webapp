@@ -1,4 +1,4 @@
-import { useFoldersQuery } from '../../hooks/useFolderQuery';
+import { useFoldersQuery } from '../../hooks/queries/useFolderQuery';
 import { RootFolderType } from '../../types/RootType';
 import { Breadcrumbs } from '../Breadcrumbs/Breadcrumbs';
 import {

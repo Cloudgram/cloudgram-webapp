@@ -1,10 +1,11 @@
-import { Link, useParams } from 'react-router-dom';
-import { useFolderHistory } from '../../hooks/useFolderHistory';
+import { Link } from 'react-router-dom';
+import { useFolderHistory } from '../../hooks/queries/useFolderHistory';
 import styles from './Breadcrumbs.module.scss';
 import { Fragment } from 'react';
+import { usePathfinder } from '../../hooks/usePathFinder';
 
 export const Breadcrumbs = () => {
-    const folderId = useParams().folderId;
+    const folderId = usePathfinder();
     const folderPath = useFolderHistory(folderId ?? '0');
 
     const handleBreadcrumbClick = (index: number) => {

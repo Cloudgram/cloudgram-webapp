@@ -1,16 +1,13 @@
-import { FC } from 'react';
 import {
     avatar,
-    useMutation,
-    logoutSession,
     useUserQuery,
     calcSum,
     cooldownDate,
     dateFormat,
-    queryClient,
-    useNavigate,
     styles,
-    AxiosError,
+    useLogoutMutation,
+    ButtonLoad,
+    FC,
 } from './index';
 
 interface IUserPanel {
@@ -18,30 +15,18 @@ interface IUserPanel {
 }
 
 export const UserPanel: FC<IUserPanel> = ({ menuRef }) => {
-    const { data: user } = useUserQuery();
-    const navigate = useNavigate();
+    // const uploaded = 10000000000000;
+    // console.log(user);
+    const { data: user, isLoading, isError } = useUserQuery();
+    const { mutate, isPending } = useLogoutMutation();
     const size = 25;
 
-    const logoutMutation = useMutation({
-        mutationFn: () => logoutSession(),
-        onSuccess() {
-            queryClient.setQueryData(['user'], { isAuth: true });
-            navigate('/auth', { replace: true });
-        },
-        onError(error: AxiosError) {
-            if (error.response?.status === 404) {
-                throw new Error('Неверный код');
-            } else if (error.message.includes('CORS')) {
-                console.warn('CORS-проблема, но запрос может быть успешным.');
-            } else {
-                throw new Error('Ошибка сервера');
-            }
-        },
-    });
-
     const handleLogoutClick = () => {
-        logoutMutation.mutate();
+        mutate();
     };
+
+    if (isLoading) return <div>Загрузка...</div>;
+    if (isError) return <div>Ошибка загрузки данных</div>;
 
     return (
         <div className={styles.user} ref={menuRef}>
@@ -55,12 +40,20 @@ export const UserPanel: FC<IUserPanel> = ({ menuRef }) => {
                             className={styles.user__avatar}
                         />
                     ) : (
-                        <img src={avatar} alt='user icon' className={styles.user__avatar} />
+                        <img
+                            src={avatar}
+                            alt='user icon'
+                            className={styles.user__avatar}
+                        />
                     )}
                     {user?.subscriber ? (
-                        <span className={styles.user__fullname}>{user?.full_name}</span>
+                        <span className={styles.user__fullname}>
+                            {user?.full_name}
+                        </span>
                     ) : (
-                        <span className={styles.user__fullname}>{user?.full_name}</span>
+                        <span className={styles.user__fullname}>
+                            {user?.full_name}
+                        </span>
                     )}
                     <div className={styles.user__stats}>
                         <div className={styles.user__createdat}>
@@ -102,7 +95,9 @@ export const UserPanel: FC<IUserPanel> = ({ menuRef }) => {
                                     {cooldownDate(user?.subscriber.end || '')}
                                 </span>
                             ) : (
-                                <span className={styles.user__premium_end}>У вас нет подписки</span>
+                                <span className={styles.user__premium_end}>
+                                    У вас нет подписки
+                                </span>
                             )}
                         </div>
                     </div>
@@ -127,7 +122,9 @@ export const UserPanel: FC<IUserPanel> = ({ menuRef }) => {
                         </svg>
                         {user?.subscriber ? (
                             <span className={styles.user__storage_value}>
-                                Загружено: {calcSum(user?.uploaded_sum ?? 0)} гб, из
+                                {`Загружено: ${calcSum(
+                                    user?.uploaded_sum ?? 0,
+                                )} из `}
                                 <svg
                                     fill='#000000'
                                     width={size}
@@ -136,20 +133,31 @@ export const UserPanel: FC<IUserPanel> = ({ menuRef }) => {
                                     xmlns='http://www.w3.org/2000/svg'
                                 >
                                     <path
-                                        fill-rule='evenodd'
+                                        fillRule='evenodd'
                                         d='M5.25 8.5c-2.032 0-3.75 1.895-3.75 3.75S3.218 16 5.25 16c1.017 0 2.014-.457 3.062-1.253.89-.678 1.758-1.554 2.655-2.497-.897-.943-1.765-1.82-2.655-2.497C7.264 8.957 6.267 8.5 5.25 8.5zM12 11.16c-.887-.933-1.813-1.865-2.78-2.6C8.048 7.667 6.733 7 5.25 7 2.343 7 0 9.615 0 12.25s2.343 5.25 5.25 5.25c1.483 0 2.798-.668 3.97-1.56.967-.735 1.893-1.667 2.78-2.6.887.933 1.813 1.865 2.78 2.6 1.172.892 2.487 1.56 3.97 1.56 2.907 0 5.25-2.615 5.25-5.25S21.657 7 18.75 7c-1.483 0-2.798.668-3.97 1.56-.967.735-1.893 1.667-2.78 2.6zm1.033 1.09c.897.943 1.765 1.82 2.655 2.497C16.736 15.543 17.733 16 18.75 16c2.032 0 3.75-1.895 3.75-3.75S20.782 8.5 18.75 8.5c-1.017 0-2.014.457-3.062 1.253-.89.678-1.758 1.554-2.655 2.497z'
                                     />
                                 </svg>
                             </span>
                         ) : (
                             <span className={styles.user__storage_value}>
-                                Загружено: {calcSum(user?.uploaded_sum ?? 0)} гб из{' '}
-                                {calcSum(user?.storage_limit ?? 0)} гб
+                                Загружено: {calcSum(user?.uploaded_sum ?? 0)} гб
+                                из {calcSum(user?.storage_limit ?? 0)}
                             </span>
                         )}
                     </div>
-                    <button className={styles.user__logout} onClick={() => handleLogoutClick()}>
-                        Выйти
+                    <button
+                        className={styles.user__logout}
+                        onClick={() => handleLogoutClick()}
+                    >
+                        {isPending ? (
+                            <ButtonLoad
+                                type='spinner-circle'
+                                bgColor={'black'}
+                                size={40}
+                            />
+                        ) : (
+                            'Выйти'
+                        )}
                     </button>
                 </div>
             </div>

@@ -1,10 +1,14 @@
-// import { Load } from '../../components/Loader/Load'
-import { FoldersList, Header, styles } from './index';
+import { FoldersList, Header, styles, useParams, Navigate } from './index';
 
 export const MainPage = () => {
+    const { folderId } = useParams();
+
+    if (folderId === '0') {
+        return <Navigate to={'/my-drive'} replace />;
+    }
+
     return (
         <section className={styles.main}>
-            {/* <Load type="box-rotate-z" bgColor={'black'} color={'black'} title={'LOADING...'} size={100} /> */}
             <Header />
             <FoldersList />
         </section>

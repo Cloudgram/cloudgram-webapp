@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { getFolders } from '../api/Folders';
-import { RootFolderType } from '../types/RootType';
+import { getFolders } from '../../api/Folders';
+import { RootFolderType } from '../../types/RootType';
 
 export const useFoldersQuery = (folderId: string) => {
     return useQuery<RootFolderType>({

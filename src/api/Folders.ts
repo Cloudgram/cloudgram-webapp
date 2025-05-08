@@ -1,20 +1,18 @@
 import { apiUrl } from './api_url';
-import { validateResponse } from '../utils/responseValidator';
+import { validateResponse } from '../utils/validators/responseValidator';
 import { RootFolderType } from '../types/RootType';
 
-export const getFolders = async (
-    folderId: string
-): Promise<RootFolderType> => {
+export const getFolders = async (folderId: string): Promise<RootFolderType> => {
     try {
         const response = await fetch(`${apiUrl}/folder/${folderId}`, {
             method: 'GET',
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json',
+                Accept: 'application/json',
             },
             redirect: 'follow',
-            mode: 'cors'
+            mode: 'cors',
         });
 
         if (!response.ok) {
@@ -29,10 +27,7 @@ export const getFolders = async (
     }
 };
 
-export const createFolder = async (
-    title: string,
-    folderId: string,
-): Promise<void> => {
+export const createFolder = async (title: string, folderId: string): Promise<void> => {
     const colorId = 2;
     const queryParams = new URLSearchParams({
         folder_id: folderId,
@@ -45,10 +40,10 @@ export const createFolder = async (
         credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json',
+            Accept: 'application/json',
         },
         mode: 'cors',
-        redirect: 'follow'
+        redirect: 'follow',
     })
         .then(res => validateResponse(res))
         .then(res => res.json());
@@ -60,11 +55,11 @@ export const deleteFolder = async (folderId: string): Promise<void> => {
         credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json',
+            Accept: 'application/json',
         },
         mode: 'cors',
-        redirect: 'follow'
+        redirect: 'follow',
     })
         .then(res => validateResponse(res))
         .then(undefined);
-}
+};

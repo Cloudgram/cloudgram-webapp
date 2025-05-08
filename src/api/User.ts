@@ -1,4 +1,4 @@
-import { validateResponse } from '../utils/responseValidator';
+import { validateResponse } from '../utils/validators/responseValidator';
 import { UserType } from '../types/UserType';
 import { apiUrl } from './api_url';
 

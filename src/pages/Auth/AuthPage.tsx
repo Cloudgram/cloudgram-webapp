@@ -1,39 +1,18 @@
-// import { useUserQuery } from '../../hooks/useUserQuery';
 import {
     styles,
-    getAuth,
-    AxiosError,
     useState,
-    useNavigate,
-    useMutation,
-    queryClient,
     AuthCodeInput,
+    ButtonLoad,
+    useAuthMutation,
+    AxiosError,
 } from './index';
 
 export const AuthPage = () => {
-    const navigate = useNavigate();
     const [code, setCode] = useState('');
-
-    const authMutation = useMutation({
-        mutationFn: () => getAuth(code),
-        onSuccess() {
-            queryClient.removeQueries({ queryKey: ['folders'] });
-            queryClient.setQueryData(['user'], { isAuth: true });
-            navigate('/folder/0', { replace: true });
-        },
-        onError(error: AxiosError) {
-            if (error.response?.status === 404) {
-                throw new Error('Неверный код');
-            } else if (error.message.includes('CORS')) {
-                console.warn('CORS-проблема, но запрос может быть успешным.');
-            } else {
-                throw new Error('Ошибка сервера');
-            }
-        },
-    });
+    const { mutate, isPending, isError, error } = useAuthMutation();
 
     const handleLogin = () => {
-        authMutation.mutate();
+        mutate(code);
     };
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -42,18 +21,52 @@ export const AuthPage = () => {
         }
     };
 
+    const errorMessage = () => {
+        console.log(error);
+        if (error instanceof AxiosError) {
+            if (error.response?.status === 404) {
+                return <span className={styles.auth__error}>Неверный код</span>;
+            } else if (error.message.includes('CORS')) {
+                return (
+                    <span className={styles.auth__error}>
+                        CORS-проблема, но запрос может быть успешным.
+                    </span>
+                );
+            } else {
+                return (
+                    <span className={styles.auth__error}>Ошибка сервера</span>
+                );
+            }
+        }
+        return null; // В случае, если ошибка не экземпляр AxiosError
+    };
+
     return (
         <div className={styles.auth}>
             <div className={styles.auth__form}>
                 <h1 className={styles.auth__title}>Cloudgram</h1>
-                <AuthCodeInput onCodeChange={setCode} onKeyDown={handleKeyDown} />
-                <span className={styles.auth__descr}>Введите код из Telegram бота</span>
+                <AuthCodeInput
+                    onCodeChange={setCode}
+                    onKeyDown={handleKeyDown}
+                />
+                <span className={styles.auth__descr}>
+                    Введите код из Telegram бота
+                </span>
                 <div className={styles.auth__buttons}>
+                    {isError && error && errorMessage()}
                     <button
                         className={`${styles.auth__button} ${styles.auth__button_login}`}
                         onClick={handleLogin}
                     >
-                        Войти
+                        {isPending ? (
+                            <ButtonLoad
+                                type='spinner-circle'
+                                bgColor={'white'}
+                                size={40}
+                            />
+                        ) : (
+                            'Войти'
+                        )}
                     </button>
                     <a
                         href='https://t.me/miishalom_test_bot'
