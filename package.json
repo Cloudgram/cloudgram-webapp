@@ -15,8 +15,8 @@
         "lint": "eslint .",
         "preview": "vite preview",
         "docker:remove-old": "for /f \"tokens=*\" %i in ('docker ps -aq --filter \"ancestor=cloudgram-web\"') do docker rm -f %i || echo No old container found & for /f \"tokens=*\" %j in ('docker images -q cloudgram-web') do docker rmi -f %j || echo No old image found",
-        "docker:build": "docker build -t cloudgram-web .",
-        "docker:run": "docker run -p 3000:3000 cloudgram-web"
+        "docker:build": "docker build -t cloudgram-web --target=development .",
+        "docker:run": "docker run -p 5174:5174 cloudgram-web"
     },
     "dependencies": {
         "@reduxjs/toolkit": "^2.6.1",
