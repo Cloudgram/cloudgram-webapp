@@ -13,7 +13,10 @@
         "dev": "vite --host",
         "build": "tsc -b && vite build",
         "lint": "eslint .",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "docker:remove-old": "for /f \"tokens=*\" %i in ('docker ps -aq --filter \"ancestor=cloudgram-web\"') do docker rm -f %i || echo No old container found & for /f \"tokens=*\" %j in ('docker images -q cloudgram-web') do docker rmi -f %j || echo No old image found",
+        "docker:build": "docker build -t cloudgram-web .",
+        "docker:run": "docker run -p 3000:3000 cloudgram-web"
     },
     "dependencies": {
         "@reduxjs/toolkit": "^2.6.1",
@@ -32,19 +35,22 @@
         "zod": "^3.24.2"
     },
     "devDependencies": {
-        "@eslint/js": "^9.17.0",
+        "@eslint/js": "^9.26.0",
         "@types/js-cookie": "^3.0.6",
         "@types/react": "^18.3.18",
         "@types/react-dom": "^18.3.5",
         "@types/react-redux": "^7.1.34",
+        "@typescript-eslint/eslint-plugin": "^8.32.0",
+        "@typescript-eslint/parser": "^8.32.0",
         "@vitejs/plugin-react": "^4.3.4",
-        "eslint": "^9.17.0",
-        "eslint-plugin-react-hooks": "^5.0.0",
-        "eslint-plugin-react-refresh": "^0.4.16",
-        "globals": "^15.14.0",
+        "eslint": "^9.26.0",
+        "eslint-plugin-react-hooks": "^5.2.0",
+        "eslint-plugin-react-refresh": "^0.4.20",
+        "globals": "^15.15.0",
+        "react-refresh": "^0.17.0",
         "sass-embedded": "^1.83.4",
-        "typescript": "^5.8.3",
-        "typescript-eslint": "^8.18.2",
+        "typescript": "5.7",
+        "typescript-eslint": "^8.32.0",
         "vite": "^6.0.5"
     }
 }
