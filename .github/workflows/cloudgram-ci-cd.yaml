@@ -2,9 +2,13 @@ name: Cloudgram CI/CD
 
 on:
     push:
-        branches: [main, new-design]
+        branches:
+            - main
+            - new-design
     pull_request:
-        branches: [main, new-design]
+        branches:
+            - main
+            - new-design
 
 jobs:
     build:
@@ -56,6 +60,11 @@ jobs:
                     docker tag cloudgram-web ${{ secrets.DOCKER_USERNAME }}/cloudgram-web:latest
                     docker push ${{ secrets.DOCKER_USERNAME }}/cloudgram-web:latest
                   elif [ "${{ github.ref }}" == "refs/heads/new-design" ]; then
-                    docker tag cloudgram-web ${{ secrets.DOCKER_USERNAME }}/cloudgram-web:dev
-                    docker push ${{ secrets.DOCKER_USERNAME }}/cloudgram-web:dev
+                    echo "Skipping Docker push for new-design branch"
                   fi
+
+    no_dependency_job:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Dummy step
+              run: echo "This job has no dependencies"
