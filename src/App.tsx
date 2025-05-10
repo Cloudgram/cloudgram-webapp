@@ -1,5 +1,5 @@
 import { Route, Routes, BrowserRouter, Navigate } from 'react-router-dom';
-import './App.css';
+import styles from './App.module.css';
 import { MainPage, AuthPage } from './index';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './api/queryClient';
@@ -12,32 +12,34 @@ function App() {
     return (
         <QueryClientProvider client={queryClient}>
             <BrowserRouter>
-                <Suspense
-                    fallback={
-                        <Load
-                            type='box-rotate-z'
-                            bgColor={'black'}
-                            color={'black'}
-                            title={'Загрузка...'}
-                            size={100}
-                        />
-                    }
-                >
-                    <Routes>
-                        {/* Публичные роуты */}
-                        <Route path={ROUTES.AUTH} element={<AuthPage />} />
+                <div className={styles.container}>
+                    <Suspense
+                        fallback={
+                            <Load
+                                type='box-rotate-z'
+                                bgColor={'black'}
+                                color={'black'}
+                                title={'Загрузка...'}
+                                size={100}
+                            />
+                        }
+                    >
+                        <Routes>
+                            {/* Публичные роуты */}
+                            <Route path={ROUTES.AUTH} element={<AuthPage />} />
 
-                        {/* Приватные роуты */}
-                        <Route element={<PrivateRoute />}>
-                            <Route path={ROUTES.MY_DRIVE} element={<MainPage />} />
-                            <Route path={ROUTES.FOLDER} element={<MainPage />} />
-                        </Route>
+                            {/* Приватные роуты */}
+                            <Route element={<PrivateRoute />}>
+                                <Route path={ROUTES.MY_DRIVE} element={<MainPage />} />
+                                <Route path={ROUTES.FOLDER} element={<MainPage />} />
+                            </Route>
 
-                        {/* Редиректы */}
-                        <Route path='/' element={<Navigate to={ROUTES.MY_DRIVE} replace />} />
-                        <Route path='*' element={<Navigate to={ROUTES.MY_DRIVE} replace />} />
-                    </Routes>
-                </Suspense>
+                            {/* Редиректы */}
+                            <Route path='/' element={<Navigate to={ROUTES.MY_DRIVE} replace />} />
+                            <Route path='*' element={<Navigate to={ROUTES.MY_DRIVE} replace />} />
+                        </Routes>
+                    </Suspense>
+                </div>
             </BrowserRouter>
         </QueryClientProvider>
     );

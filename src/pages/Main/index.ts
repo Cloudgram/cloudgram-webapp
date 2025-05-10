@@ -4,4 +4,12 @@ import { useNavigate, useParams, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import styles from './MainPage.module.scss';
 
-export { FoldersList, Header, styles, useNavigate, useParams, useEffect, Navigate };
+export {
+    FoldersList,
+    Header,
+    styles,
+    useNavigate,
+    useParams,
+    useEffect,
+    Navigate,
+};

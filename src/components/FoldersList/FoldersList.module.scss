@@ -1,7 +1,8 @@
-.main__container {
+.folderslist__container {
     display: flex;
     flex-direction: row;
-    height: 100vh;
+    height: 100vh; // изменено с 100%
+    min-height: 0;
 }
 
 .list__title {
@@ -16,10 +17,15 @@
 }
 
 .list__container {
+    display: flex;
+    flex-direction: column;
     z-index: 1;
-    padding: 30px 30px;
+    padding: 30px;
     width: 100%;
-    // box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+    height: 100%;
+    min-height: 0;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .list__header {
@@ -27,6 +33,7 @@
     flex-direction: row;
     justify-content: space-between;
     margin-bottom: 30px;
+    flex-shrink: 0; // предотвращает сжатие заголовка
 }
 
 .list__orientation {
@@ -131,11 +138,59 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 15px;
+    overflow-y: auto;
+    padding-right: 10px;
+    border-radius: 20px;
+    // flex: 1;
+    min-height: 0;
+    max-height: calc(100vh - 250px); // вычитаем высоту header + footer + padding
 
-    &_line {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+    &::-webkit-scrollbar {
+        width: 6px;
+        margin-left: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-button {
+        display: none;
+    }
+}
+
+.folders__list_line {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    padding-right: 10px;
+    border-radius: 10px;
+    flex: 1;
+    min-height: 0;
+    max-height: calc(100vh - 250px); // вычитаем высоту header + footer + padding
+
+    &::-webkit-scrollbar {
+        width: 6px;
+        margin-left: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-button {
+        display: none;
     }
 }
 

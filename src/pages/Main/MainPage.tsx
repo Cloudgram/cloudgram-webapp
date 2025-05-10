@@ -1,4 +1,6 @@
-import { FoldersList, Header, styles, useParams, Navigate } from './index';
+import { FileManager } from '../../components/FileManager/FileManager';
+import { Header } from './index';
+import { useParams, Navigate } from 'react-router-dom';
 
 export const MainPage = () => {
     const { folderId } = useParams();
@@ -8,9 +10,9 @@ export const MainPage = () => {
     }
 
     return (
-        <section className={styles.main}>
+        <>
             <Header />
-            <FoldersList />
-        </section>
+            <FileManager />
+        </>
     );
 };
