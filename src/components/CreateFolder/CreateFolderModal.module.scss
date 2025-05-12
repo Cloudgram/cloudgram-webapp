@@ -27,10 +27,12 @@
         justify-content: end;
         gap: 10px;
     }
-    
+
     .create__button {
         color: #1967d2;
         padding: 10px 10px;
+        min-width: 120px;
+        min-height: 45px;
 
         &:disabled {
             color: #a0a0a0;
@@ -41,4 +43,15 @@
         color: #1967d2;
         padding: 10px 10px;
     }
+}
+
+.folder__colors {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.color__button {
+    padding: 20px;
+    border-radius: 100px;
 }

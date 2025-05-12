@@ -1,3 +1,4 @@
+import { isPremium } from '../../utils/isPremium';
 import {
     avatar,
     useUserQuery,
@@ -33,28 +34,22 @@ export const UserPanel: FC<IUserPanel> = ({ menuRef }) => {
             <div className={styles.user__container}>
                 <div className={styles.user__top}>&#64;{user?.username}</div>
                 <div className={styles.user__main}>
-                    {user?.avatar ? (
-                        <img
-                            src={`data:image/jpeg;base64,${user.avatar}`}
-                            alt='user icon'
-                            className={styles.user__avatar}
-                        />
-                    ) : (
-                        <img
-                            src={avatar}
-                            alt='user icon'
-                            className={styles.user__avatar}
-                        />
-                    )}
-                    {user?.subscriber ? (
-                        <span className={styles.user__fullname}>
-                            {user?.full_name}
-                        </span>
-                    ) : (
-                        <span className={styles.user__fullname}>
-                            {user?.full_name}
-                        </span>
-                    )}
+                    <div className={styles.user__info}>
+                        {user?.avatar ? (
+                            <img
+                                src={`data:image/jpeg;base64,${user.avatar}`}
+                                alt='user icon'
+                                className={styles.user__avatar}
+                            />
+                        ) : (
+                            <img src={avatar} alt='user icon' className={styles.user__avatar} />
+                        )}
+                        {isPremium() ? (
+                            <span className={styles.user__fullname}>{user?.full_name}</span>
+                        ) : (
+                            <span className={styles.user__fullname}>{user?.full_name}</span>
+                        )}
+                    </div>
                     <div className={styles.user__stats}>
                         <div className={styles.user__createdat}>
                             <svg
@@ -73,7 +68,7 @@ export const UserPanel: FC<IUserPanel> = ({ menuRef }) => {
                                 />
                             </svg>
                             <span className={styles.user__createdat__date}>
-                                {dateFormat(user?.created_at || '')}
+                                Регистрация: {dateFormat(user?.created_at!)}
                             </span>
                         </div>
                         <div className={styles.user__premium}>
@@ -90,71 +85,60 @@ export const UserPanel: FC<IUserPanel> = ({ menuRef }) => {
                                 />
                             </svg>
 
-                            {user?.subscriber ? (
+                            {isPremium() ? (
                                 <span className={styles.user__premium_end}>
-                                    {cooldownDate(user?.subscriber.end || '')}
+                                    {cooldownDate(user?.subscriber.end || '')} до окончания
                                 </span>
                             ) : (
-                                <span className={styles.user__premium_end}>
-                                    У вас нет подписки
+                                <span className={styles.user__premium_end}>У вас нет подписки</span>
+                            )}
+                        </div>
+                        <div className={styles.user__storage}>
+                            <svg
+                                width={size}
+                                height={size}
+                                viewBox='0 0 24 24'
+                                fill='none'
+                                xmlns='http://www.w3.org/2000/svg'
+                            >
+                                <g id='File / Cloud'>
+                                    <path
+                                        id='Vector'
+                                        d='M19 11C21.2091 11 23 12.7909 23 15C23 17.2091 21.2091 19 19 19L6 19.0001C3.23858 19.0001 1 16.7613 1 13.9999C1 11.3498 3.06206 9.18144 5.66895 9.01082C6.79019 6.64004 9.20335 5 12 5C15.5267 5 18.4447 7.60802 18.9297 11.0006C18.9532 11.0002 18.9764 11 19 11Z'
+                                        stroke='#000000'
+                                        strokeWidth='2'
+                                        strokeLinecap='round'
+                                        strokeLinejoin='round'
+                                    />
+                                </g>
+                            </svg>
+                            {isPremium() ? (
+                                <span className={styles.user__storage_value}>
+                                    {`Загружено: ${calcSum(user?.uploaded_sum ?? 0)} из `}
+                                    <svg
+                                        fill='#000000'
+                                        width={size}
+                                        height={size}
+                                        viewBox='0 0 24 24'
+                                        xmlns='http://www.w3.org/2000/svg'
+                                    >
+                                        <path
+                                            fillRule='evenodd'
+                                            d='M5.25 8.5c-2.032 0-3.75 1.895-3.75 3.75S3.218 16 5.25 16c1.017 0 2.014-.457 3.062-1.253.89-.678 1.758-1.554 2.655-2.497-.897-.943-1.765-1.82-2.655-2.497C7.264 8.957 6.267 8.5 5.25 8.5zM12 11.16c-.887-.933-1.813-1.865-2.78-2.6C8.048 7.667 6.733 7 5.25 7 2.343 7 0 9.615 0 12.25s2.343 5.25 5.25 5.25c1.483 0 2.798-.668 3.97-1.56.967-.735 1.893-1.667 2.78-2.6.887.933 1.813 1.865 2.78 2.6 1.172.892 2.487 1.56 3.97 1.56 2.907 0 5.25-2.615 5.25-5.25S21.657 7 18.75 7c-1.483 0-2.798.668-3.97 1.56-.967.735-1.893 1.667-2.78 2.6zm1.033 1.09c.897.943 1.765 1.82 2.655 2.497C16.736 15.543 17.733 16 18.75 16c2.032 0 3.75-1.895 3.75-3.75S20.782 8.5 18.75 8.5c-1.017 0-2.014.457-3.062 1.253-.89.678-1.758 1.554-2.655 2.497z'
+                                        />
+                                    </svg>
+                                </span>
+                            ) : (
+                                <span className={styles.user__storage_value}>
+                                    Загружено: {calcSum(user?.uploaded_sum ?? 0)} гб из{' '}
+                                    {calcSum(user?.storage_limit ?? 0)}
                                 </span>
                             )}
                         </div>
                     </div>
-                    <div className={styles.user__storage}>
-                        <svg
-                            width={size}
-                            height={size}
-                            viewBox='0 0 24 24'
-                            fill='none'
-                            xmlns='http://www.w3.org/2000/svg'
-                        >
-                            <g id='File / Cloud'>
-                                <path
-                                    id='Vector'
-                                    d='M19 11C21.2091 11 23 12.7909 23 15C23 17.2091 21.2091 19 19 19L6 19.0001C3.23858 19.0001 1 16.7613 1 13.9999C1 11.3498 3.06206 9.18144 5.66895 9.01082C6.79019 6.64004 9.20335 5 12 5C15.5267 5 18.4447 7.60802 18.9297 11.0006C18.9532 11.0002 18.9764 11 19 11Z'
-                                    stroke='#000000'
-                                    strokeWidth='2'
-                                    strokeLinecap='round'
-                                    strokeLinejoin='round'
-                                />
-                            </g>
-                        </svg>
-                        {user?.subscriber ? (
-                            <span className={styles.user__storage_value}>
-                                {`Загружено: ${calcSum(
-                                    user?.uploaded_sum ?? 0,
-                                )} из `}
-                                <svg
-                                    fill='#000000'
-                                    width={size}
-                                    height={size}
-                                    viewBox='0 0 24 24'
-                                    xmlns='http://www.w3.org/2000/svg'
-                                >
-                                    <path
-                                        fillRule='evenodd'
-                                        d='M5.25 8.5c-2.032 0-3.75 1.895-3.75 3.75S3.218 16 5.25 16c1.017 0 2.014-.457 3.062-1.253.89-.678 1.758-1.554 2.655-2.497-.897-.943-1.765-1.82-2.655-2.497C7.264 8.957 6.267 8.5 5.25 8.5zM12 11.16c-.887-.933-1.813-1.865-2.78-2.6C8.048 7.667 6.733 7 5.25 7 2.343 7 0 9.615 0 12.25s2.343 5.25 5.25 5.25c1.483 0 2.798-.668 3.97-1.56.967-.735 1.893-1.667 2.78-2.6.887.933 1.813 1.865 2.78 2.6 1.172.892 2.487 1.56 3.97 1.56 2.907 0 5.25-2.615 5.25-5.25S21.657 7 18.75 7c-1.483 0-2.798.668-3.97 1.56-.967.735-1.893 1.667-2.78 2.6zm1.033 1.09c.897.943 1.765 1.82 2.655 2.497C16.736 15.543 17.733 16 18.75 16c2.032 0 3.75-1.895 3.75-3.75S20.782 8.5 18.75 8.5c-1.017 0-2.014.457-3.062 1.253-.89.678-1.758 1.554-2.655 2.497z'
-                                    />
-                                </svg>
-                            </span>
-                        ) : (
-                            <span className={styles.user__storage_value}>
-                                Загружено: {calcSum(user?.uploaded_sum ?? 0)} гб
-                                из {calcSum(user?.storage_limit ?? 0)}
-                            </span>
-                        )}
-                    </div>
-                    <button
-                        className={styles.user__logout}
-                        onClick={() => handleLogoutClick()}
-                    >
+                    <button className={styles.user__logout} onClick={() => handleLogoutClick()}>
                         {isPending ? (
-                            <ButtonLoad
-                                type='spinner-circle'
-                                bgColor={'black'}
-                                size={40}
-                            />
+                            <ButtonLoad type='spinner-circle' bgColor={'black'} size={40} />
                         ) : (
                             'Выйти'
                         )}

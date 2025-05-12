@@ -25,16 +25,13 @@ function App() {
                         }
                     >
                         <Routes>
-                            {/* Публичные роуты */}
                             <Route path={ROUTES.AUTH} element={<AuthPage />} />
 
-                            {/* Приватные роуты */}
                             <Route element={<PrivateRoute />}>
                                 <Route path={ROUTES.MY_DRIVE} element={<MainPage />} />
                                 <Route path={ROUTES.FOLDER} element={<MainPage />} />
                             </Route>
 
-                            {/* Редиректы */}
                             <Route path='/' element={<Navigate to={ROUTES.MY_DRIVE} replace />} />
                             <Route path='*' element={<Navigate to={ROUTES.MY_DRIVE} replace />} />
                         </Routes>

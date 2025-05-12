@@ -3,12 +3,12 @@ export const calcSum = (bytes: number): string => {
 
     if (gb >= 1024 ** 2) {
         // Петабайты
-        return (gb / 1024 ** 2).toFixed(1) + ' Пб';
+        return (gb / 1024 ** 2).toFixed(2) + ' Пб';
     } else if (gb >= 1024) {
         // Терабайты
-        return (gb / 1024).toFixed(1) + ' Тб';
+        return (gb / 1024).toFixed(2) + ' Тб';
     } else {
         // Гигабайты
-        return gb.toFixed(0) + ' Гб';
+        return gb.toFixed(2) + ' Гб';
     }
 };

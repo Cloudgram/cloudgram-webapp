@@ -1,14 +1,10 @@
-import { Link } from 'react-router-dom';
-import { useFolderHistory } from '../../hooks/queries/useFolderHistory';
-import styles from './Breadcrumbs.module.scss';
-import { Fragment } from 'react';
-import { usePathfinder } from '../../hooks/usePathFinder';
+import { styles, Link, useFolderHistory, Fragment, usePathfinder } from './index';
 
 export const Breadcrumbs = () => {
     const folderId = usePathfinder();
     const folderPath = useFolderHistory(folderId ?? '0');
 
-    const handleBreadcrumbClick = (index: number) => {
+    const handleBreadcrumbClick = async (index: number) => {
         const newPath = folderPath.slice(0, index + 1);
         localStorage.setItem('folderHistory', JSON.stringify(newPath));
     };

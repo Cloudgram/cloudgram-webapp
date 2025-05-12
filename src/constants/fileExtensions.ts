@@ -156,10 +156,6 @@ const EXTENSIONS_IMAGE = [
     'ico',
     'heic',
     'avif',
-    'JPG',
-    'JPEG',
-    'PNG',
-    'SVG',
 ] as const;
 
 const EXTENSIONS_VIDEO = [

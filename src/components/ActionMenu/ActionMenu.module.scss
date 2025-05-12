@@ -3,7 +3,7 @@
     display: flex;
     top: 40%;
     right: 9%;
-    width: 100px;
+    width: fit-content;
     flex-direction: column;
     background-color: white;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -15,17 +15,19 @@
 .actionMenu__button {
     display: flex;
     gap: 5px;
+    width: 100%;
     flex-direction: row;
     align-items: center;
+    font-weight: 500;
     padding: 5px;
     border: none;
     background: none;
     text-align: left;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 15px;
     color: #22215b;
     border-radius: 10px;
-    transition: background-color .12s ease-in-out;
+    transition: background-color 0.12s ease-in-out;
 
     svg {
         width: 30px;
@@ -34,5 +36,10 @@
 
     &:hover {
         background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+        transform: scale(0.98);
+        background-color: rgba(0, 0, 0, 0.2);
     }
 }

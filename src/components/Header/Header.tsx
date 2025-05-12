@@ -1,4 +1,5 @@
 import { useUserQuery } from '../../hooks/queries/useUserQuery';
+import { isPremium } from '../../utils/isPremium';
 import { useClickOutside } from '../Filters';
 import { SearchInput } from '../SearchInput/SearchInput';
 import { UserPanel } from '../UserPanel/UserPanel';
@@ -43,7 +44,7 @@ export const Header = () => {
                     <div className={styles.header__username}>
                         <span className={styles.full__name}>
                             {user?.full_name}
-                            {user?.subscriber && (
+                            {isPremium() && (
                                 <svg
                                     width='23'
                                     height='23'

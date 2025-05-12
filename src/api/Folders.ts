@@ -27,8 +27,11 @@ export const getFolders = async (folderId: string): Promise<RootFolderType> => {
     }
 };
 
-export const createFolder = async (title: string, folderId: string): Promise<void> => {
-    const colorId = 2;
+export const createFolder = async (
+    title: string,
+    folderId: string,
+    colorId: number
+): Promise<void> => {
     const queryParams = new URLSearchParams({
         folder_id: folderId,
         title,
@@ -62,4 +65,27 @@ export const deleteFolder = async (folderId: string): Promise<void> => {
     })
         .then(res => validateResponse(res))
         .then(undefined);
+};
+
+export const changeFolder = async (
+    currentFolderId: string,
+    targetId: string,
+    currentTitle: string,
+    currentColorId: number
+) => {
+    return fetch(
+        `${apiUrl}/folder/${currentFolderId}/edit?$folder_id=${targetId}&title=${currentTitle}&color_id=${currentColorId}`,
+        {
+            method: 'PATCH',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+            mode: 'cors',
+            redirect: 'follow',
+        }
+    )
+        .then(res => validateResponse(res))
+        .then(res => res.json());
 };

@@ -7,14 +7,14 @@ import { useQuery } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router-dom';
 import { queryClient } from '../../api/queryClient';
 import { deleteFolder } from '../../api/Folders';
-import { FileActionMenu } from '../FileActionMenu/FileActionMenu';
+import { ActionMenu } from '../ActionMenu/ActionMenu';
 import { useClickOutside } from '../../hooks/state/useClickOutside';
-import { FolderActionMenu } from '../FolderActionMenu/FolderActionMenu';
 import { getFileIcon } from '../../utils/getFileIcon';
 import { getFileColor } from '../../utils/getFileColor';
 import { animateFileActionMenu } from '../../utils/animations/ActionsMenuAnimation';
 import { useNavigate } from 'react-router-dom';
 import { deleteFile, downloadFile } from '../../api/Files';
+import { usePathfinder } from '../CreateFolder';
 
 export {
     styles,
@@ -28,13 +28,13 @@ export {
     useParams,
     queryClient,
     deleteFolder,
-    FileActionMenu,
+    ActionMenu,
     useClickOutside,
-    FolderActionMenu,
     getFileIcon,
     getFileColor,
     animateFileActionMenu,
     deleteFile,
     downloadFile,
     useNavigate,
+    usePathfinder,
 };

@@ -42,7 +42,11 @@ export const getFileIcon = (extension: string) => {
         ),
     };
 
-    if (programmingExtensions.includes(extension as (typeof programmingExtensions)[number])) {
+    if (
+        programmingExtensions.includes(
+            extension.toLowerCase() as (typeof programmingExtensions)[number],
+        )
+    ) {
         return (
             <svg xmlns='http://www.w3.org/2000/svg' width={size} height={size} viewBox='0 0 16 16'>
                 <path
@@ -53,7 +57,7 @@ export const getFileIcon = (extension: string) => {
         );
     }
 
-    if (imageExtensions.includes(extension as (typeof imageExtensions)[number])) {
+    if (imageExtensions.includes(extension.toLowerCase() as (typeof imageExtensions)[number])) {
         return (
             <svg xmlns='http://www.w3.org/2000/svg' width={size} height={size} viewBox='0 0 16 16'>
                 <g fill='currentColor'>
@@ -64,7 +68,7 @@ export const getFileIcon = (extension: string) => {
         );
     }
 
-    if (videoExtensions.includes(extension as (typeof videoExtensions)[number])) {
+    if (videoExtensions.includes(extension.toLowerCase() as (typeof videoExtensions)[number])) {
         return (
             <svg xmlns='http://www.w3.org/2000/svg' width={size} height={size} viewBox='0 0 16 16'>
                 <path
@@ -76,7 +80,7 @@ export const getFileIcon = (extension: string) => {
         );
     }
 
-    if (wordExtensions.includes(extension as (typeof wordExtensions)[number])) {
+    if (wordExtensions.includes(extension.toLowerCase() as (typeof wordExtensions)[number])) {
         return (
             <svg xmlns='http://www.w3.org/2000/svg' width={size} height={size} viewBox='0 0 16 16'>
                 <path
@@ -87,7 +91,7 @@ export const getFileIcon = (extension: string) => {
         );
     }
 
-    if (excelExtensions.includes(extension as (typeof excelExtensions)[number])) {
+    if (excelExtensions.includes(extension.toLowerCase() as (typeof excelExtensions)[number])) {
         return (
             <svg xmlns='http://www.w3.org/2000/svg' width={size} height={size} viewBox='0 0 16 16'>
                 <path
@@ -98,7 +102,7 @@ export const getFileIcon = (extension: string) => {
         );
     }
 
-    if (archiveExtensions.includes(extension as (typeof archiveExtensions)[number])) {
+    if (archiveExtensions.includes(extension.toLowerCase() as (typeof archiveExtensions)[number])) {
         return (
             <svg xmlns='http://www.w3.org/2000/svg' width={size} height={size} viewBox='0 0 16 16'>
                 <g fill='currentColor'>
@@ -109,7 +113,11 @@ export const getFileIcon = (extension: string) => {
         );
     }
 
-    if (powerpointExtensions.includes(extension as (typeof powerpointExtensions)[number])) {
+    if (
+        powerpointExtensions.includes(
+            extension.toLowerCase() as (typeof powerpointExtensions)[number],
+        )
+    ) {
         return (
             <svg xmlns='http://www.w3.org/2000/svg' width={size} height={size} viewBox='0 0 16 16'>
                 <g fill='currentColor'>
@@ -120,7 +128,7 @@ export const getFileIcon = (extension: string) => {
         );
     }
 
-    if (exeExtension.includes(extension as (typeof exeExtension)[number])) {
+    if (exeExtension.includes(extension.toLowerCase() as (typeof exeExtension)[number])) {
         return (
             <svg xmlns='http://www.w3.org/2000/svg' width={size} height={size} viewBox='0 0 16 16'>
                 <path
