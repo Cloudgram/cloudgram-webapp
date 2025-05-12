@@ -13,7 +13,7 @@ import {
 } from './index';
 import { ColorType } from '../../types/color';
 import { useEffect } from 'react';
-import { isPremium } from '../../utils/isPremium';
+import { useUserQuery } from '../../hooks/queries/useUserQuery';
 
 interface CreateFolderModalProps {
     onClose: () => void;
@@ -33,12 +33,13 @@ export const CreateFolderModal = ({
     const [selectedColor, setSelectedColor] = useState<number>(color_id);
     const currentFolderId = usePathfinder();
     const { data } = useGetColors();
+    const { data: user } = useUserQuery();
 
     useEffect(() => {
         if (data) {
             setColors(data.data);
         }
-    });
+    }, [data]);
 
     const { mutate, isPending } = useMutation({
         mutationFn: () => {
@@ -94,7 +95,7 @@ export const CreateFolderModal = ({
                     onKeyDown={handleEnterKey}
                     autoFocus
                 />
-                {isPremium() && (
+                {user?.subscriber && (
                     <div className={styles.folder__colors}>
                         {Array.isArray(colors) &&
                             colors.map((color, index) => (

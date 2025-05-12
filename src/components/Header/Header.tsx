@@ -1,5 +1,4 @@
 import { useUserQuery } from '../../hooks/queries/useUserQuery';
-import { isPremium } from '../../utils/isPremium';
 import { useClickOutside } from '../Filters';
 import { SearchInput } from '../SearchInput/SearchInput';
 import { UserPanel } from '../UserPanel/UserPanel';
@@ -22,10 +21,7 @@ export const Header = () => {
     return (
         <header className={styles.header}>
             <div className={styles.header__left}>
-                <div
-                    className={styles.header__user}
-                    onClick={() => toggleUserPanel()}
-                >
+                <div className={styles.header__user} onClick={() => toggleUserPanel()}>
                     <div className={styles.icon__container}>
                         {user?.avatar ? (
                             <img
@@ -34,17 +30,13 @@ export const Header = () => {
                                 className={styles.user__icon}
                             />
                         ) : (
-                            <img
-                                src={avatar}
-                                alt='user icon'
-                                className={styles.user__icon}
-                            />
+                            <img src={avatar} alt='user icon' className={styles.user__icon} />
                         )}
                     </div>
                     <div className={styles.header__username}>
                         <span className={styles.full__name}>
                             {user?.full_name}
-                            {isPremium() && (
+                            {user?.subscriber && (
                                 <svg
                                     width='23'
                                     height='23'
@@ -59,9 +51,7 @@ export const Header = () => {
                                 </svg>
                             )}
                         </span>
-                        <span
-                            className={styles.user__name}
-                        >{`@${user?.username}`}</span>
+                        <span className={styles.user__name}>{`@${user?.username}`}</span>
                     </div>
                 </div>
             </div>
@@ -70,11 +60,7 @@ export const Header = () => {
             <ul className={styles.header__list}>
                 <li className={styles.header__item}>
                     <a href='/' className={styles.header__button}>
-                        <img
-                            src={home}
-                            alt='home_page'
-                            className={styles.header__icon}
-                        />
+                        <img src={home} alt='home_page' className={styles.header__icon} />
                     </a>
                 </li>
                 <li className={styles.header__item}>
@@ -83,11 +69,7 @@ export const Header = () => {
                         target='_blank'
                         className={styles.header__button}
                     >
-                        <img
-                            src={bot}
-                            alt='bot_link'
-                            className={styles.header__icon}
-                        />
+                        <img src={bot} alt='bot_link' className={styles.header__icon} />
                     </a>
                 </li>
             </ul>

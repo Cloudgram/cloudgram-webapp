@@ -1,4 +1,4 @@
-import { isPremium } from '../../utils/isPremium';
+// import { isPremium } from '../../utils/isPremium';
 import {
     avatar,
     useUserQuery,
@@ -44,7 +44,7 @@ export const UserPanel: FC<IUserPanel> = ({ menuRef }) => {
                         ) : (
                             <img src={avatar} alt='user icon' className={styles.user__avatar} />
                         )}
-                        {isPremium() ? (
+                        {user?.subscriber ? (
                             <span className={styles.user__fullname}>{user?.full_name}</span>
                         ) : (
                             <span className={styles.user__fullname}>{user?.full_name}</span>
@@ -68,7 +68,10 @@ export const UserPanel: FC<IUserPanel> = ({ menuRef }) => {
                                 />
                             </svg>
                             <span className={styles.user__createdat__date}>
-                                Регистрация: {dateFormat(user?.created_at!)}
+                                Регистрация:{' '}
+                                {user?.created_at
+                                    ? dateFormat(new Date(user.created_at))
+                                    : 'Дата неизвестна'}
                             </span>
                         </div>
                         <div className={styles.user__premium}>
@@ -85,7 +88,7 @@ export const UserPanel: FC<IUserPanel> = ({ menuRef }) => {
                                 />
                             </svg>
 
-                            {isPremium() ? (
+                            {user?.subscriber ? (
                                 <span className={styles.user__premium_end}>
                                     {cooldownDate(user?.subscriber.end || '')} до окончания
                                 </span>
@@ -112,7 +115,7 @@ export const UserPanel: FC<IUserPanel> = ({ menuRef }) => {
                                     />
                                 </g>
                             </svg>
-                            {isPremium() ? (
+                            {user?.subscriber ? (
                                 <span className={styles.user__storage_value}>
                                     {`Загружено: ${calcSum(user?.uploaded_sum ?? 0)} из `}
                                     <svg

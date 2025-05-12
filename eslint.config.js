@@ -9,17 +9,12 @@ export default tseslint.config(
     {
         extends: [
             js.configs.recommended,
-            ...tseslint.configs.recommended,
-            ...testlint.configs.str.strictTypeChecked,
+            ...tseslint.configs.recommended
         ],
         files: ['**/*.{ts,tsx}'],
         languageOptions: {
             ecmaVersion: 2020,
             globals: globals.browser,
-            parser: tseslint.ESLintParser,
-            parserOptions: {
-                project: './tsconfig.json',
-            }
         },
         plugins: {
             'react-hooks': reactHooks,
@@ -31,10 +26,7 @@ export default tseslint.config(
                 'warn',
                 { allowConstantExport: true },
             ],
-            '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }], // Предупреждение о неиспользуемых переменных
-            '@typescript-eslint/no-explicit-any': 'warn', // Предупреждение об использовании any
-            '@typescript-eslint/explicit-function-return-type': 'warn', // Требование явного указания типов возврата функций
-            'no-console': ['warn', { allow: ['warn', 'error'] }] // Разрешает только console.warn и console.error
         },
+        ignores: ['**/*.d.ts', 'node_modules', 'dist', 'build', 'coverage', '.next'],
     }
 )
