@@ -1,6 +1,3 @@
-import { RootFolderType } from '../../types/RootType';
-import { ViewType } from '../../types/view';
-import { CreateFolderModal } from '../CreateFolder/CreateFolderModal';
 import {
     ActionMenu,
     dateFormat,
@@ -11,16 +8,35 @@ import {
     usePathfinder,
     useNavigate,
     getFolders,
+    useClickOutside,
+    ViewType,
+    RootFolderType,
+    CreateFolderModal,
 } from './index';
 
 interface FolderItemProps {
     folder: RootFolderType['folders'][number];
     index: number;
-    actionMenuRef: React.RefObject<HTMLDivElement>;
     view: ViewType;
+    onDragStart: (folder: {
+        id: string;
+        title: string;
+        color_id: number;
+    }) => (e: React.DragEvent<HTMLElement>) => void;
+    onDragEnd: () => void;
+    onDrop: (targetId: string) => (e: React.DragEvent<HTMLElement>) => Promise<void>;
+    isDragging: boolean;
 }
 
-export const FolderItem: React.FC<FolderItemProps> = ({ folder, index, actionMenuRef, view }) => {
+export const FolderItem: React.FC<FolderItemProps> = ({
+    folder,
+    index,
+    view,
+    onDragStart,
+    onDragEnd,
+    onDrop,
+    isDragging,
+}) => {
     const [activeFolderMenuId, setActiveFolderMenuId] = useState<number | null>(null);
     const folderId = usePathfinder() || '0';
     const navigate = useNavigate();
@@ -31,6 +47,12 @@ export const FolderItem: React.FC<FolderItemProps> = ({ folder, index, actionMen
         title: string;
         color_id: number;
     } | null>(null);
+
+    const closeMenu = () => {
+        setActiveFolderMenuId(null);
+    };
+
+    const menuRef = useClickOutside(closeMenu);
 
     const toggleMenu = (id: number) => {
         setActiveFolderMenuId(activeFolderMenuId === id ? null : id);
@@ -70,12 +92,22 @@ export const FolderItem: React.FC<FolderItemProps> = ({ folder, index, actionMen
                         backgroundColor: folder.color.background_hex,
                         color: folder.color.back_hex,
                     }}
-                    className={`${styles.list__item} ${styles.list__item__folder}`}
+                    className={`${styles.list__item} ${styles.list__item__folder} ${
+                        isDragging ? styles.dragging : ''
+                    }`}
                     key={index}
                     onClick={e => {
                         e.preventDefault();
                     }}
                     onDoubleClick={e => handleFolderDoubleClick(e, `/folder/${folder.id}`)}
+                    draggable
+                    onDragStart={onDragStart({
+                        id: folder.id.toString(),
+                        title: folder.title,
+                        color_id: folder.color.id,
+                    })}
+                    onDragEnd={onDragEnd}
+                    onDrop={onDrop(folder.id.toString())}
                 >
                     <div className={styles.folders__item}>
                         <div className={styles.folder__icons}>
@@ -139,7 +171,7 @@ export const FolderItem: React.FC<FolderItemProps> = ({ folder, index, actionMen
                     </div>
                     {activeFolderMenuId === folder.id && (
                         <ActionMenu
-                            menuRef={actionMenuRef}
+                            menuRef={menuRef}
                             onDelete={() => handleDelete(folder.id)}
                             onEditFolder={() => {
                                 handleEditFolder({
@@ -155,7 +187,9 @@ export const FolderItem: React.FC<FolderItemProps> = ({ folder, index, actionMen
                 </li>
             ) : (
                 <li
-                    className={`${styles.list__item_line} ${styles.list__item_line__folder}`}
+                    className={`${styles.list__item_line} ${styles.list__item_line__folder} ${
+                        isDragging ? styles.dragging : ''
+                    }`}
                     onClick={e => e.preventDefault()}
                     onDoubleClick={e => handleFolderDoubleClick(e, `/folder/${folder.id}`)}
                     style={{
@@ -163,6 +197,14 @@ export const FolderItem: React.FC<FolderItemProps> = ({ folder, index, actionMen
                         color: folder.color.back_hex,
                     }}
                     key={index}
+                    draggable
+                    onDragStart={onDragStart({
+                        id: folder.id.toString(),
+                        title: folder.title,
+                        color_id: folder.color.id,
+                    })}
+                    onDragEnd={onDragEnd}
+                    onDrop={onDrop(folder.id.toString())}
                 >
                     <div className={styles.folders__item_line}>
                         <div className={styles.folder__icons_line}>

@@ -1,5 +1,3 @@
-import { FC } from 'react';
-import { RootFolderType } from '../../types/RootType';
 import {
     ActionMenu,
     dateFormat,
@@ -9,22 +7,30 @@ import {
     getFileIcon,
     queryClient,
     styles,
+    useClickOutside,
     usePathfinder,
     useState,
+    ViewType,
+    RootFolderType,
+    FC,
 } from './index';
-import { ViewType } from '../../types/view';
 
 interface IFileItemProps {
     file: RootFolderType['files'][number];
     index: number;
-    menuRef: React.RefObject<HTMLDivElement>;
     view: ViewType;
 }
 
-export const FileItem: FC<IFileItemProps> = ({ file, index, menuRef, view }) => {
+export const FileItem: FC<IFileItemProps> = ({ file, index, view }) => {
     const fileColors = getFileColor(file.extension);
     const [activeFileMenuId, setActiveFileMenuId] = useState<number | null>(null);
     const folderId = usePathfinder() || '0';
+
+    const closeMenu = () => {
+        setActiveFileMenuId(null);
+    };
+
+    const menuRef = useClickOutside(closeMenu);
 
     const toggleMenu = (id: number) => {
         setActiveFileMenuId(activeFileMenuId === id ? null : id);
@@ -144,10 +150,6 @@ export const FileItem: FC<IFileItemProps> = ({ file, index, menuRef, view }) => 
                                     <path d='M8 5.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0a3.5 3.5 0 0 1-7 0' />
                                 </g>
                             </svg>
-                            {/* <svg className={styles.view__svg_line} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z" stroke='black' strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                                    <path d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z" stroke='black' strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                                </svg> */}
                             {file.views}
                         </div>
                         <div className={styles.actions__menu}>

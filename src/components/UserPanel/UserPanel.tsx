@@ -16,8 +16,6 @@ interface IUserPanel {
 }
 
 export const UserPanel: FC<IUserPanel> = ({ menuRef }) => {
-    // const uploaded = 10000000000000;
-    // console.log(user);
     const { data: user, isLoading, isError } = useUserQuery();
     const { mutate, isPending } = useLogoutMutation();
     const size = 25;

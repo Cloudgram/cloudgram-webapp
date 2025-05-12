@@ -68,6 +68,11 @@
         transform 0.1s ease-in-out,
         box-shadow 0.1s ease-in-out;
 
+    &.dragging {
+        opacity: 0.5;
+        cursor: move;
+    }
+
     &_line {
         padding: 15px;
         border-radius: 10px;
@@ -80,6 +85,11 @@
         transition:
             transform 0.1s ease-in-out,
             box-shadow 0.1s ease-in-out;
+
+        &.dragging {
+            opacity: 0.5;
+            cursor: move;
+        }
 
         &__folder {
             cursor: pointer;

@@ -1,5 +1,3 @@
-import { changeFolder } from '../../api/Folders';
-import { useGetColors } from '../../hooks/queries/useGetColors';
 import {
     useState,
     styles,
@@ -10,16 +8,21 @@ import {
     usePathfinder,
     getFolders,
     ButtonLoad,
+    changeFolder,
+    useGetColors,
+    ColorType,
+    useEffect,
+    useUserQuery,
+    FormControl,
+    FormLabel,
+    Box,
 } from './index';
-import { ColorType } from '../../types/color';
-import { useEffect } from 'react';
-import { useUserQuery } from '../../hooks/queries/useUserQuery';
 
 interface CreateFolderModalProps {
     onClose: () => void;
     folderId?: string;
     title?: string;
-    color_id: number;
+    color_id?: number;
 }
 
 export const CreateFolderModal = ({
@@ -30,10 +33,11 @@ export const CreateFolderModal = ({
 }: CreateFolderModalProps) => {
     const [folderTitle, setFolderTitle] = useState<string>(title ?? '');
     const [colors, setColors] = useState<ColorType['data'] | null>(null);
-    const [selectedColor, setSelectedColor] = useState<number>(color_id);
+    const [selectedColorId, setSelectedColorId] = useState<number>(color_id ?? 2);
     const currentFolderId = usePathfinder();
     const { data } = useGetColors();
     const { data: user } = useUserQuery();
+    const defaultColorId = 2;
 
     useEffect(() => {
         if (data) {
@@ -44,9 +48,9 @@ export const CreateFolderModal = ({
     const { mutate, isPending } = useMutation({
         mutationFn: () => {
             if (folderId) {
-                return changeFolder(folderId, currentFolderId, folderTitle, selectedColor);
+                return changeFolder(folderId, currentFolderId, folderTitle, selectedColorId);
             }
-            return createFolder(folderTitle, currentFolderId, selectedColor | 2);
+            return createFolder(folderTitle, currentFolderId, selectedColorId || defaultColorId);
         },
         onSuccess: async () => {
             queryClient.invalidateQueries({ queryKey: ['folders'] });
@@ -96,17 +100,61 @@ export const CreateFolderModal = ({
                     autoFocus
                 />
                 {user?.subscriber && (
-                    <div className={styles.folder__colors}>
-                        {Array.isArray(colors) &&
-                            colors.map((color, index) => (
-                                <button
-                                    className={styles.color__button}
-                                    key={index}
-                                    style={{ background: color.hex }}
-                                    onClick={() => setSelectedColor(color.id)}
-                                />
-                            ))}
-                    </div>
+                    <FormControl
+                        sx={{
+                            mt: 2,
+                            p: 2,
+                            border: '1px solid',
+                            borderColor: 'divider',
+                            borderRadius: 1,
+                            position: 'relative',
+                            boxSizing: 'border-box',
+                            // width: 'fit-content',
+                            '& .MuiFormLabel-root': {
+                                position: 'absolute',
+                                top: '-12px',
+                                left: '10px',
+                                padding: '0 5px',
+                                backgroundColor: 'white',
+                                fontSize: '14px',
+                            },
+                        }}
+                        fullWidth
+                    >
+                        <FormLabel>Цвет папки</FormLabel>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                borderRadius: '100px',
+                                gap: 1,
+                                flexWrap: 'wrap',
+                                mt: 1,
+                            }}
+                        >
+                            {Array.isArray(colors) &&
+                                colors.map(color => (
+                                    <button
+                                        className={styles.color__button}
+                                        key={color.id}
+                                        style={{
+                                            background: color.hex,
+                                            width: '32px',
+                                            height: '32px',
+                                            border:
+                                                selectedColorId === color.id
+                                                    ? '2px solid #000'
+                                                    : '1px solid #e0e0e0',
+                                            borderRadius: '4px',
+                                            cursor: 'pointer',
+                                        }}
+                                        onClick={() => {
+                                            setSelectedColorId(color.id);
+                                        }}
+                                    />
+                                ))}
+                        </Box>
+                    </FormControl>
                 )}
                 <div className={styles.container__buttons}>
                     <button className={styles.cancel__button} onClick={onClose}>
