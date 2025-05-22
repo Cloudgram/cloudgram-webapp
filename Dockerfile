@@ -5,6 +5,7 @@ WORKDIR /app
 
 COPY package*.json ./
 RUN npm install --legacy-peer-deps
+RUN npm rebuild @rollup/rollup-linux-x64-musl
 
 COPY . .
 RUN npm run build
