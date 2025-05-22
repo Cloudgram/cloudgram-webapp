@@ -59,18 +59,3 @@ jobs:
                   elif [ "${{ github.ref }}" == "refs/heads/new-design" ]; then
                     echo "Skipping Docker push for new-design branch"
                   fi
-
-            - name: 🏷 Tag and Push image
-              run: |
-                  if [ "${{ github.ref }}" == "refs/heads/main" ]; then
-                    docker tag cloudgram-web ${{ secrets.DOCKER_USERNAME }}/cloudgram-web:latest
-                    docker push ${{ secrets.DOCKER_USERNAME }}/cloudgram-web:latest
-                  elif [ "${{ github.ref }}" == "refs/heads/new-design" ]; then
-                    echo "Skipping Docker push for new-design branch"
-                  fi
-
-    no_dependency_job:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Dummy step
-              run: echo "This job has no dependencies"
