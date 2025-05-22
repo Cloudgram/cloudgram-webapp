@@ -4,6 +4,7 @@
 
 # Environment
 **/node_modules/
+scripts
 
 # Files not for server
 **/package-dev.json

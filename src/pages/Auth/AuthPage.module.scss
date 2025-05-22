@@ -11,11 +11,13 @@
         padding: 25px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         border-radius: 20px;
+        min-width: 250px;
+        gap: 30px;
     }
 
-    &__title {
-        margin-bottom: 30px;
-    }
+    // &__title {
+    //     margin-bottom: 30px;
+    // }
 
     &__input {
         height: 50px;
@@ -34,8 +36,16 @@
         display: flex;
         flex-direction: column;
         width: 100%;
-        margin-top: 50px;
+        // margin-top: 20px;
         gap: 15px;
+    }
+
+    &__descr {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+        margin: 15px 0;
     }
 
     &__button {
