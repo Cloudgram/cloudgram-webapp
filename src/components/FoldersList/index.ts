@@ -15,13 +15,14 @@ import { deleteFile, downloadFile } from '../../api/Files';
 import { usePathfinder } from '../CreateFolder';
 import { useFoldersQuery } from '../../hooks/queries/useFolderQuery';
 import { RootFolderType } from '../../types/RootType';
-import { ViewType } from '../../types/view';
+import { ViewType } from '../../constants/view';
 import { ViewList } from './ViewList';
 import { FileItem } from './FileItem';
 import { FolderItem } from './FolderItem';
 import { FC } from 'react';
 import { CreateFolderModal } from '../CreateFolder/CreateFolderModal';
 import { useDragAndDrop } from '../../hooks/state/useDragAndDrop';
+import { useRef } from 'react';
 
 export {
     styles,
@@ -49,6 +50,7 @@ export {
     ViewList,
     CreateFolderModal,
     useDragAndDrop,
+    useRef,
 };
 
 export type { RootFolderType, FC };

@@ -1,4 +1,5 @@
 // import { isPremium } from '../../utils/isPremium';
+import { animateUserPanel } from '../../utils/animations/UserPanelAnimation';
 import {
     avatar,
     useUserQuery,
@@ -9,14 +10,15 @@ import {
     useLogoutMutation,
     ButtonLoad,
     FC,
+    useEffect,
 } from './index';
 
 interface IUserPanel {
-    menuRef: React.RefObject<HTMLDivElement>;
+    cardRef: React.RefObject<HTMLDivElement>;
 }
 
-export const UserPanel: FC<IUserPanel> = ({ menuRef }) => {
-    const { data: user, isLoading, isError } = useUserQuery();
+export const UserPanel: FC<IUserPanel> = ({ cardRef }) => {
+    const { data: user } = useUserQuery();
     const { mutate, isPending } = useLogoutMutation();
     const size = 25;
 
@@ -24,11 +26,12 @@ export const UserPanel: FC<IUserPanel> = ({ menuRef }) => {
         mutate();
     };
 
-    if (isLoading) return <div>Загрузка...</div>;
-    if (isError) return <div>Ошибка загрузки данных</div>;
+    useEffect(() => {
+        animateUserPanel(cardRef, true);
+    }, [cardRef]);
 
     return (
-        <div className={styles.user} ref={menuRef}>
+        <div className={styles.user} ref={cardRef}>
             <div className={styles.user__container}>
                 <div className={styles.user__top}>&#64;{user?.username}</div>
                 <div className={styles.user__main}>
@@ -66,7 +69,7 @@ export const UserPanel: FC<IUserPanel> = ({ menuRef }) => {
                                 />
                             </svg>
                             <span className={styles.user__createdat__date}>
-                                Регистрация:{' '}
+                                Зарегестрирован{' '}
                                 {user?.created_at
                                     ? dateFormat(new Date(user.created_at))
                                     : 'Дата неизвестна'}
@@ -115,7 +118,7 @@ export const UserPanel: FC<IUserPanel> = ({ menuRef }) => {
                             </svg>
                             {user?.subscriber ? (
                                 <span className={styles.user__storage_value}>
-                                    {`Загружено: ${calcSum(user?.uploaded_sum ?? 0)} из `}
+                                    {`${calcSum(user?.uploaded_sum ?? 0)} из `}
                                     <svg
                                         fill='#000000'
                                         width={size}
@@ -131,7 +134,7 @@ export const UserPanel: FC<IUserPanel> = ({ menuRef }) => {
                                 </span>
                             ) : (
                                 <span className={styles.user__storage_value}>
-                                    Загружено: {calcSum(user?.uploaded_sum ?? 0)} гб из{' '}
+                                    {calcSum(user?.uploaded_sum ?? 0)} из{' '}
                                     {calcSum(user?.storage_limit ?? 0)}
                                 </span>
                             )}

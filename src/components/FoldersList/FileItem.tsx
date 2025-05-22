@@ -1,3 +1,7 @@
+import { copyEntity, eleminateEntity, repairEntity } from '../../api/shared';
+import { rootFolderId } from '../../constants/rootFolder';
+import { useAppSelectot } from '../../store/store';
+// import { AnimatedWrapper } from '../../utils/animations/ListAnimation';
 import {
     ActionMenu,
     dateFormat,
@@ -24,7 +28,9 @@ interface IFileItemProps {
 export const FileItem: FC<IFileItemProps> = ({ file, index, view }) => {
     const fileColors = getFileColor(file.extension);
     const [activeFileMenuId, setActiveFileMenuId] = useState<number | null>(null);
-    const folderId = usePathfinder() || '0';
+    const folderId = usePathfinder() || rootFolderId;
+
+    const currentFilter = useAppSelectot(state => state.filter);
 
     const closeMenu = () => {
         setActiveFileMenuId(null);
@@ -36,9 +42,42 @@ export const FileItem: FC<IFileItemProps> = ({ file, index, view }) => {
         setActiveFileMenuId(activeFileMenuId === id ? null : id);
     };
 
-    const handleDelete = async (id: string | number) => {
-        await deleteFile(String(id));
-        queryClient.invalidateQueries({ queryKey: ['folders', folderId] });
+    const handleDelete = async (id: string) => {
+        if (!window.confirm('Вы действительно хотите удалить этот файл?')) {
+            return;
+        } else {
+            await deleteFile([id]);
+            queryClient.invalidateQueries({ queryKey: ['folders', folderId] });
+        }
+    };
+
+    const handleCopyFolder = async (
+        currentId: string,
+        currentFolderId: string,
+        isFolder: boolean
+    ) => {
+        await copyEntity(currentId, currentFolderId, isFolder);
+        queryClient.invalidateQueries({ queryKey: ['folders', currentFolderId] });
+        setActiveFileMenuId(null);
+    };
+
+    const handleEleminate = async (id: string) => {
+        if (!window.confirm('Вы действительно хотите стереть этот файл?')) {
+            return;
+        } else {
+            await eleminateEntity([id]);
+            queryClient.invalidateQueries({ queryKey: ['trash'] });
+        }
+    };
+
+    const handleRepair = async (id: string) => {
+        if (!window.confirm('Вы действительно хотите восстановить этот файл?')) {
+            return;
+        } else {
+            await repairEntity([id]);
+            queryClient.invalidateQueries({ queryKey: ['trash'] });
+            queryClient.invalidateQueries({ queryKey: ['folders'] });
+        }
     };
 
     const handleFileDownload = async (id: string, name: string, extension: string) => {
@@ -56,6 +95,7 @@ export const FileItem: FC<IFileItemProps> = ({ file, index, view }) => {
                     }}
                     className={styles.list__item}
                     key={index}
+                    tabIndex={0}
                 >
                     <div className={styles.folders__item}>
                         <div className={styles.folder__icons}>
@@ -79,19 +119,29 @@ export const FileItem: FC<IFileItemProps> = ({ file, index, view }) => {
                                     />
                                 </svg>
                             </button>
-                            {activeFileMenuId === file.id && (
-                                <ActionMenu
-                                    menuRef={menuRef}
-                                    onDownload={() =>
-                                        handleFileDownload(
-                                            file.id.toString(),
-                                            file.title,
-                                            file.extension
-                                        )
-                                    }
-                                    onDelete={() => handleDelete(file.id)}
-                                />
-                            )}
+                            {activeFileMenuId === file.id &&
+                                (currentFilter === 'trash' ? (
+                                    <ActionMenu
+                                        menuRef={menuRef}
+                                        onEleminate={() => handleEleminate(file.id)}
+                                        onRepair={() => handleRepair(file.id)}
+                                    />
+                                ) : (
+                                    <ActionMenu
+                                        menuRef={menuRef}
+                                        onDownload={() =>
+                                            handleFileDownload(
+                                                file.id.toString(),
+                                                file.title,
+                                                file.extension
+                                            )
+                                        }
+                                        onDelete={() => handleDelete(file.id)}
+                                        onCopy={() =>
+                                            handleCopyFolder(file.id.toString(), folderId, false)
+                                        }
+                                    />
+                                ))}
                         </div>
                         <span className={styles.folder__title}>{file.title}</span>
                         <div className={styles.folder__descr}>
@@ -124,6 +174,7 @@ export const FileItem: FC<IFileItemProps> = ({ file, index, view }) => {
                     }}
                     className={styles.list__item_line}
                     key={index}
+                    tabIndex={0}
                 >
                     <div className={styles.folders__item_line}>
                         <div className={styles.folder__icons_line}>
@@ -175,6 +226,23 @@ export const FileItem: FC<IFileItemProps> = ({ file, index, view }) => {
                                         <path d='M15.83 7.138a5.5 5.5 0 0 0-10.796 1.98S5.187 10 5.5 10.5' />
                                         <path d='M17 17a5 5 0 1 0-1.17-9.862L14.5 7.5' />
                                     </g>
+                                </svg>
+                            </button>
+                            <button
+                                className={styles.action__button}
+                                onClick={() => handleCopyFolder(file.id, folderId, false)}
+                            >
+                                <svg
+                                    xmlns='http://www.w3.org/2000/svg'
+                                    width='16'
+                                    height='16'
+                                    viewBox='0 0 16 16'
+                                >
+                                    <path
+                                        fill='currentColor'
+                                        fillRule='evenodd'
+                                        d='M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z'
+                                    />
                                 </svg>
                             </button>
                             <button

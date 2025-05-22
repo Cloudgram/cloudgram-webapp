@@ -22,7 +22,7 @@ interface CreateFolderModalProps {
     onClose: () => void;
     folderId?: string;
     title?: string;
-    color_id?: number;
+    color_id?: string;
 }
 
 export const CreateFolderModal = ({
@@ -33,24 +33,35 @@ export const CreateFolderModal = ({
 }: CreateFolderModalProps) => {
     const [folderTitle, setFolderTitle] = useState<string>(title ?? '');
     const [colors, setColors] = useState<ColorType['data'] | null>(null);
-    const [selectedColorId, setSelectedColorId] = useState<number>(color_id ?? 2);
+    const [error, setError] = useState<string | null>(null);
+    const [selectedColorId, setSelectedColorId] = useState<string | undefined>(
+        color_id ?? undefined
+    );
     const currentFolderId = usePathfinder();
-    const { data } = useGetColors();
+    const { data: colorsData } = useGetColors();
     const { data: user } = useUserQuery();
-    const defaultColorId = 2;
 
     useEffect(() => {
-        if (data) {
-            setColors(data.data);
+        if (colorsData) {
+            setColors(colorsData.data);
         }
-    }, [data]);
+    }, [colorsData]);
 
     const { mutate, isPending } = useMutation({
         mutationFn: () => {
             if (folderId) {
-                return changeFolder(folderId, currentFolderId, folderTitle, selectedColorId);
+                if (user?.subscriber) {
+                    return changeFolder(
+                        folderId,
+                        currentFolderId,
+                        folderTitle,
+                        selectedColorId ?? undefined
+                    );
+                } else {
+                    return changeFolder(folderId, currentFolderId, folderTitle);
+                }
             }
-            return createFolder(folderTitle, currentFolderId, selectedColorId || defaultColorId);
+            return createFolder(folderTitle, currentFolderId, selectedColorId ?? 'folder_blue');
         },
         onSuccess: async () => {
             queryClient.invalidateQueries({ queryKey: ['folders'] });
@@ -63,7 +74,11 @@ export const CreateFolderModal = ({
             onClose();
         },
         onError: (error: Error) => {
-            console.error(error);
+            if (error.message.includes('premium')) {
+                setError('Эта функция доступна только для премиум подписки');
+            } else {
+                setError(error.message || 'Произошла ошибка');
+            }
         },
     });
 
@@ -135,6 +150,7 @@ export const CreateFolderModal = ({
                             {Array.isArray(colors) &&
                                 colors.map(color => (
                                     <button
+                                        tabIndex={0}
                                         className={styles.color__button}
                                         key={color.id}
                                         style={{
@@ -156,6 +172,7 @@ export const CreateFolderModal = ({
                         </Box>
                     </FormControl>
                 )}
+                {error && <p className={styles.error}>{error}</p>}
                 <div className={styles.container__buttons}>
                     <button className={styles.cancel__button} onClick={onClose}>
                         Отмена

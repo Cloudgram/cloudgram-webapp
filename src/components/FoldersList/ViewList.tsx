@@ -1,17 +1,16 @@
 import React from 'react';
 import { Breadcrumbs } from '../Breadcrumbs/Breadcrumbs';
-import { ViewType } from '../../types/view';
+import { ViewType } from '../../constants/view';
 import styles from './FoldersList.module.scss';
 
 interface ViewList {
-    folderId: string;
     viewType: ViewType;
     onViewChange: (type: ViewType) => void;
 }
 
-export const ViewList: React.FC<ViewList> = ({ folderId, viewType, onViewChange }) => {
+export const ViewList: React.FC<ViewList> = ({ viewType, onViewChange }) => {
     return (
-        <div className={folderId === '0' ? styles.list__header : styles.list__header_active}>
+        <div className={styles.list__header}>
             <Breadcrumbs />
             <div className={styles.list__orientation}>
                 <button

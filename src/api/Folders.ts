@@ -1,26 +1,10 @@
-import { apiUrl } from './api_url';
-import { validateResponse } from '../utils/validators/responseValidator';
 import { RootFolderType } from '../types/RootType';
+import { requestInstance } from './requestInstance';
 
 export const getFolders = async (folderId: string): Promise<RootFolderType> => {
     try {
-        const response = await fetch(`${apiUrl}/folder/${folderId}`, {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-            redirect: 'follow',
-            mode: 'cors',
-        });
-
-        if (!response.ok) {
-            console.error(`Ошибка: ${response.status} ${response.statusText}`);
-            throw new Error(`Ошибка: ${response.status}`);
-        }
-
-        return await response.json();
+        const data = await requestInstance.get(`/folder/${folderId}`);
+        return data.data;
     } catch (error) {
         console.error('Ошибка при выполнении запроса:', error);
         throw error;
@@ -30,62 +14,48 @@ export const getFolders = async (folderId: string): Promise<RootFolderType> => {
 export const createFolder = async (
     title: string,
     folderId: string,
-    colorId: number
+    colorId: string
 ): Promise<void> => {
-    const queryParams = new URLSearchParams({
-        folder_id: folderId,
-        title,
-        color_id: colorId.toString(),
-    });
-
-    return fetch(`${apiUrl}/folder?${queryParams.toString()}`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-        },
-        mode: 'cors',
-        redirect: 'follow',
-    })
-        .then(res => validateResponse(res))
-        .then(res => res.json());
+    try {
+        const { data } = await requestInstance.post('/folder', {
+            folder_id: folderId,
+            title: title,
+            color_id: colorId,
+        });
+        return data;
+    } catch (error) {
+        console.error('Ошибка при выполнении запроса:', error);
+        throw error;
+    }
 };
 
-export const deleteFolder = async (folderId: string): Promise<void> => {
-    return fetch(`${apiUrl}/folder/${folderId}`, {
-        method: 'DELETE',
-        credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-        },
-        mode: 'cors',
-        redirect: 'follow',
-    })
-        .then(res => validateResponse(res))
-        .then(undefined);
+export const deleteFolder = async (idsMassive: string[]): Promise<void> => {
+    try {
+        const { data } = await requestInstance.patch('/trash', {
+            ids: idsMassive,
+        });
+        return data;
+    } catch (error) {
+        console.error('Ошибка при выполнении запроса:', error);
+        throw error;
+    }
 };
 
 export const changeFolder = async (
     currentFolderId: string,
-    targetId: string,
-    currentTitle: string,
-    currentColorId: number
+    targetId?: string,
+    currentTitle?: string,
+    currentColorId?: string
 ) => {
-    return fetch(
-        `${apiUrl}/folder/${currentFolderId}/edit?$folder_id=${targetId}&title=${currentTitle}&color_id=${currentColorId}`,
-        {
-            method: 'PATCH',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-            mode: 'cors',
-            redirect: 'follow',
-        }
-    )
-        .then(res => validateResponse(res))
-        .then(res => res.json());
+    try {
+        const { data } = await requestInstance.patch(`/folder/${currentFolderId}/edit`, {
+            folder_id: targetId,
+            title: currentTitle,
+            color_id: currentColorId,
+        });
+        return data;
+    } catch (error) {
+        console.error('Ошибка при выполнении запроса:', error);
+        throw error;
+    }
 };

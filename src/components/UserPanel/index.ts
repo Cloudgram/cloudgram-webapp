@@ -9,7 +9,7 @@ import styles from './UserPanel.module.scss';
 import { AxiosError } from 'axios';
 import { useLogoutMutation } from '../../hooks/mutations/useLogoutMutation';
 import { ButtonLoad } from '../Loader/ButtonLoad';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 
 export {
     avatar,
@@ -25,5 +25,6 @@ export {
     AxiosError,
     useLogoutMutation,
     ButtonLoad,
+    useEffect,
 };
 export type { FC };

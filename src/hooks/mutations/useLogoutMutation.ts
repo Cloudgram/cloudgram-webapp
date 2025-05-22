@@ -8,6 +8,7 @@ export const useLogoutMutation = () => {
     return useMutation({
         mutationFn: () => logoutSession(),
         onSuccess() {
+            localStorage.removeItem('folderHistory');
             navigate('/auth', { replace: true });
         },
         onError(error: AxiosError) {

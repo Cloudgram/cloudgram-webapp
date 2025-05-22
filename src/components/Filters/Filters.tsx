@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+import { FILTERS } from '../../constants/filters';
 import {
     styles,
     useState,
@@ -11,11 +13,34 @@ import {
     usePathfinder,
     queryClient,
 } from './index';
+import { useDispatch } from 'react-redux';
+import { rootFolderHistory } from '../../constants/rootFolder';
+import { useAppSelectot } from '../../store/store';
 
 export const Filters = () => {
     const [isPanelVisible, setIsPanelVisible] = useState(false);
     const [createModal, setCreateModal] = useState(false);
+    const filter = useAppSelectot(state => state.filter);
+    const navigate = useNavigate();
     const folderId = usePathfinder();
+    const size = 20;
+
+    const dispatch = useDispatch();
+
+    const toggleFilter = (filterState: string) => {
+        dispatch({
+            type: filterState,
+            payload: { filter: filterState },
+        });
+        // setFilter(filterState);
+        queryClient.invalidateQueries({ queryKey: [`${filterState}`] });
+        localStorage.setItem('folderHistory', JSON.stringify(rootFolderHistory));
+        if (filterState === 'home') {
+            navigate('/my-drive');
+        } else {
+            navigate(`/my-drive/${filterState}`);
+        }
+    };
 
     const closeMenu = () => {
         setIsPanelVisible(false);
@@ -41,7 +66,7 @@ export const Filters = () => {
     };
 
     const uploadMutation = useMutation({
-        mutationFn: (file: File) => uploadFile(file, folderId, true),
+        mutationFn: (file: File) => uploadFile(file, folderId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['folders', folderId] });
         },
@@ -59,19 +84,14 @@ export const Filters = () => {
         }
 
         const fileArray = Array.from(fileList);
-        const totalFiles = fileArray.length;
-        let successLoad = 0;
 
         for (const file of fileArray) {
             try {
-                console.log(`Загружается ${successLoad + 1} из ${totalFiles}`);
                 await uploadMutation.mutateAsync(file);
-                successLoad++;
             } catch (error) {
                 console.error('Ошибка загрузки файла:', error);
             }
         }
-        console.log(`✅ Успешно загружено: ${successLoad} из ${totalFiles}`);
     };
 
     return (
@@ -154,10 +174,34 @@ export const Filters = () => {
                 </div>
                 <ul className={styles.filters__list}>
                     <li className={styles.filters__item}>
-                        <button className={styles.filters__button}>
+                        <button
+                            onClick={() => toggleFilter(FILTERS.HOME)}
+                            className={styles.filters__button}
+                        >
                             <svg
-                                width='20'
-                                height='20'
+                                xmlns='http://www.w3.org/2000/svg'
+                                width={size}
+                                height={size}
+                                viewBox='0 0 16 16'
+                            >
+                                <path
+                                    fill='currentColor'
+                                    d='M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z'
+                                />
+                            </svg>
+                            <span className={styles.filters__title}>Мой диск</span>
+                        </button>
+                    </li>
+                    <li className={styles.filters__item}>
+                        <button
+                            onClick={() => toggleFilter(FILTERS.SHARED)}
+                            className={`${styles.filters__button} ${
+                                filter === FILTERS.SHARED ? styles.filters__button_active : ''
+                            }`}
+                        >
+                            <svg
+                                width={size}
+                                height={size}
                                 viewBox='0 0 20 20'
                                 fill='none'
                                 xmlns='http://www.w3.org/2000/svg'
@@ -171,10 +215,15 @@ export const Filters = () => {
                         </button>
                     </li>
                     <li className={styles.filters__item}>
-                        <button className={styles.filters__button}>
+                        <button
+                            onClick={() => toggleFilter(FILTERS.FAV)}
+                            className={`${styles.filters__button} ${
+                                filter === FILTERS.FAV ? styles.filters__button_active : ''
+                            }`}
+                        >
                             <svg
-                                width='20'
-                                height='20'
+                                width={size}
+                                height={size}
                                 viewBox='0 0 20 20'
                                 fill='none'
                                 xmlns='http://www.w3.org/2000/svg'
@@ -191,10 +240,15 @@ export const Filters = () => {
                         </button>
                     </li>
                     <li className={styles.filters__item}>
-                        <button className={styles.filters__button}>
+                        <button
+                            onClick={() => toggleFilter(FILTERS.RECENT)}
+                            className={`${styles.filters__button} ${
+                                filter === FILTERS.RECENT ? styles.filters__button_active : ''
+                            }`}
+                        >
                             <svg
-                                width='20'
-                                height='20'
+                                width={size}
+                                height={size}
                                 viewBox='0 0 20 20'
                                 fill='none'
                                 xmlns='http://www.w3.org/2000/svg'
@@ -218,20 +272,24 @@ export const Filters = () => {
                         </button>
                     </li>
                     <li className={styles.filters__item}>
-                        <button className={styles.filters__button}>
+                        <button
+                            onClick={() => toggleFilter(FILTERS.TRASH)}
+                            className={`${styles.filters__button} ${
+                                filter === FILTERS.TRASH ? styles.filters__button_active : ''
+                            }`}
+                        >
                             <svg
-                                width='24'
-                                height='24'
-                                viewBox='0 0 24 24'
-                                fill='none'
                                 xmlns='http://www.w3.org/2000/svg'
+                                width={size}
+                                height={size}
+                                viewBox='0 0 16 16'
                             >
-                                <path
-                                    d='M12 23L2.5 17.5V6.5L12 1L21.5 6.5V17.5L12 23ZM12 3.312L4.5 7.653V16.347L12 20.689L19.5 16.347V7.653L12 3.311V3.312ZM12 16C10.9395 15.997 9.92294 15.5759 9.171 14.828C8.02724 13.6839 7.68525 11.9635 8.30448 10.4689C8.92371 8.97436 10.3822 8 12 8C13.0603 8.00284 14.0765 8.42402 14.828 9.172C16.3895 10.734 16.3895 13.266 14.828 14.828C14.0764 15.5757 13.0602 15.9968 12 16ZM12 10C11.0458 9.9998 10.2244 10.6736 10.0381 11.6094C9.85175 12.5452 10.3524 13.4823 11.2339 13.8476C12.1153 14.2129 13.1321 13.9047 13.6623 13.1114C14.1926 12.3182 14.0886 11.2608 13.414 10.586C13.0398 10.2098 12.5307 9.99879 12 10Z'
-                                    fill='black'
-                                />
+                                <g fill='currentColor'>
+                                    <path d='M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z' />
+                                    <path d='M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z' />
+                                </g>
                             </svg>
-                            <span className={styles.settings__title}>Настройки</span>
+                            <span className={styles.settings__title}>Корзина</span>
                         </button>
                     </li>
                 </ul>

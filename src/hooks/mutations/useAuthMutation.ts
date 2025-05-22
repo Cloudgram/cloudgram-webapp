@@ -9,7 +9,7 @@ export const useAuthMutation = () => {
     const navigate = useNavigate();
 
     return useMutation({
-        mutationFn: (code: string) => getAuth(code),
+        mutationFn: (secret: string) => getAuth(secret),
         onSuccess() {
             queryClient.removeQueries({ queryKey: ['folders'] });
             queryClient.refetchQueries({ queryKey: ['user'] });

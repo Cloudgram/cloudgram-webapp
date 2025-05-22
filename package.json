@@ -18,10 +18,10 @@
         "docker:build": "docker build -t cloudgram-web --target=development .",
         "docker:run": "docker run -p 5174:5174 cloudgram-web",
         "storybook": "storybook dev -p 6006",
-        "build-storybook": "storybook build",
-        "test": "jest"
+        "build-storybook": "storybook build"
     },
     "dependencies": {
+        "@emotion/cache": "^11.14.0",
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.0",
         "@mui/icons-material": "^7.1.0",
@@ -29,12 +29,9 @@
         "@reduxjs/toolkit": "^2.6.1",
         "@tanstack/react-query": "^5.69.0",
         "@types/node": "^22.15.2",
-        "@types/react-beautiful-dnd": "^13.1.8",
         "axios": "^1.9.0",
         "gsap": "^3.12.7",
         "react": "^18.3.1",
-        "react-beautiful-dnd": "^13.1.1",
-        "react-code-input": "^3.10.1",
         "react-dom": "^18.3.1",
         "react-js-loader": "^0.1.3",
         "react-redux": "^9.2.0",

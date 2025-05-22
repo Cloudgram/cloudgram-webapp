@@ -6,8 +6,9 @@ export const useFoldersQuery = (folderId: string) => {
     return useQuery<RootFolderType>({
         queryKey: ['folders', folderId],
         queryFn: () => getFolders(folderId),
-        staleTime: 300000,
+        staleTime: 1000 * 60 * 5,
         refetchOnWindowFocus: false,
-        refetchOnMount: false,
+        refetchOnMount: true,
+        refetchOnReconnect: true,
     });
 };

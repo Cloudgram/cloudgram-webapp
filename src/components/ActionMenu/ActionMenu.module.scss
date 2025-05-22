@@ -14,7 +14,7 @@
 
 .actionMenu__button {
     display: flex;
-    gap: 5px;
+    gap: 7px;
     width: 100%;
     flex-direction: row;
     align-items: center;
@@ -29,10 +29,10 @@
     border-radius: 10px;
     transition: background-color 0.12s ease-in-out;
 
-    svg {
-        width: 30px;
-        height: 30px;
-    }
+    // svg {
+    //     width: 30px;
+    //     height: 30px;
+    // }
 
     &:hover {
         background-color: rgba(0, 0, 0, 0.1);

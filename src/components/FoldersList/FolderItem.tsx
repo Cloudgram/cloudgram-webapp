@@ -1,3 +1,8 @@
+import { eleminateEntity, repairEntity } from '../../api/shared';
+import { copyEntity } from '../../api/shared';
+import { FILTERS } from '../../constants/filters';
+import { rootFolderId } from '../../constants/rootFolder';
+import { useAppSelectot } from '../../store/store';
 import {
     ActionMenu,
     dateFormat,
@@ -21,7 +26,7 @@ interface FolderItemProps {
     onDragStart: (folder: {
         id: string;
         title: string;
-        color_id: number;
+        color_id: string;
     }) => (e: React.DragEvent<HTMLElement>) => void;
     onDragEnd: () => void;
     onDrop: (targetId: string) => (e: React.DragEvent<HTMLElement>) => Promise<void>;
@@ -37,16 +42,21 @@ export const FolderItem: React.FC<FolderItemProps> = ({
     onDrop,
     isDragging,
 }) => {
-    const [activeFolderMenuId, setActiveFolderMenuId] = useState<number | null>(null);
-    const folderId = usePathfinder() || '0';
+    const [activeFolderMenuId, setActiveFolderMenuId] = useState<string | null>(null);
+    const folderId = usePathfinder() || rootFolderId;
     const navigate = useNavigate();
     const [createModal, setCreateModal] = useState<boolean>(false);
+    const [isDragOver, setIsDragOver] = useState(false);
     const [editingFolder, setEditingFolder] = useState<{
         id: string;
         folder_id: string;
         title: string;
-        color_id: number;
+        color_id: string;
     } | null>(null);
+
+    const size = 16;
+
+    const currentFilter = useAppSelectot(state => state.filter);
 
     const closeMenu = () => {
         setActiveFolderMenuId(null);
@@ -54,7 +64,7 @@ export const FolderItem: React.FC<FolderItemProps> = ({
 
     const menuRef = useClickOutside(closeMenu);
 
-    const toggleMenu = (id: number) => {
+    const toggleMenu = (id: string) => {
         setActiveFolderMenuId(activeFolderMenuId === id ? null : id);
     };
 
@@ -62,14 +72,59 @@ export const FolderItem: React.FC<FolderItemProps> = ({
         id: string;
         folder_id: string;
         title: string;
-        color_id: number;
+        color_id: string;
     }) => {
         setEditingFolder(folder);
         setCreateModal(true);
     };
 
-    const handleDelete = async (id: string | number) => {
-        await deleteFolder(String(id));
+    const handleDragOver = (e: React.DragEvent<HTMLElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragOver(true);
+    };
+
+    const handleDragLeave = (e: React.DragEvent<HTMLElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragOver(false);
+    };
+
+    const handleDelete = async (id: string) => {
+        if (!window.confirm('Вы действительно хотите переместить эту папку в корзину?')) {
+            return;
+        } else {
+            await deleteFolder([id]);
+            queryClient.invalidateQueries({ queryKey: ['folders', folderId] });
+        }
+    };
+
+    const handleEleminate = async (id: string) => {
+        if (!window.confirm('Вы действительно хотите стереть эту папку?')) {
+            return;
+        } else {
+            await eleminateEntity([id]);
+            queryClient.invalidateQueries({ queryKey: ['trash'] });
+        }
+    };
+
+    const handleRepair = async (id: string) => {
+        if (!window.confirm('Вы действительно хотите восстановить эту папку?')) {
+            return;
+        } else {
+            await repairEntity([id]);
+            queryClient.invalidateQueries({ queryKey: ['trash'] });
+            queryClient.invalidateQueries({ queryKey: ['folders'] });
+        }
+    };
+
+    const handleCopyFolder = async (
+        currentId: string,
+        currentFolderId: string,
+        isFolder: boolean
+    ) => {
+        await copyEntity(currentId, currentFolderId, isFolder);
+        setActiveFolderMenuId(null);
         queryClient.invalidateQueries({ queryKey: ['folders', folderId] });
     };
 
@@ -94,20 +149,41 @@ export const FolderItem: React.FC<FolderItemProps> = ({
                     }}
                     className={`${styles.list__item} ${styles.list__item__folder} ${
                         isDragging ? styles.dragging : ''
-                    }`}
+                    } ${isDragOver ? styles.dragover : ''}`}
+                    tabIndex={0}
                     key={index}
                     onClick={e => {
                         e.preventDefault();
                     }}
-                    onDoubleClick={e => handleFolderDoubleClick(e, `/folder/${folder.id}`)}
-                    draggable
-                    onDragStart={onDragStart({
-                        id: folder.id.toString(),
-                        title: folder.title,
-                        color_id: folder.color.id,
+                    onDoubleClick={e => {
+                        if (currentFilter === FILTERS.TRASH) {
+                            return;
+                        } else {
+                            handleFolderDoubleClick(e, `/folder/${folder.id}`);
+                        }
+                    }}
+                    {...(currentFilter !== FILTERS.TRASH && {
+                        draggable: 'true',
+                        onDragStart: (e: React.DragEvent<HTMLElement>) => {
+                            e.stopPropagation();
+                            onDragStart({
+                                id: folder.id.toString(),
+                                title: folder.title,
+                                color_id: folder.color.id,
+                            })(e);
+                        },
+                        onDragOver: handleDragOver,
+                        onDragLeave: handleDragLeave,
+                        onDragEnd: e => {
+                            e.stopPropagation();
+                            onDragEnd();
+                        },
+                        onDrop: e => {
+                            e.stopPropagation();
+                            setIsDragOver(false);
+                            onDrop(folder.id.toString())(e);
+                        },
                     })}
-                    onDragEnd={onDragEnd}
-                    onDrop={onDrop(folder.id.toString())}
                 >
                     <div className={styles.folders__item}>
                         <div className={styles.folder__icons}>
@@ -142,7 +218,8 @@ export const FolderItem: React.FC<FolderItemProps> = ({
                                         fillRule='evenodd'
                                         clipRule='evenodd'
                                         d='M3 1.5C3 2.32843 2.32843 3 1.5 3C0.671573 3 0 2.32843 0 1.5C0 0.671573 0.671573 0 1.5 0C2.32843 0 3 0.671573 3 1.5ZM3 7.5C3 8.32843 2.32843 9 1.5 9C0.671573 9 0 8.32843 0 7.5C0 6.67157 0.671573 6 1.5 6C2.32843 6 3 6.67157 3 7.5ZM1.5 15C2.32843 15 3 14.3284 3 13.5C3 12.6716 2.32843 12 1.5 12C0.671573 12 0 12.6716 0 13.5C0 14.3284 0.671573 15 1.5 15Z'
-                                        fill={folder.color.back_hex}
+                                        // fill={folder.color.back_hex}
+                                        fill='black'
                                     />
                                 </svg>
                             </button>
@@ -169,42 +246,59 @@ export const FolderItem: React.FC<FolderItemProps> = ({
                             )}
                         </div>
                     </div>
-                    {activeFolderMenuId === folder.id && (
-                        <ActionMenu
-                            menuRef={menuRef}
-                            onDelete={() => handleDelete(folder.id)}
-                            onEditFolder={() => {
-                                handleEditFolder({
-                                    id: folder.id.toString(),
-                                    folder_id: folderId,
-                                    title: folder.title,
-                                    color_id: Number(folder.color.id),
-                                });
-                                setActiveFolderMenuId(null);
-                            }}
-                        />
-                    )}
+                    {activeFolderMenuId === folder.id &&
+                        (currentFilter === 'trash' ? (
+                            <ActionMenu
+                                menuRef={menuRef}
+                                onEleminate={() => handleEleminate(folder.id)}
+                                onRepair={() => handleRepair(folder.id)}
+                            />
+                        ) : (
+                            <ActionMenu
+                                menuRef={menuRef}
+                                onCopy={() =>
+                                    handleCopyFolder(folder.id.toString(), folderId, true)
+                                }
+                                onEditFolder={() => {
+                                    handleEditFolder({
+                                        id: folder.id.toString(),
+                                        folder_id: folderId,
+                                        title: folder.title,
+                                        color_id: folder.color.id,
+                                    });
+                                    setActiveFolderMenuId(null);
+                                }}
+                                onDelete={() => handleDelete(folder.id)}
+                            />
+                        ))}
                 </li>
             ) : (
                 <li
                     className={`${styles.list__item_line} ${styles.list__item_line__folder} ${
                         isDragging ? styles.dragging : ''
-                    }`}
+                    } ${isDragOver ? styles.dragover : ''}`}
+                    tabIndex={0}
+                    key={index}
                     onClick={e => e.preventDefault()}
                     onDoubleClick={e => handleFolderDoubleClick(e, `/folder/${folder.id}`)}
                     style={{
                         backgroundColor: folder.color.background_hex,
                         color: folder.color.back_hex,
                     }}
-                    key={index}
                     draggable
                     onDragStart={onDragStart({
                         id: folder.id.toString(),
                         title: folder.title,
                         color_id: folder.color.id,
                     })}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
                     onDragEnd={onDragEnd}
-                    onDrop={onDrop(folder.id.toString())}
+                    onDrop={e => {
+                        e.stopPropagation();
+                        setIsDragOver(false);
+                        onDrop(folder.id.toString())(e);
+                    }}
                 >
                     <div className={styles.folders__item_line}>
                         <div className={styles.folder__icons_line}>
@@ -245,22 +339,113 @@ export const FolderItem: React.FC<FolderItemProps> = ({
                             {folder.views}
                         </div>
                         <div className={styles.actions__menu}>
-                            <button
-                                className={styles.action__button}
-                                onClick={() => handleDelete(folder.id.toString())}
-                            >
-                                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'>
-                                    <path
-                                        fill='currentColor'
-                                        fillOpacity='.15'
-                                        d='M292.7 840h438.6l24.2-512h-487z'
-                                    />
-                                    <path
-                                        fill='currentColor'
-                                        d='M864 256H736v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32m-504-72h304v72H360zm371.3 656H292.7l-24.2-512h487z'
-                                    />
-                                </svg>
-                            </button>
+                            {currentFilter === 'trash' ? (
+                                <>
+                                    <button
+                                        className={styles.action__button}
+                                        onClick={e => {
+                                            e.stopPropagation();
+                                            handleRepair(folder.id);
+                                        }}
+                                    >
+                                        <svg
+                                            xmlns='http://www.w3.org/2000/svg'
+                                            width={size}
+                                            height={size}
+                                            viewBox='0 0 16 16'
+                                        >
+                                            <path
+                                                fill='currentColor'
+                                                d='M0 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z'
+                                            />
+                                        </svg>
+                                    </button>
+                                    <button
+                                        className={styles.action__button}
+                                        onClick={e => {
+                                            e.stopPropagation();
+                                            handleEleminate(folder.id);
+                                        }}
+                                    >
+                                        <svg
+                                            xmlns='http://www.w3.org/2000/svg'
+                                            width={size}
+                                            height={size}
+                                            viewBox='0 0 16 16'
+                                        >
+                                            <path
+                                                fill='currentColor'
+                                                d='M8.086 2.207a2 2 0 0 1 2.828 0l3.879 3.879a2 2 0 0 1 0 2.828l-5.5 5.5A2 2 0 0 1 7.879 15H5.12a2 2 0 0 1-1.414-.586l-2.5-2.5a2 2 0 0 1 0-2.828zm2.121.707a1 1 0 0 0-1.414 0L4.16 7.547l5.293 5.293l4.633-4.633a1 1 0 0 0 0-1.414zM8.746 13.547L3.453 8.254L1.914 9.793a1 1 0 0 0 0 1.414l2.5 2.5a1 1 0 0 0 .707.293H7.88a1 1 0 0 0 .707-.293z'
+                                            />
+                                        </svg>
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <button
+                                        className={styles.action__button}
+                                        onClick={e => {
+                                            e.stopPropagation();
+                                            handleEditFolder({
+                                                id: folder.id.toString(),
+                                                folder_id: folderId,
+                                                title: folder.title,
+                                                color_id: folder.color.id,
+                                            });
+                                        }}
+                                    >
+                                        <svg
+                                            xmlns='http://www.w3.org/2000/svg'
+                                            width={size}
+                                            height={size}
+                                            viewBox='0 -960 960 960'
+                                            fill='currentColor'
+                                        >
+                                            <path d='M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z' />
+                                        </svg>
+                                    </button>
+                                    <button
+                                        className={styles.action__button}
+                                        onClick={() =>
+                                            handleCopyFolder(folder.id.toString(), folderId, true)
+                                        }
+                                    >
+                                        <svg
+                                            xmlns='http://www.w3.org/2000/svg'
+                                            width={size}
+                                            height={size}
+                                            viewBox='0 0 16 16'
+                                        >
+                                            <path
+                                                fill='currentColor'
+                                                fillRule='evenodd'
+                                                d='M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z'
+                                            />
+                                        </svg>
+                                    </button>
+                                    <button
+                                        className={styles.action__button}
+                                        onClick={() => handleDelete(folder.id.toString())}
+                                    >
+                                        <svg
+                                            xmlns='http://www.w3.org/2000/svg'
+                                            width={size}
+                                            height={size}
+                                            viewBox='0 0 1024 1024'
+                                        >
+                                            <path
+                                                fill='currentColor'
+                                                fillOpacity='.15'
+                                                d='M292.7 840h438.6l24.2-512h-487z'
+                                            />
+                                            <path
+                                                fill='currentColor'
+                                                d='M864 256H736v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32m-504-72h304v72H360zm371.3 656H292.7l-24.2-512h487z'
+                                            />
+                                        </svg>
+                                    </button>
+                                </>
+                            )}
                         </div>
                     </div>
                 </li>
@@ -273,7 +458,7 @@ export const FolderItem: React.FC<FolderItemProps> = ({
                     }}
                     title={editingFolder?.title}
                     folderId={editingFolder?.id}
-                    color_id={editingFolder?.color_id || 2}
+                    color_id={editingFolder?.color_id}
                 />
             )}
         </>

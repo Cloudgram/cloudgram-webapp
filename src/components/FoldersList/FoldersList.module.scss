@@ -57,6 +57,7 @@
     padding: 16px;
     height: 120px; // фиксированная высота вместо fit-content
     box-sizing: border-box;
+    border: 2px solid transparent;
     border-radius: 20px;
     font-family: "GR", sans-serif;
     text-decoration: none;
@@ -68,14 +69,31 @@
         transform 0.1s ease-in-out,
         box-shadow 0.1s ease-in-out;
 
+    &:hover {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    // &:focus {
+    //     border: 1px dashed black;
+    // }
+
     &.dragging {
         opacity: 0.5;
         cursor: move;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    &.dragover {
+        border: 2px dashed rgba(0, 0, 0, 0.3);
+        transform: scale(1.02);
+        transition: all 0.2s ease;
+        opacity: 1; // явно указываем, что элемент должен быть непрозрачным
     }
 
     &_line {
         padding: 15px;
         border-radius: 10px;
+        border: 2px solid transparent;
         background-color: rgba(0, 0, 0, 0.1);
         text-decoration: none;
         user-select: none;
@@ -89,6 +107,13 @@
         &.dragging {
             opacity: 0.5;
             cursor: move;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        &.dragover {
+            border: 2px dashed rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+            opacity: 1;
         }
 
         &__folder {
@@ -98,12 +123,18 @@
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             }
 
+            // &:focus {
+            //     border: 1px solid black;
+            // }
+
             &:active {
                 box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-
-                // transform: translateZ(10px);
             }
         }
+
+        // &:focus {
+        //     border: 1px solid black;
+        // }
 
         &:hover {
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -118,9 +149,7 @@
         }
 
         &:active {
-            // cursor: grabbing;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2) !important;
-            // transform: scale(0.98);
         }
     }
 
@@ -171,7 +200,7 @@
     overflow-y: auto;
     padding-right: 10px;
     border-radius: 20px;
-    height: calc(100vh - 150px); // фиксированная высота с учетом отступов
+    height: calc(100vh - 230px); // фиксированная высота с учетом отступов
     box-sizing: border-box;
     grid-auto-rows: 120px; // фиксированная высота строк
 
@@ -202,7 +231,7 @@
         padding: 10px;
         padding-right: 10px;
         border-radius: 10px;
-        height: calc(100vh - 150px); // такая же высота для line view
+        height: calc(100vh - 230px); // такая же высота для line view
         box-sizing: border-box;
 
         &::-webkit-scrollbar {
@@ -267,7 +296,7 @@
     width: 100%;
 
     &_line {
-        width: 500px;
+        width: 400px;
         // font-size: 17px;
         font-weight: 500;
         color: black;
