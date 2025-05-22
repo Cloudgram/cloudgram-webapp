@@ -4,11 +4,11 @@ on:
     push:
         branches:
             - main
-            - new-design
+            - development/alpha
     pull_request:
         branches:
             - main
-            - new-design
+            - development/alpha
 
 jobs:
     build:
@@ -56,6 +56,6 @@ jobs:
                   if [ "${{ github.ref }}" == "refs/heads/main" ]; then
                     docker compose build
                     docker compose push
-                  elif [ "${{ github.ref }}" == "refs/heads/new-design" ]; then
-                    echo "Skipping Docker push for new-design branch"
+                  elif [ "${{ github.ref }}" == "refs/heads/development/alpha" ]; then
+                    echo "Skipping Docker push for development/alpha branch"
                   fi
