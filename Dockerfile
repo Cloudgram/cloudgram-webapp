@@ -10,9 +10,9 @@ COPY . .
 RUN npm run build
 
 # для разработки
-FROM node:22-alpine AS development
-WORKDIR /app
-RUN npm install -g serve
-COPY --from=builder /app/dist ./dist
-EXPOSE 5174
-CMD ["serve", "-s", "dist", "-l", "5174"]
+# FROM node:22-alpine AS development
+# WORKDIR /app
+# RUN npm install -g serve
+# COPY --from=builder /app/dist ./dist
+# EXPOSE 5174
+# CMD ["serve", "-s", "dist", "-l", "5174"]

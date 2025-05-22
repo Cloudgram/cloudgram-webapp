@@ -2,11 +2,9 @@ version: '3.8'
 
 services:
     webapp:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        restart: always
-        depends_on:
-            - postgres
+        build: .
         expose:
             - '8002'
+        volumes:
+            - ./dist:/app/dist
+        command: npm run build
