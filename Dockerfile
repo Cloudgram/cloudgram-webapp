@@ -8,7 +8,7 @@ RUN npm install --legacy-peer-deps
 RUN npm rebuild @rollup/rollup-linux-x64-musl
 
 COPY . .
-RUN npm run build
+#RUN npm run build
 
 # для разработки
 # FROM node:22-alpine AS development
