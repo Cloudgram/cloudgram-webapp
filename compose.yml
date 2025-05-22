@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  webapp:
+    build: .
+    expose:
+      - "8002"
+    volumes:
+      - ./dist:/app/dist
+    command: npm run build
