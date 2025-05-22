@@ -1,27 +1,23 @@
-import { apiUrl } from './api_url';
+import { requestInstance } from './requestInstance';
 
-export const getAuth = (code: string) => {
-    return fetch(`${apiUrl}/session?code=${code}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-    }).then(res => {
-        if (!res.ok) throw new Error('Ошибка авторизации');
-        return res.json();
-    });
+export const getAuth = async (secret: string) => {
+    try {
+        const { data } = await requestInstance.post('/session', {
+            secret: secret,
+        });
+        return data;
+    } catch (error) {
+        console.error('Ошибка при выполнении запроса:', error);
+        throw error;
+    }
 };
 
 export const logoutSession = async (): Promise<void> => {
-    return fetch(`${apiUrl}/session`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-    }).then(res => {
-        if (!res.ok) throw new Error('Ошибка авторизации');
-        return res.json();
-    });
+    try {
+        const { data } = await requestInstance.delete('/session');
+        return data;
+    } catch (error) {
+        console.error('Ошибка при выполнении запроса:', error);
+        throw error;
+    }
 };

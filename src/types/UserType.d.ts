@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const UserSchema = z.object({
     id: z.number(),
     tg_id: z.number(),
-    created_at: z.string(),
+    created_at: z.date(),
     uploaded_sum: z.number(),
     referrals: z.array(
         z.object({
@@ -12,7 +12,7 @@ export const UserSchema = z.object({
             full_name: z.string(),
             username: z.string(),
             created_at: z.string(),
-        }),
+        })
     ),
     avatar: z.string(),
     username: z.string(),
@@ -22,7 +22,7 @@ export const UserSchema = z.object({
     subscriber: z.object({
         id: z.number(),
         end: z.string(),
-        created_at: z.string(),
+        created_at: z.date(),
         tariff:
             z.object({
                 id: z.number(),

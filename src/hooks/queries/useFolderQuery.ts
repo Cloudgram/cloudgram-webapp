@@ -1,13 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import { getFolders } from '../api/Folders';
-import { RootFolderType } from '../types/RootType';
+import { getFolders } from '../../api/Folders';
+import { RootFolderType } from '../../types/RootType';
 
 export const useFoldersQuery = (folderId: string) => {
     return useQuery<RootFolderType>({
         queryKey: ['folders', folderId],
         queryFn: () => getFolders(folderId),
-        staleTime: 300000,
+        staleTime: 1000 * 60 * 5,
         refetchOnWindowFocus: false,
-        refetchOnMount: false,
+        refetchOnMount: true,
+        refetchOnReconnect: true,
     });
 };

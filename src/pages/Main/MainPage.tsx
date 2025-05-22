@@ -1,12 +1,19 @@
-// import { Load } from '../../components/Loader/Load'
-import { FoldersList, Header, styles } from './index';
+import { FileManager } from '../../components/FileManager/FileManager';
+import { rootFolderId } from '../../constants/rootFolder';
+import { Header } from './index';
+import { useParams, Navigate } from 'react-router-dom';
 
 export const MainPage = () => {
+    const { folderId } = useParams();
+
+    if (folderId === rootFolderId) {
+        return <Navigate to={'/my-drive'} replace />;
+    }
+
     return (
-        <section className={styles.main}>
-            {/* <Load type="box-rotate-z" bgColor={'black'} color={'black'} title={'LOADING...'} size={100} /> */}
+        <>
             <Header />
-            <FoldersList />
-        </section>
+            <FileManager />
+        </>
     );
 };

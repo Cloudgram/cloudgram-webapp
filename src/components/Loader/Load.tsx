@@ -1,5 +1,5 @@
-import Loader from 'react-js-loader'
-import styles from './Loader.module.scss'
+import Loader from 'react-js-loader';
+import styles from './Loader.module.scss';
 
 export interface ILoader {
     type: string;
@@ -14,5 +14,5 @@ export const Load = ({ type, bgColor, color, title, size }: ILoader) => {
         <div className={styles.loader}>
             <Loader type={type} bgColor={bgColor} color={color} title={title} size={size} />
         </div>
-    )
-}
+    );
+};

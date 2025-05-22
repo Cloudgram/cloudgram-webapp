@@ -1,18 +1,19 @@
-FROM node:22-alpine
+# для прода
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
+COPY package*.json ./
+RUN npm install --legacy-peer-deps
+RUN npm rebuild @rollup/rollup-linux-x64-musl
+
 COPY . .
-
-RUN npm install
-RUN npm install typescript -g
-RUN npm i -g serve
-RUN npm install vite @vitejs/plugin-react
-
 RUN npm run build
 
-CMD ["tail", "-f", "/dev/null"]
-#
-#EXPOSE 3000
-#
-#CMD [ "serve", "-s", "dist" ]
+# для разработки
+# FROM node:22-alpine AS development
+# WORKDIR /app
+# RUN npm install -g serve
+# COPY --from=builder /app/dist ./dist
+# EXPOSE 5174
+# CMD ["serve", "-s", "dist", "-l", "5174"]

@@ -1,67 +1,70 @@
-// import { useUserQuery } from '../../hooks/useUserQuery';
-import {
-    styles,
-    getAuth,
-    AxiosError,
-    useState,
-    useNavigate,
-    useMutation,
-    queryClient,
-    AuthCodeInput,
-} from './index';
+import { useSearchParams } from 'react-router-dom';
+import { styles, useAuthMutation, AxiosError } from './index';
+import { useEffect } from 'react';
 
 export const AuthPage = () => {
-    const navigate = useNavigate();
-    const [code, setCode] = useState('');
+    const [searchParams] = useSearchParams();
+    const { mutate, isPending, isError, error } = useAuthMutation();
+    const userSecret = searchParams.get('secret') || '';
 
-    const authMutation = useMutation({
-        mutationFn: () => getAuth(code),
-        onSuccess() {
-            queryClient.removeQueries({ queryKey: ['folders'] });
-            queryClient.setQueryData(['user'], { isAuth: true });
-            navigate('/folder/0', { replace: true });
-        },
-        onError(error: AxiosError) {
-            if (error.response?.status === 404) {
-                throw new Error('Неверный код');
-            } else if (error.message.includes('CORS')) {
-                console.warn('CORS-проблема, но запрос может быть успешным.');
-            } else {
-                throw new Error('Ошибка сервера');
-            }
-        },
-    });
-
-    const handleLogin = () => {
-        authMutation.mutate();
-    };
-
-    const handleKeyDown = (event: React.KeyboardEvent) => {
-        if (event.key === 'Enter') {
-            handleLogin();
+    // Автоматически вызываем mutate при наличии secret
+    useEffect(() => {
+        if (userSecret) {
+            mutate(userSecret);
         }
+    }, [userSecret, mutate]);
+
+    const errorMessage = () => {
+        if (error instanceof AxiosError) {
+            switch (error.response?.status) {
+                case 400:
+                    return (
+                        <span className={styles.auth__error}>
+                            Недействительная ссылка авторизации
+                        </span>
+                    );
+
+                case 404:
+                    return <span className={styles.auth__error}>Неверный токен</span>;
+
+                case 401:
+                    return <span className={styles.auth__error}>Ошибка авторизации</span>;
+
+                case 500:
+                    return <span className={styles.auth__error}>Ошибка сервера</span>;
+
+                default:
+                    if (error.message?.includes('CORS')) {
+                        return (
+                            <span className={styles.auth__error}>
+                                CORS-проблема, но запрос может быть успешным.
+                            </span>
+                        );
+                    }
+                    return <span className={styles.auth__error}>Неизвестная ошибка</span>;
+            }
+        }
+        return null;
     };
 
     return (
         <div className={styles.auth}>
             <div className={styles.auth__form}>
                 <h1 className={styles.auth__title}>Cloudgram</h1>
-                <AuthCodeInput onCodeChange={setCode} onKeyDown={handleKeyDown} />
-                <span className={styles.auth__descr}>Введите код из Telegram бота</span>
+                <span className={styles.auth__descr}>
+                    {isPending ? 'Выполняется вход...' : 'Авторизация через Telegram'}
+                </span>
                 <div className={styles.auth__buttons}>
-                    <button
-                        className={`${styles.auth__button} ${styles.auth__button_login}`}
-                        onClick={handleLogin}
-                    >
-                        Войти
-                    </button>
-                    <a
-                        href='https://t.me/miishalom_test_bot'
-                        target='_blank'
-                        className={`${styles.auth__button} ${styles.auth__button_bot}`}
-                    >
-                        Перейти к боту
-                    </a>
+                    {isError && error && errorMessage()}
+                    {!userSecret && (
+                        <a
+                            href='https://t.me/CloudgramWeb_bot'
+                            target='_blank'
+                            className={`${styles.auth__button} ${styles.auth__button_bot}`}
+                        >
+                            Перейти к боту
+                        </a>
+                    )}
                 </div>
             </div>
         </div>

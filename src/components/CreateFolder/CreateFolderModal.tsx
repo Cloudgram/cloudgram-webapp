@@ -1,56 +1,202 @@
-import { useState, styles, createFolder, useMutation, ModalWindow, useParams, queryClient } from './index'
+import {
+    useState,
+    styles,
+    createFolder,
+    useMutation,
+    ModalWindow,
+    queryClient,
+    usePathfinder,
+    getFolders,
+    ButtonLoad,
+    changeFolder,
+    useGetColors,
+    ColorType,
+    useEffect,
+    useUserQuery,
+    FormControl,
+    FormLabel,
+    Box,
+} from './index';
 
 interface CreateFolderModalProps {
     onClose: () => void;
+    folderId?: string;
+    title?: string;
+    color_id?: string;
 }
 
-export const CreateFolderModal = ({ onClose }: CreateFolderModalProps) => {
-    const [title, setTitle] = useState<string>('');
-    const { folderId = '' } = useParams();
+export const CreateFolderModal = ({
+    onClose,
+    folderId,
+    title,
+    color_id,
+}: CreateFolderModalProps) => {
+    const [folderTitle, setFolderTitle] = useState<string>(title ?? '');
+    const [colors, setColors] = useState<ColorType['data'] | null>(null);
+    const [error, setError] = useState<string | null>(null);
+    const [selectedColorId, setSelectedColorId] = useState<string | undefined>(
+        color_id ?? undefined
+    );
+    const currentFolderId = usePathfinder();
+    const { data: colorsData } = useGetColors();
+    const { data: user } = useUserQuery();
 
-    const createFolderMutation = useMutation({
-        mutationFn: () => createFolder(title, folderId),
-        onSuccess: () => {
+    useEffect(() => {
+        if (colorsData) {
+            setColors(colorsData.data);
+        }
+    }, [colorsData]);
+
+    const { mutate, isPending } = useMutation({
+        mutationFn: () => {
+            if (folderId) {
+                if (user?.subscriber) {
+                    return changeFolder(
+                        folderId,
+                        currentFolderId,
+                        folderTitle,
+                        selectedColorId ?? undefined
+                    );
+                } else {
+                    return changeFolder(folderId, currentFolderId, folderTitle);
+                }
+            }
+            return createFolder(folderTitle, currentFolderId, selectedColorId ?? 'folder_blue');
+        },
+        onSuccess: async () => {
             queryClient.invalidateQueries({ queryKey: ['folders'] });
+
+            await queryClient.prefetchQuery({
+                queryKey: ['folders', currentFolderId],
+                queryFn: () => getFolders(currentFolderId),
+            });
+
             onClose();
         },
         onError: (error: Error) => {
-            console.error(error);
-        }
-
-    })
+            if (error.message.includes('premium')) {
+                setError('Эта функция доступна только для премиум подписки');
+            } else {
+                setError(error.message || 'Произошла ошибка');
+            }
+        },
+    });
 
     const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.target.value);
-    }
+        setFolderTitle(e.target.value);
+    };
+
+    const handleEnterKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            mutate();
+        }
+        if (e.key === 'Escape') {
+            onClose();
+        }
+    };
 
     const handleCreateFolder = () => {
-        createFolderMutation.mutate();
-    }
+        mutate();
+    };
 
     return (
         <ModalWindow>
             <div className={styles.container}>
-                <h2 className={styles.container__title}>Новая папка</h2>
+                <h2 className={styles.container__title}>
+                    {title ? 'Изменить папку' : 'Создать папку'}
+                </h2>
                 <input
-                    type="text"
+                    type='text'
                     className={styles.container__input}
                     placeholder='Название папки'
-                    value={title}
+                    value={folderTitle}
                     onChange={handleChangeTitle}
+                    onKeyDown={handleEnterKey}
+                    autoFocus
                 />
+                {user?.subscriber && (
+                    <FormControl
+                        sx={{
+                            mt: 2,
+                            p: 2,
+                            border: '1px solid',
+                            borderColor: 'divider',
+                            borderRadius: 1,
+                            position: 'relative',
+                            boxSizing: 'border-box',
+                            // width: 'fit-content',
+                            '& .MuiFormLabel-root': {
+                                position: 'absolute',
+                                top: '-12px',
+                                left: '10px',
+                                padding: '0 5px',
+                                backgroundColor: 'white',
+                                fontSize: '14px',
+                            },
+                        }}
+                        fullWidth
+                    >
+                        <FormLabel>Цвет папки</FormLabel>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                borderRadius: '100px',
+                                gap: 1,
+                                flexWrap: 'wrap',
+                                mt: 1,
+                            }}
+                        >
+                            {Array.isArray(colors) &&
+                                colors.map(color => (
+                                    <button
+                                        tabIndex={0}
+                                        className={styles.color__button}
+                                        key={color.id}
+                                        style={{
+                                            background: color.hex,
+                                            width: '32px',
+                                            height: '32px',
+                                            border:
+                                                selectedColorId === color.id
+                                                    ? '2px solid #000'
+                                                    : '1px solid #e0e0e0',
+                                            borderRadius: '4px',
+                                            cursor: 'pointer',
+                                        }}
+                                        onClick={() => {
+                                            setSelectedColorId(color.id);
+                                        }}
+                                    />
+                                ))}
+                        </Box>
+                    </FormControl>
+                )}
+                {error && <p className={styles.error}>{error}</p>}
                 <div className={styles.container__buttons}>
-                    <button
-                        className={styles.cancel__button}
-                        onClick={onClose}
-                    >Отмена</button>
+                    <button className={styles.cancel__button} onClick={onClose}>
+                        Отмена
+                    </button>
                     <button
                         className={styles.create__button}
-                        disabled={!title?.trim()}
+                        disabled={!folderTitle?.trim()}
                         onClick={handleCreateFolder}
-                    >Создать</button>
+                    >
+                        {isPending ? (
+                            <ButtonLoad
+                                type='bubble-loop'
+                                bgColor='black'
+                                color='black'
+                                size={40}
+                            />
+                        ) : title && folderId ? (
+                            'Изменить'
+                        ) : (
+                            'Создать'
+                        )}
+                    </button>
                 </div>
             </div>
         </ModalWindow>
-    )
-}
+    );
+};

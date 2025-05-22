@@ -1,9 +1,10 @@
-import { validateResponse } from '../utils/responseValidator';
+import { validateResponse } from '../utils/validators/responseValidator';
 import { UserType } from '../types/UserType';
-import { apiUrl } from './api_url';
+import { API_URL } from '../constants/apiUrl';
+// import { apiUrl } from './api_url';
 
 export const getUser = async (): Promise<UserType> => {
-    return fetch(`${apiUrl}/user`, {
+    return fetch(`${API_URL}/user`, {
         method: 'GET',
         credentials: 'include',
     })

@@ -1,54 +1,98 @@
-import { validateResponse } from '../utils/responseValidator';
-import { apiUrl } from './api_url';
+import axios from 'axios';
+import { CHUNK_SIZE } from '../constants/chunkSize';
+import { requestInstance } from './requestInstance';
+
+interface InitFileResponse {
+    success: boolean;
+    file_id: string;
+}
+
+// const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const uploadFile = async (file: File, folderId: string) => {
-    const queryParams = new URLSearchParams({
-        file_name: file.name,
-        size: file.size.toString(),
-        folder_id: folderId,
-    });
+    try {
+        const { data: initResponse } = await requestInstance.post<InitFileResponse>('/file', {
+            file_name: file.name,
+            size: file.size,
+            folder_id: folderId,
+        });
 
-    return fetch(`${apiUrl}/file?${queryParams.toString()}`, {
-        method: 'POST',
-        credentials: 'include',
-        body: file,
-        headers: {
-            'Content-Disposition': `attachment; filename="${file.name}"`,
-            'Content-Type': file.type,
-        },
-    })
-        .then(res => validateResponse(res))
-        .then(res => res.json());
+        if (!initResponse?.success || !initResponse?.file_id) {
+            throw new Error('Failed to initialize file upload - invalid server response');
+        }
+
+        const fileId = initResponse.file_id;
+
+        let offset = 0;
+        while (offset < file.size) {
+            const chunk = file.slice(offset, offset + CHUNK_SIZE);
+            const formData = new FormData();
+            formData.append('chunk', chunk);
+
+            await requestInstance.post(`/file/${fileId}/chunk`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Accept: 'application/json',
+                },
+                onUploadProgress: progressEvent => {
+                    const percentCompleted = Math.round(
+                        ((offset + progressEvent.loaded) * 100) / file.size
+                    );
+                    console.log(`Upload progress: ${percentCompleted}%`);
+                },
+            });
+
+            // await delay(700);
+            offset += chunk.size;
+        }
+
+        return fileId;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('Server response:', error.response?.data);
+            console.error('Request config:', {
+                url: error.config?.url,
+                data: error.config?.data,
+            });
+        }
+        console.error('Error uploading file:', error);
+        throw error;
+    }
 };
 
-export const deleteFile = async (fileId: string): Promise<void> => {
-    return fetch(`${apiUrl}/file/${fileId}`, {
-        method: 'DELETE',
-        credentials: 'include',
-    })
-        .then(res => validateResponse(res))
-        .then(undefined);
+export const deleteFile = async (idsMassive: string[]): Promise<void> => {
+    const { data } = await requestInstance.patch(
+        '/trash',
+        {
+            ids: idsMassive,
+        },
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        }
+    );
+    return data;
 };
 
 export const downloadFile = async (
     fileId: string,
     fileName: string,
-    fileExtension: string,
+    fileExtension: string
 ): Promise<void> => {
-    const response = await fetch(`${apiUrl}/file/${fileId}`, {
-        method: 'GET',
-        credentials: 'include',
+    const { data, headers } = await requestInstance.get(`/file/${fileId}`, {
+        responseType: 'blob',
     });
 
-    if (!response.ok) {
-        throw new Error(`Failed to download file: ${response.statusText}`);
-    }
-
-    const contentDisposition = response.headers.get('Content-Disposition');
+    const contentDisposition = headers['content-disposition'];
     const suggestedFileName =
         contentDisposition?.match(/filename="?(.+?)"?$/)?.[1] || `${fileName}.${fileExtension}`;
 
-    const blob = await response.blob();
+    const blob = new Blob([data], {
+        type: headers['content-type'],
+    });
+
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;

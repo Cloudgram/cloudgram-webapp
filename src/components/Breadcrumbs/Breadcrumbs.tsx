@@ -1,37 +1,83 @@
-import { Link, useParams } from 'react-router-dom';
-import { useFolderHistory } from '../../hooks/useFolderHistory';
-import styles from './Breadcrumbs.module.scss';
-import { Fragment } from 'react';
+import { rootFolderId } from '../../constants/rootFolder';
+import { useAppSelectot } from '../../store/store';
+import { getFilterName } from '../../utils/getFilterName';
+import {
+    styles,
+    Link,
+    useFolderHistory,
+    Fragment,
+    usePathfinder,
+    useDragAndDrop,
+    useState,
+} from './index';
 
 export const Breadcrumbs = () => {
-    const folderId = useParams().folderId;
-    const folderPath = useFolderHistory(folderId ?? '0');
+    const folderId = usePathfinder();
+    const folderPath = useFolderHistory(folderId ?? rootFolderId);
+    const { handleDrop } = useDragAndDrop();
+    const [dragOverId, setDragOverId] = useState<string | null>(null);
+    const filterState = useAppSelectot(state => state.filter);
 
-    const handleBreadcrumbClick = (index: number) => {
+    const handleDragOver = (id: string) => (e: React.DragEvent<HTMLElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragOverId(id);
+        e.dataTransfer.dropEffect = 'move';
+    };
+
+    const handleDragLeave = () => {
+        setDragOverId(null);
+    };
+
+    const handleDropWrapper = (id: string) => (e: React.DragEvent<HTMLElement>) => {
+        setDragOverId(null);
+        handleDrop(id)(e);
+    };
+
+    const handleBreadcrumbClick = async (index: number) => {
         const newPath = folderPath.slice(0, index + 1);
         localStorage.setItem('folderHistory', JSON.stringify(newPath));
     };
 
     return (
         <div className={styles.breadcrumb}>
-            {folderId === '0' ? (
-                <span className={styles.breadcrumb__home}>Home</span>
+            {folderId === rootFolderId ? (
+                <span
+                    className={`${styles.breadcrumb__home} ${
+                        dragOverId === rootFolderId ? styles.breadcrumb__dragover : ''
+                    }`}
+                    onDragOver={handleDragOver(rootFolderId)}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDropWrapper(rootFolderId)}
+                >
+                    {getFilterName(filterState)}
+                </span>
             ) : (
                 folderPath.map((folder, index) => (
                     <Fragment key={folder.id}>
                         {index === folderPath.length - 1 ? (
                             <span
-                                className={`${styles.breadcrumb__link} ${styles.breadcrumb__link_current}`}
+                                className={`${styles.breadcrumb__link} ${
+                                    styles.breadcrumb__link_current
+                                } ${dragOverId === folder.id ? styles.breadcrumb__dragover : ''}`}
+                                onDragOver={handleDragOver(folder.id)}
+                                onDragLeave={handleDragLeave}
+                                onDrop={handleDropWrapper(folder.id)}
                             >
-                                {folder.id === '0' ? 'Home' : folder.title}
+                                {folder.id === rootFolderId ? 'Home' : folder.title}
                             </span>
                         ) : (
                             <Link
                                 onClick={() => handleBreadcrumbClick(index)}
                                 to={`/folder/${folder.id}`}
-                                className={styles.breadcrumb__link}
+                                className={`${styles.breadcrumb__link} ${
+                                    dragOverId === folder.id ? styles.breadcrumb__dragover : ''
+                                }`}
+                                onDragOver={handleDragOver(folder.id)}
+                                onDragLeave={handleDragLeave}
+                                onDrop={handleDropWrapper(folder.id)}
                             >
-                                {folder.id === '0' ? 'Home' : folder.title}
+                                {folder.id === rootFolderId ? 'Home' : folder.title}
                             </Link>
                         )}
                         {index < folderPath.length - 1 && (

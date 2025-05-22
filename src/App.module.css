@@ -1,0 +1,22 @@
+:root {
+    font-family: "GR", sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.offlineAlert {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 12px;
+    text-align: center;
+    z-index: 1000;
+    border-bottom: 1px solid #ffeeba;
+}
