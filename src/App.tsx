@@ -9,6 +9,7 @@ import { Load } from './components/Filters';
 import { ROUTES } from './constants/routes';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
+import { NotFoundPage } from './pages/NotFound/NotFoundPage';
 
 function App() {
     return (
@@ -29,7 +30,7 @@ function App() {
                         >
                             <Routes>
                                 <Route path={ROUTES.AUTH} element={<AuthPage />} />
-
+                                <Route path={ROUTES.NOT_FOUND} element={<NotFoundPage />} />
                                 <Route element={<PrivateRoute />}>
                                     <Route path={ROUTES.MY_DRIVE} element={<MainPage />} />
                                     <Route path={ROUTES.FOLDER} element={<MainPage />} />
@@ -38,14 +39,13 @@ function App() {
                                     <Route path={ROUTES.RECENT} element={<MainPage />} />
                                     <Route path={ROUTES.TRASH} element={<MainPage />} />
                                 </Route>
-
                                 <Route
                                     path='/'
                                     element={<Navigate to={ROUTES.MY_DRIVE} replace />}
                                 />
                                 <Route
                                     path='*'
-                                    element={<Navigate to={ROUTES.MY_DRIVE} replace />}
+                                    element={<Navigate to={ROUTES.NOT_FOUND} replace />}
                                 />
                             </Routes>
                         </Suspense>

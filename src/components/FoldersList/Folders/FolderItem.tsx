@@ -1,8 +1,8 @@
-import { eleminateEntity, repairEntity } from '../../api/shared';
-import { copyEntity } from '../../api/shared';
-import { FILTERS } from '../../constants/filters';
-import { rootFolderId } from '../../constants/rootFolder';
-import { useAppSelectot } from '../../store/store';
+import { eleminateEntity, repairEntity } from '../../../api/shared';
+import { copyEntity } from '../../../api/shared';
+import { FILTERS } from '../../../constants/filters';
+import { rootFolderId } from '../../../constants/rootFolder';
+import { useAppSelectot } from '../../../store/store';
 import {
     ActionMenu,
     dateFormat,
@@ -17,7 +17,7 @@ import {
     ViewType,
     RootFolderType,
     CreateFolderModal,
-} from './index';
+} from '../index';
 
 interface FolderItemProps {
     folder: RootFolderType['folders'][number];

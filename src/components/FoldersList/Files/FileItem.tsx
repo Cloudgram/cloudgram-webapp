@@ -1,6 +1,6 @@
-import { copyEntity, eleminateEntity, repairEntity } from '../../api/shared';
-import { rootFolderId } from '../../constants/rootFolder';
-import { useAppSelectot } from '../../store/store';
+import { copyEntity, eleminateEntity, repairEntity } from '../../../api/shared';
+import { rootFolderId } from '../../../constants/rootFolder';
+import { useAppSelectot } from '../../../store/store';
 // import { AnimatedWrapper } from '../../utils/animations/ListAnimation';
 import {
     ActionMenu,
@@ -17,7 +17,7 @@ import {
     ViewType,
     RootFolderType,
     FC,
-} from './index';
+} from '../index';
 
 interface IFileItemProps {
     file: RootFolderType['files'][number];
@@ -29,6 +29,7 @@ export const FileItem: FC<IFileItemProps> = ({ file, index, view }) => {
     const fileColors = getFileColor(file.extension);
     const [activeFileMenuId, setActiveFileMenuId] = useState<number | null>(null);
     const folderId = usePathfinder() || rootFolderId;
+    const size = 16;
 
     const currentFilter = useAppSelectot(state => state.filter);
 
@@ -192,8 +193,8 @@ export const FileItem: FC<IFileItemProps> = ({ file, index, view }) => {
                             <svg
                                 className={styles.view__svg_line}
                                 xmlns='http://www.w3.org/2000/svg'
-                                width='16'
-                                height='16'
+                                width={size}
+                                height={size}
                                 viewBox='0 0 16 16'
                             >
                                 <g fill='currentColor'>
@@ -204,63 +205,118 @@ export const FileItem: FC<IFileItemProps> = ({ file, index, view }) => {
                             {file.views}
                         </div>
                         <div className={styles.actions__menu}>
-                            <button
-                                className={styles.action__button}
-                                onClick={() =>
-                                    handleFileDownload(
-                                        file.id.toString(),
-                                        file.title,
-                                        file.extension
-                                    )
-                                }
-                            >
-                                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
-                                    <g
-                                        fill='none'
-                                        stroke='currentColor'
-                                        strokeLinecap='round'
-                                        strokeLinejoin='round'
-                                        strokeWidth='2'
+                            {currentFilter === 'trash' ? (
+                                <>
+                                    <button
+                                        className={styles.action__button}
+                                        onClick={e => {
+                                            e.stopPropagation();
+                                            handleRepair(file.id);
+                                        }}
                                     >
-                                        <path d='M12 22v-9m0 9l-2.5-2m2.5 2l2.5-2M5.034 9.117A4.002 4.002 0 0 0 6 17h1' />
-                                        <path d='M15.83 7.138a5.5 5.5 0 0 0-10.796 1.98S5.187 10 5.5 10.5' />
-                                        <path d='M17 17a5 5 0 1 0-1.17-9.862L14.5 7.5' />
-                                    </g>
-                                </svg>
-                            </button>
-                            <button
-                                className={styles.action__button}
-                                onClick={() => handleCopyFolder(file.id, folderId, false)}
-                            >
-                                <svg
-                                    xmlns='http://www.w3.org/2000/svg'
-                                    width='16'
-                                    height='16'
-                                    viewBox='0 0 16 16'
-                                >
-                                    <path
-                                        fill='currentColor'
-                                        fillRule='evenodd'
-                                        d='M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z'
-                                    />
-                                </svg>
-                            </button>
-                            <button
-                                className={styles.action__button}
-                                onClick={() => handleDelete(file.id.toString())}
-                            >
-                                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'>
-                                    <path
-                                        fill='currentColor'
-                                        fillOpacity='.15'
-                                        d='M292.7 840h438.6l24.2-512h-487z'
-                                    />
-                                    <path
-                                        fill='currentColor'
-                                        d='M864 256H736v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32m-504-72h304v72H360zm371.3 656H292.7l-24.2-512h487z'
-                                    />
-                                </svg>
-                            </button>
+                                        <svg
+                                            xmlns='http://www.w3.org/2000/svg'
+                                            width={size}
+                                            height={size}
+                                            viewBox='0 0 16 16'
+                                        >
+                                            <path
+                                                fill='currentColor'
+                                                d='M0 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z'
+                                            />
+                                        </svg>
+                                    </button>
+                                    <button
+                                        className={styles.action__button}
+                                        onClick={e => {
+                                            e.stopPropagation();
+                                            handleEleminate(file.id);
+                                        }}
+                                    >
+                                        <svg
+                                            xmlns='http://www.w3.org/2000/svg'
+                                            width={size}
+                                            height={size}
+                                            viewBox='0 0 16 16'
+                                        >
+                                            <path
+                                                fill='currentColor'
+                                                d='M8.086 2.207a2 2 0 0 1 2.828 0l3.879 3.879a2 2 0 0 1 0 2.828l-5.5 5.5A2 2 0 0 1 7.879 15H5.12a2 2 0 0 1-1.414-.586l-2.5-2.5a2 2 0 0 1 0-2.828zm2.121.707a1 1 0 0 0-1.414 0L4.16 7.547l5.293 5.293l4.633-4.633a1 1 0 0 0 0-1.414zM8.746 13.547L3.453 8.254L1.914 9.793a1 1 0 0 0 0 1.414l2.5 2.5a1 1 0 0 0 .707.293H7.88a1 1 0 0 0 .707-.293z'
+                                            />
+                                        </svg>
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <button
+                                        className={styles.action__button}
+                                        onClick={() =>
+                                            handleFileDownload(
+                                                file.id.toString(),
+                                                file.title,
+                                                file.extension
+                                            )
+                                        }
+                                    >
+                                        <svg
+                                            xmlns='http://www.w3.org/2000/svg'
+                                            viewBox='0 0 24 24'
+                                            width={size}
+                                            height={size}
+                                        >
+                                            <g
+                                                fill='none'
+                                                stroke='currentColor'
+                                                strokeLinecap='round'
+                                                strokeLinejoin='round'
+                                                strokeWidth='2'
+                                            >
+                                                <path d='M12 22v-9m0 9l-2.5-2m2.5 2l2.5-2M5.034 9.117A4.002 4.002 0 0 0 6 17h1' />
+                                                <path d='M15.83 7.138a5.5 5.5 0 0 0-10.796 1.98S5.187 10 5.5 10.5' />
+                                                <path d='M17 17a5 5 0 1 0-1.17-9.862L14.5 7.5' />
+                                            </g>
+                                        </svg>
+                                    </button>
+                                    <button
+                                        className={styles.action__button}
+                                        onClick={() => handleCopyFolder(file.id, folderId, false)}
+                                    >
+                                        <svg
+                                            xmlns='http://www.w3.org/2000/svg'
+                                            width={size}
+                                            height={size}
+                                            viewBox='0 0 16 16'
+                                        >
+                                            <path
+                                                fill='currentColor'
+                                                fillRule='evenodd'
+                                                d='M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z'
+                                            />
+                                        </svg>
+                                    </button>
+                                    <button
+                                        className={styles.action__button}
+                                        onClick={() => handleDelete(file.id.toString())}
+                                    >
+                                        <svg
+                                            xmlns='http://www.w3.org/2000/svg'
+                                            viewBox='0 0 1024 1024'
+                                            width={size}
+                                            height={size}
+                                        >
+                                            <path
+                                                fill='currentColor'
+                                                fillOpacity='.15'
+                                                d='M292.7 840h438.6l24.2-512h-487z'
+                                            />
+                                            <path
+                                                fill='currentColor'
+                                                d='M864 256H736v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32m-504-72h304v72H360zm371.3 656H292.7l-24.2-512h487z'
+                                            />
+                                        </svg>
+                                    </button>
+                                </>
+                            )}
                         </div>
                     </div>
                 </li>
