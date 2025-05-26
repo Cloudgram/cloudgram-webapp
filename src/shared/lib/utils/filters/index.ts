@@ -1,0 +1,1 @@
+export { getFilterName } from './getFilterName';
