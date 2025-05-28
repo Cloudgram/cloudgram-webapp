@@ -12,6 +12,7 @@ interface FileActionMenuProps {
     onShare?: () => void;
     onCopy?: () => void;
     onMove?: () => void;
+    isLineList?: boolean;
     menuRef: React.RefObject<HTMLDivElement>;
 }
 
@@ -26,6 +27,7 @@ export const ActionMenu: React.FC<FileActionMenuProps> = ({
     onCopy,
     onEleminate,
     onRepair,
+    isLineList,
     // onShare,
     // onMove,
 }) => {
@@ -33,7 +35,7 @@ export const ActionMenu: React.FC<FileActionMenuProps> = ({
         animateFileActionMenu(menuRef, true);
     }, [menuRef]);
     return (
-        <div className={styles.actionMenu} ref={menuRef}>
+        <div className={isLineList ? styles.actionMenu_line : styles.actionMenu} ref={menuRef}>
             {onFavorite && (
                 <button
                     className={styles.actionMenu__button}

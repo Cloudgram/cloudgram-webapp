@@ -91,6 +91,7 @@
     }
 
     &_line {
+        position: relative;
         padding: 15px;
         border-radius: 10px;
         border: 2px solid transparent;
@@ -193,7 +194,7 @@
 
 .folders__list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 15px;
     margin: 15px;
     padding: 10px;
@@ -279,9 +280,7 @@
 
 .more__actions__button {
     &_line {
-        padding: 0 10px;
-        display: flex;
-        align-items: center;
+        display: none;
     }
 }
 
@@ -399,5 +398,111 @@
 
     &:hover {
         background-color: rgba(0, 0, 0, 0.1);
+    }
+}
+
+@media (max-width: 1200px) {
+    .folder {
+        &__title {
+            &_line {
+                width: 200px;
+            }
+        }
+    }
+}
+
+@media (max-width: 1000px) {
+    .actions__menu {
+        display: none;
+    }
+
+    .more__actions__button {
+        &_line {
+            padding: 0 10px;
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    .view__container {
+        &_line {
+            display: none;
+        }
+    }
+
+    .folder {
+        &__title {
+            &_line {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 100px;
+            }
+        }
+    }
+}
+
+@media (max-width: 800px) {
+    .folder {
+        &__title {
+            &_line {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 30px;
+            }
+        }
+    }
+}
+
+@media (max-width: 650px) {
+    .folders__list {
+        margin: 5px;
+        height: calc(100vh - 285px);
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+
+        &_line {
+            margin: 5px;
+            // height: calc(100vh - 295px);
+            height: calc(100vh - 285px);
+        }
+    }
+
+    .list__header {
+        margin: 10px;
+    }
+
+    .folder {
+        &__title {
+            &_line {
+                white-space: wrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 100px;
+            }
+        }
+    }
+}
+
+@media (max-width: 450px) {
+    .folder {
+        &__createdAt {
+            &_line {
+                display: none;
+            }
+        }
+
+        &__title {
+            &_line {
+                white-space: wrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 150px;
+            }
+        }
+    }
+
+    .list__header {
+        justify-content: flex-end;
     }
 }

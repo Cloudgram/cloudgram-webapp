@@ -92,3 +92,9 @@ $transition-ease: ease-in-out;
         color: black !important;
     }
 }
+
+@media (max-width: 450px) {
+    .breadcrumb {
+        display: none;
+    }
+}

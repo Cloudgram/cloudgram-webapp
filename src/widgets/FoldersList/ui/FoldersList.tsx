@@ -21,11 +21,10 @@ export const FoldersList = () => {
     const [viewType, setViewType] = useState<ViewType>(ViewType.GRID);
     const [createModal, setCreateModal] = useState(false);
 
+    const currentFilter = useAppSelectot(state => state.filter);
     const folderId = usePathfinder();
     const { data } = useFoldersQuery(folderId);
-    const { data: trashData } = useTrashList();
-
-    const currentFilter = useAppSelectot(state => state.filter);
+    const { data: trashData } = useTrashList(currentFilter === FILTERS.TRASH);
 
     useHotkeys('x', () => {
         setCreateModal(true);

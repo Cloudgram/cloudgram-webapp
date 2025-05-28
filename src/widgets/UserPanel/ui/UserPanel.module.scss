@@ -158,3 +158,12 @@
         }
     }
 }
+
+@media (max-width: 350px) {
+    .user {
+        &__container {
+            box-sizing: border-box;
+            min-width: fit-content;
+        }
+    }
+}

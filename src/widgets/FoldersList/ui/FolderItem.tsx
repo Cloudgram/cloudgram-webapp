@@ -3,17 +3,18 @@ import { deleteFolder, getFolders } from '@shared/api/Folders';
 import { queryClient } from '@shared/api/queryClient';
 import { copyEntity, eleminateEntity, repairEntity } from '@shared/api/shared';
 import { useAppSelectot } from '@app/store/config/store';
-import { ActionMenu } from '@/shared/ui/ActionMenu/ui/ActionMenu';
+import { ActionMenu } from '@shared/ui/ActionMenu/ui/ActionMenu';
 import { FolderFormModal } from '@features/folderManagement';
-import { FILTERS } from '@/shared/config/routes/filters';
+import { FILTERS } from '@shared/config/routes/filters';
 import { rootFolderId } from '@/shared/config/app/rootFolder';
-import { ViewType } from '@/shared/config/routes/view';
-import { useClickOutside } from '@/shared/hooks/state/useClickOutside';
-import { usePathfinder } from '@/shared/hooks/usePathFinder';
+import { ViewType } from '@shared/config/routes/view';
+import { useClickOutside } from '@shared/hooks/state/useClickOutside';
+import { usePathfinder } from '@shared/hooks/usePathFinder';
 import { RootFolderType } from '@shared/types';
-import { dateFormat } from '@/shared/lib/utils/date/formatDate';
+import { dateFormat } from '@shared/lib/utils/date/formatDate';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDeviceType } from '@shared/hooks/state/useDeviceType';
 
 interface FolderItemProps {
     folder: RootFolderType['folders'][number];
@@ -51,6 +52,7 @@ export const FolderItem: React.FC<FolderItemProps> = ({
     } | null>(null);
 
     const size = 16;
+    const isMobile = useDeviceType(768);
 
     const currentFilter = useAppSelectot(state => state.filter);
 
@@ -60,7 +62,8 @@ export const FolderItem: React.FC<FolderItemProps> = ({
 
     const menuRef = useClickOutside(closeMenu);
 
-    const toggleMenu = (id: string) => {
+    const toggleMenu = (e: React.MouseEvent, id: string) => {
+        e.stopPropagation();
         setActiveFolderMenuId(activeFolderMenuId === id ? null : id);
     };
 
@@ -135,6 +138,19 @@ export const FolderItem: React.FC<FolderItemProps> = ({
         navigate(link);
     };
 
+    const handleMobileClick = async (e: React.MouseEvent, link: string) => {
+        e.preventDefault();
+        if (currentFilter === FILTERS.TRASH) return;
+
+        if (isMobile) {
+            await queryClient.prefetchQuery({
+                queryKey: ['folders', link.split('/')[2]],
+                queryFn: () => getFolders(link.split('/')[2]),
+            });
+            navigate(link);
+        }
+    };
+
     return (
         <>
             {view === ViewType.GRID ? (
@@ -148,9 +164,7 @@ export const FolderItem: React.FC<FolderItemProps> = ({
                     } ${isDragOver ? styles.dragover : ''}`}
                     tabIndex={0}
                     key={index}
-                    onClick={e => {
-                        e.preventDefault();
-                    }}
+                    onClick={e => handleMobileClick(e, `/folder/${folder.id}`)}
                     onDoubleClick={e => {
                         if (currentFilter === FILTERS.TRASH) {
                             return;
@@ -201,7 +215,7 @@ export const FolderItem: React.FC<FolderItemProps> = ({
                             </svg>
                             <button
                                 className={styles.more__actions__button}
-                                onClick={() => toggleMenu(folder.id)}
+                                onClick={e => toggleMenu(e, folder.id)}
                             >
                                 <svg
                                     width='3'
@@ -275,7 +289,7 @@ export const FolderItem: React.FC<FolderItemProps> = ({
                     } ${isDragOver ? styles.dragover : ''}`}
                     tabIndex={0}
                     key={index}
-                    onClick={e => e.preventDefault()}
+                    onClick={e => handleMobileClick(e, `/folder/${folder.id}`)}
                     onDoubleClick={e => handleFolderDoubleClick(e, `/folder/${folder.id}`)}
                     style={{
                         backgroundColor: folder.color.background_hex,
@@ -334,6 +348,50 @@ export const FolderItem: React.FC<FolderItemProps> = ({
                             </svg>
                             {folder.views}
                         </div>
+                        <button
+                            className={styles.more__actions__button_line}
+                            onClick={e => toggleMenu(e, folder.id)}
+                        >
+                            <svg
+                                width='3'
+                                height='15'
+                                viewBox='0 0 3 15'
+                                fill='none'
+                                xmlns='http://www.w3.org/2000/svg'
+                            >
+                                <path
+                                    fillRule='evenodd'
+                                    clipRule='evenodd'
+                                    d='M3 1.5C3 2.32843 2.32843 3 1.5 3C0.671573 3 0 2.32843 0 1.5C0 0.671573 0.671573 0 1.5 0C2.32843 0 3 0.671573 3 1.5ZM3 7.5C3 8.32843 2.32843 9 1.5 9C0.671573 9 0 8.32843 0 7.5C0 6.67157 0.671573 6 1.5 6C2.32843 6 3 6.67157 3 7.5ZM1.5 15C2.32843 15 3 14.3284 3 13.5C3 12.6716 2.32843 12 1.5 12C0.671573 12 0 12.6716 0 13.5C0 14.3284 0.671573 15 1.5 15Z'
+                                    fill='black'
+                                />
+                            </svg>
+                        </button>
+                        {activeFolderMenuId === folder.id &&
+                            (currentFilter === 'trash' ? (
+                                <ActionMenu
+                                    menuRef={menuRef}
+                                    onEleminate={() => handleEleminate(folder.id)}
+                                    onRepair={() => handleRepair(folder.id)}
+                                />
+                            ) : (
+                                <ActionMenu
+                                    menuRef={menuRef}
+                                    onCopy={() =>
+                                        handleCopyFolder(folder.id.toString(), folderId, true)
+                                    }
+                                    onEditFolder={() => {
+                                        handleEditFolder({
+                                            id: folder.id.toString(),
+                                            folder_id: folderId,
+                                            title: folder.title,
+                                            color_id: folder.color.id,
+                                        });
+                                        setActiveFolderMenuId(null);
+                                    }}
+                                    onDelete={() => handleDelete(folder.id)}
+                                />
+                            ))}
                         <div className={styles.actions__menu}>
                             {currentFilter === 'trash' ? (
                                 <>

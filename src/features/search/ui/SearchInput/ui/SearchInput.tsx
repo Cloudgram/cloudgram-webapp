@@ -1,8 +1,12 @@
 import styles from './SearchInput.module.scss';
 
-export const SearchInput = () => {
+interface SearchInputProps {
+    className?: string;
+}
+
+export const SearchInput = ({ className }: SearchInputProps) => {
     return (
-        <div className={styles.search__container}>
+        <div className={className ?? styles.search__container}>
             <svg
                 width='18'
                 height='17'

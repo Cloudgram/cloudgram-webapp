@@ -3,7 +3,7 @@ import { usePathfinder } from '@/shared/hooks/usePathFinder';
 import { useDragAndDrop } from '@/shared/hooks/state/useDragAndDrop';
 import { useFolderHistory } from '@/shared/hooks/queries/useFolderHistory';
 import { rootFolderId } from '@/shared/config/app/rootFolder';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useAppSelectot } from '@app/store/config/store';
 import { getFilterName } from '@shared/lib/utils/filters';
 import { Link } from 'react-router-dom';
@@ -36,6 +36,28 @@ export const Breadcrumbs = () => {
         localStorage.setItem('folderHistory', JSON.stringify(newPath));
     };
 
+    useEffect(() => {
+        const handlePopState = () => {
+            const currentFolderId = window.location.pathname.split('/')[2] || rootFolderId;
+            const newPath = folderPath.slice(
+                0,
+                folderPath.findIndex(folder => folder.id === currentFolderId) + 1
+            );
+
+            if (newPath.length > 0) {
+                localStorage.setItem('folderHistory', JSON.stringify(newPath));
+            } else {
+                localStorage.removeItem('folderHistory');
+            }
+        };
+
+        window.addEventListener('popstate', handlePopState);
+
+        return () => {
+            window.removeEventListener('popstate', handlePopState);
+        };
+    }, [folderPath]);
+
     return (
         <div className={styles.breadcrumb}>
             {folderId === rootFolderId ? (
@@ -61,7 +83,7 @@ export const Breadcrumbs = () => {
                                 onDragLeave={handleDragLeave}
                                 onDrop={handleDropWrapper(folder.id)}
                             >
-                                {folder.id === rootFolderId ? 'Home' : folder.title}
+                                {folder.id === rootFolderId ? 'Мой диск' : folder.title}
                             </span>
                         ) : (
                             <Link
@@ -74,7 +96,7 @@ export const Breadcrumbs = () => {
                                 onDragLeave={handleDragLeave}
                                 onDrop={handleDropWrapper(folder.id)}
                             >
-                                {folder.id === rootFolderId ? 'Home' : folder.title}
+                                {folder.id === rootFolderId ? 'Мой диск' : folder.title}
                             </Link>
                         )}
                         {index < folderPath.length - 1 && (

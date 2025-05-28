@@ -15,6 +15,7 @@ import { generateUserIcon } from '@/shared/lib';
 export const Header = () => {
     const { data: user } = useUserQuery();
     const [userPanel, setUserPanel] = useState(false);
+    const [mobileSearch, setMobileSearch] = useState(false);
     const path = usePathfinder();
     const atHome = path === rootFolderId;
     const size = 25;
@@ -31,6 +32,11 @@ export const Header = () => {
         setUserPanel(!userPanel);
     };
 
+    const handleSearchClick = () => {
+        setMobileSearch(!mobileSearch);
+        console.log(mobileSearch);
+    };
+
     const handleGoHome = () => {
         dispatch({
             type: FILTERS.HOME,
@@ -44,6 +50,7 @@ export const Header = () => {
 
     return (
         <header className={styles.header}>
+            {mobileSearch && <SearchInput className={styles.mobile__search} />}
             <div className={styles.header__left}>
                 <div className={styles.header__user} onClick={() => toggleUserPanel()}>
                     <div className={styles.icon__container}>
@@ -82,6 +89,24 @@ export const Header = () => {
             {userPanel && <UserPanel cardRef={cardRef} />}
             <SearchInput />
             <ul className={styles.header__list}>
+                <li className={styles.header__item}>
+                    <button
+                        onClick={handleSearchClick}
+                        className={`${styles.header__button} ${styles.header__button_search}`}
+                    >
+                        <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            width={size}
+                            height={size}
+                            viewBox='0 0 16 16'
+                        >
+                            <path
+                                fill='currentColor'
+                                d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0a5.5 5.5 0 0 1 11 0'
+                            />
+                        </svg>
+                    </button>
+                </li>
                 <li className={styles.header__item}>
                     <Link onClick={handleGoHome} to='/my-drive' className={styles.header__button}>
                         {atHome && filter === FILTERS.HOME ? (
