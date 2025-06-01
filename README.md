@@ -17,36 +17,41 @@ Cloudgram - это веб-приложение для управления фа�
 
 ## 🛠️ Технологии
 
--   **Frontend Framework:** ⚛️ React + TypeScript
--   **Стилизация:** 🎨 SCSS Modules
--   **Управление состоянием:** 🔄 TanStack Query (React Query) + Redux Toolkit
--   **Роутинг:** 🔀 React Router
+-   **Frontend Framework:** ⚛️ React 18 + TypeScript
+-   **UI компоненты:** 🎨 Material UI
+-   **Стилизация:** 🎨 SCSS Modules + Emotion
+-   **Управление состоянием:** 🔄 TanStack Query v5 + Redux Toolkit
+-   **Роутинг:** 🔀 React Router v7
 -   **Анимации:** 💫 GSAP
 -   **Валидация данных:** ✅ Zod
 -   **Сборка:** ⚡ Vite
-<!-- -   **Тестирование:** 🧪 Vitest
--   **UI Документация:** 📚 Storybook -->
 -   **Контейнеризация:** 🐳 Docker
 
 ## 📁 Структура проекта
 
 ```
-src/
-├── api/              # API клиенты и конфигурация
-├── components/       # React компоненты
-├── constants/        # Константы и конфигурации
-├── hooks/           # Кастомные React хуки
-│   ├── mutations/   # Хуки для мутаций данных
-│   ├── queries/     # Хуки для запросов данных
-│   ├── state/       # Хуки для управления состоянием
-│   └── hotkeys/     # Хуки для горячих клавиш
-├── pages/           # Компоненты страниц
-├── stories/         # Storybook истории
-├── types/           # TypeScript типы и схемы
-├── utils/           # Вспомогательные функции
-│   ├── animations/  # Утилиты для анимаций
-│   └── validators/  # Валидаторы
-└── fonts/           # Шрифты
+├── src/
+│   ├── app/              # Конфигурация приложения
+│   │   ├── store/       # Redux стор
+│   │   └── styles/      # Глобальные стили
+│   ├── features/        # Функциональные модули
+│   │   ├── auth/        # Авторизация
+│   │   ├── search/      # Поиск
+│   │   └── folderManagement/  # Управление папками
+│   ├── shared/          # Переиспользуемый код
+│   │   ├── api/        # API клиенты
+│   │   ├── assets/     # Статические ресурсы
+│   │   ├── config/     # Конфигурации
+│   │   ├── hooks/      # React хуки
+│   │   ├── lib/        # Утилиты и хелперы
+│   │   ├── types/      # TypeScript типы
+│   │   └── ui/         # UI компоненты
+│   └── widgets/         # Составные компоненты
+│       ├── Sidebar/     # Боковая панель
+│       ├── FoldersList/ # Список файлов
+│       └── Breadcrumbs/ # Навигация
+├── public/              # Публичные файлы
+└── config/              # Конфигурация сборки
 ```
 
 ## 🏗️ Основные компоненты
@@ -151,29 +156,13 @@ npm run dev
 npm run build
 ```
 
-<!-- ## 🧪 Тестирование
-
-Проект использует Vitest для модульного тестирования:
-
-```bash
-npm run test           # Запуск тестов
-npm run test:coverage  # Отчет о покрытии
-```
-
-## 📚 Storybook
-
-Документация компонентов доступна через Storybook:
-
-```bash
-npm run storybook     # Запуск Storybook
-``` -->
-
 ## 🐳 Docker
 
 Проект поддерживает контейнеризацию через Docker:
 
 ```bash
-docker compose up     # Запуск в Docker
+npm run docker:run-compose    # Запуск в Docker
+npm run docker:down-compose   # Остановка контейнеров
 ```
 
 ## 🔌 API Endpoints
