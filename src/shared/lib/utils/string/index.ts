@@ -1,0 +1,1 @@
+export { cutTitle } from './cutTitle';

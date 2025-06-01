@@ -1,0 +1,240 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    padding: 30px 30px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+
+    &__left {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+    }
+
+    &__settings {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 15px;
+    }
+
+    &__user {
+        display: flex;
+        user-select: none;
+        -webkit-user-select: none; // для Safari
+        -moz-user-select: none; // для Firefox
+        -ms-user-select: none; // для IE/Edge
+        max-height: 60px;
+        align-items: center;
+        gap: 15px;
+        padding: 5px 0;
+        padding-left: 5px;
+        padding-right: 15px;
+        cursor: pointer;
+        transition:
+            color 0.1s ease-in-out,
+            background-color 0.1s ease-in-out,
+            transform 0.1s ease-in-out;
+        border-radius: 100px;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 100px;
+        }
+
+        &:active {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 100px;
+            transform: scale(0.98);
+        }
+    }
+
+    &__username {
+        display: flex;
+        flex-direction: column;
+        // gap: 1px;
+    }
+
+    .full__name {
+        font-size: 25px;
+        display: flex;
+        align-items: center;
+    }
+
+    .user__name {
+        font-size: 10px;
+        font-family: "RB", sans-serif;
+        color: rgba(0, 0, 0, 0.5);
+    }
+
+    &__icon {
+        max-width: 25px;
+        max-height: 25px;
+    }
+
+    .user__avatar {
+        height: 60px;
+        border-radius: 100px;
+
+        &_no {
+            height: 60px;
+            width: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(128, 128, 128, 0.5);
+            border-radius: 100px;
+            font-size: 30px;
+            font-family: "GR", sans-serif;
+        }
+    }
+
+    .icon__container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        height: fit-content;
+    }
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        padding: 10px;
+        height: fit-content;
+        border-radius: 100px;
+        transition: background-color 0.1s ease-in-out;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        &:active {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+    }
+
+    &__button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        text-decoration: none;
+        color: black;
+
+        &_search {
+            display: none;
+        }
+    }
+
+    .item__title {
+        margin: 0;
+        padding: 0;
+        font-family: "RB", sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+    }
+}
+
+.settings__container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+.search__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 20px;
+    max-height: 20px;
+}
+
+.settings__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 20px;
+    max-height: 20px;
+}
+
+.settings__svg {
+    width: 100%;
+    height: 100%;
+}
+
+.mobile__search {
+    display: none;
+}
+
+@media (max-width: 1000px) {
+    .header {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 850px) {
+    .header {
+        &__button {
+            &_search {
+                display: flex;
+                :focus {
+                    background-color: transparent;
+                }
+            }
+        }
+    }
+
+    .mobile__search {
+        display: flex;
+        position: absolute;
+        top: 12.5%;
+        left: 0;
+        right: 0;
+        background-color: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 1px 19px;
+        gap: 7px;
+        height: 55px;
+        align-items: center;
+        box-sizing: border-box;
+        margin: 5px 10px;
+        z-index: 4;
+    }
+}
+
+@media (max-width: 400px) {
+    .header {
+        padding: 10px;
+
+        &__user {
+            padding: 5px;
+        }
+
+        &__username {
+            display: none;
+        }
+
+        &__list {
+            gap: 0;
+        }
+    }
+
+    .mobile__search {
+        top: 10.2%;
+    }
+}

@@ -1,0 +1,116 @@
+// Colors
+$color-text: rgba(0, 0, 0, 0.6);
+$color-separator: rgba(0, 0, 0, 0.6);
+$color-hover-bg: rgba(128, 128, 128, 0.3);
+$color-active-bg: rgba(128, 128, 128, 0.5);
+
+// Typography
+$font-size-regular: 20px;
+$font-size-separator: 14px;
+$font-weight-regular: 500;
+$font-family-regular: "GR", sans-serif;
+
+// Spacing
+$padding-link: 5px 10px;
+$gap-items: 5px;
+
+// Border
+$border-radius: 100px;
+
+// Transitions
+$transition-duration: 0.1s;
+$transition-ease: ease-in-out;
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: $gap-items;
+    flex-wrap: wrap;
+
+    &__home {
+        font-size: $font-size-regular;
+        padding: $padding-link;
+        font-weight: $font-weight-regular;
+        font-family: $font-family-regular;
+        border: 2px solid transparent;
+        box-sizing: border-box;
+        cursor: default;
+
+        &[data-dragging="true"] {
+            background-color: $color-hover-bg;
+            color: black;
+        }
+
+        &__mobile {
+            display: none;
+        }
+    }
+
+    &__link {
+        color: $color-text;
+        text-decoration: none;
+        font-size: $font-size-regular;
+        transition:
+            background-color $transition-duration $transition-ease,
+            color $transition-duration $transition-ease,
+            border-color $transition-duration $transition-ease;
+        padding: $padding-link;
+        border-radius: $border-radius;
+        border: 2px solid transparent;
+        box-sizing: border-box;
+
+        &_current {
+            color: black;
+            cursor: default;
+            font-weight: 500;
+            pointer-events: none;
+        }
+
+        &:hover {
+            background-color: $color-hover-bg;
+            color: black;
+        }
+
+        &:active {
+            background-color: $color-active-bg;
+            transform: scale(0.98);
+        }
+
+        &[data-dragging="true"] {
+            background-color: $color-hover-bg;
+            color: black;
+        }
+    }
+
+    &__separator {
+        display: flex;
+        align-items: center;
+        color: $color-separator;
+        font-size: $font-size-separator;
+    }
+
+    &__dragover {
+        background-color: $color-hover-bg !important;
+        border-color: rgba(0, 0, 0) !important;
+        border-style: solid !important;
+        color: black !important;
+    }
+}
+
+@media (max-width: 450px) {
+    .breadcrumb {
+        display: none;
+
+        &__home {
+            &__mobile {
+                font-size: $font-size-regular;
+                padding: $padding-link;
+                font-weight: $font-weight-regular;
+                font-family: $font-family-regular;
+                border: 2px solid transparent;
+                box-sizing: border-box;
+                display: flex;
+            }
+        }
+    }
+}
