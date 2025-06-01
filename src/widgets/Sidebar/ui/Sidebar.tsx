@@ -66,6 +66,7 @@ export const Sidebar = () => {
         mutationFn: (file: File) => uploadFile(file, folderId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['folders', folderId] });
+            queryClient.invalidateQueries({ queryKey: ['searchlist'] });
         },
         onError: (error: Error) => {
             console.error(error);

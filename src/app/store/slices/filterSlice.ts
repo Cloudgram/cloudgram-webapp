@@ -6,7 +6,7 @@ export type State = {
 };
 
 export type FilterAction = {
-    type: 'shared' | 'home' | 'favorites' | 'recent' | 'trash';
+    type: 'shared' | 'home' | 'favorite' | 'recent' | 'trash';
     payload: {
         filter: string;
     };
@@ -26,7 +26,7 @@ export const filterReducer = (state = initialState, action: FilterAction): State
             return { ...state, filter: FILTERS.HOME };
         case 'shared':
             return { ...state, filter: FILTERS.SHARED };
-        case 'favorites':
+        case 'favorite':
             return { ...state, filter: FILTERS.FAV };
         case 'recent':
             return { ...state, filter: FILTERS.RECENT };

@@ -1,7 +1,7 @@
 export const FILTERS = {
     HOME: 'home',
     SHARED: 'shared',
-    FAV: 'favorites',
+    FAV: 'favorite',
     RECENT: 'recent',
     TRASH: 'trash',
 };

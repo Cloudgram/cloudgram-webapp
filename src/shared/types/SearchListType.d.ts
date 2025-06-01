@@ -1,22 +1,7 @@
 import { z } from 'zod';
 
-export const RootFolderSchema = z.object({
+export const SearchListSchema = z.object({
     success: z.boolean(),
-    folder_id: z.string(),
-    title: z.string(),
-    id: z.string(),
-    views: z.number(),
-    created_at: z.date(),
-    owner: z.boolean(),
-    share: z.string(),
-    tags: z.array(z.string),
-    color: z.object({
-        id: z.string(),
-        title: z.string(),
-        hex: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/),
-        background_hex: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/),
-        back_hex: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/),
-    }),
     files: z.array(
         z.object({
             id: z.string(),
@@ -32,9 +17,9 @@ export const RootFolderSchema = z.object({
     ),
     folders: z.array(
         z.object({
-            folder_id: z.string(),
             title: z.string(),
             id: z.string(),
+            folder_id: z.string(),
             views: z.number(),
             created_at: z.date(),
             owner: z.boolean(),
@@ -51,4 +36,4 @@ export const RootFolderSchema = z.object({
     ),
 });
 
-export type RootFolderType = z.infer<typeof RootFolderSchema>;
+export type SearchListType = z.infer<typeof SearchListSchema>;

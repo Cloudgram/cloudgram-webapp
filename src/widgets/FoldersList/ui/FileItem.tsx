@@ -44,6 +44,7 @@ export const FileItem: FC<IFileItemProps> = ({ file, index, view }) => {
         } else {
             await deleteFile([id]);
             queryClient.invalidateQueries({ queryKey: ['folders', folderId] });
+            queryClient.invalidateQueries({ queryKey: ['searchlist'] });
         }
     };
 
@@ -54,6 +55,7 @@ export const FileItem: FC<IFileItemProps> = ({ file, index, view }) => {
     ) => {
         await copyEntity(currentId, currentFolderId, isFolder);
         queryClient.invalidateQueries({ queryKey: ['folders', currentFolderId] });
+        queryClient.invalidateQueries({ queryKey: ['searchlist'] });
         setActiveFileMenuId(null);
     };
 
@@ -73,6 +75,7 @@ export const FileItem: FC<IFileItemProps> = ({ file, index, view }) => {
             await repairEntity([id]);
             queryClient.invalidateQueries({ queryKey: ['trash'] });
             queryClient.invalidateQueries({ queryKey: ['folders'] });
+            queryClient.invalidateQueries({ queryKey: ['searchlist'] });
         }
     };
 

@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import { SearchModal } from '../../SearchModal/ui/SearchModal';
 import styles from './SearchInput.module.scss';
 
 interface SearchInputProps {
@@ -5,6 +7,24 @@ interface SearchInputProps {
 }
 
 export const SearchInput = ({ className }: SearchInputProps) => {
+    const [searchValue, setSearchValue] = useState<string>('');
+    const [isSearchModalOpen, setIsSearchModalOpen] = useState<boolean>(false);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchValue(e.target.value);
+    };
+
+    const handleOpenSearchModal = (isOpen: boolean) => {
+        setIsSearchModalOpen(isOpen);
+    };
+
+    useEffect(() => {
+        if (searchValue.length > 0) {
+            handleOpenSearchModal(true);
+        } else {
+            handleOpenSearchModal(false);
+        }
+    }, [searchValue]);
+
     return (
         <div className={className ?? styles.search__container}>
             <svg
@@ -19,7 +39,23 @@ export const SearchInput = ({ className }: SearchInputProps) => {
                     fill='#22215B'
                 />
             </svg>
-            <input className={styles.search__input} type='text' placeholder='Найти' />
+            <input
+                onChange={handleChange}
+                value={searchValue}
+                className={styles.search__input}
+                type='text'
+                placeholder='Найти'
+            />
+            {isSearchModalOpen && (
+                <SearchModal
+                    searchQuery={searchValue}
+                    isOpen={isSearchModalOpen}
+                    onClose={() => {
+                        handleOpenSearchModal(false);
+                        setSearchValue('');
+                    }}
+                />
+            )}
         </div>
     );
 };

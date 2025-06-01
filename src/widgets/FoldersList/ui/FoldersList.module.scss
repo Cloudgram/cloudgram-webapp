@@ -470,6 +470,7 @@
 
     .list__header {
         margin: 10px;
+        justify-content: space-between;
     }
 
     .folder {
@@ -500,9 +501,5 @@
                 width: 150px;
             }
         }
-    }
-
-    .list__header {
-        justify-content: flex-end;
     }
 }

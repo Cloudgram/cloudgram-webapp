@@ -14,6 +14,7 @@ import { FolderItem } from './FolderItem';
 import { FileItem } from './FileItem';
 import { FolderFormModal } from '@features/folderManagement';
 import styles from './FoldersList.module.scss';
+import { useFilteredList } from '@/shared/hooks/useFilteredList';
 
 export const FoldersList = () => {
     const [foldersList, setFoldersList] = useState<RootFolderType['folders'] | null>(null);
@@ -25,6 +26,7 @@ export const FoldersList = () => {
     const folderId = usePathfinder();
     const { data } = useFoldersQuery(folderId);
     const { data: trashData } = useTrashList(currentFilter === FILTERS.TRASH);
+    const { filteredFolders, filteredFiles } = useFilteredList(data ?? null, currentFilter);
 
     useHotkeys('x', () => {
         setCreateModal(true);
@@ -44,12 +46,18 @@ export const FoldersList = () => {
                         setFilesList(trashData?.files);
                     }
                     break;
-                // case FILTERS.SHARED:
-                //     if (data.share === 'public') {
-                //         setFoldersList(data.folders.filter(folder => folder.share === 'public'));
-                //         setFilesList(data.files.filter(file => file.share === 'public'));
-                //     }
-                //     break;
+                case FILTERS.SHARED:
+                    setFoldersList(filteredFolders);
+                    setFilesList(filteredFiles);
+                    break;
+                case FILTERS.FAV:
+                    setFoldersList(filteredFolders);
+                    setFilesList(filteredFiles);
+                    break;
+                case FILTERS.RECENT:
+                    setFoldersList(filteredFolders);
+                    setFilesList(filteredFiles);
+                    break;
                 default:
                     setFoldersList(data.folders);
                     setFilesList(data.files);

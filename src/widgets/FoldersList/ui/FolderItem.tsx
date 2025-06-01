@@ -95,6 +95,7 @@ export const FolderItem: React.FC<FolderItemProps> = ({
         } else {
             await deleteFolder([id]);
             queryClient.invalidateQueries({ queryKey: ['folders', folderId] });
+            queryClient.invalidateQueries({ queryKey: ['searchlist'] });
         }
     };
 
@@ -104,6 +105,7 @@ export const FolderItem: React.FC<FolderItemProps> = ({
         } else {
             await eleminateEntity([id]);
             queryClient.invalidateQueries({ queryKey: ['trash'] });
+            queryClient.invalidateQueries({ queryKey: ['searchlist'] });
         }
     };
 
@@ -114,6 +116,7 @@ export const FolderItem: React.FC<FolderItemProps> = ({
             await repairEntity([id]);
             queryClient.invalidateQueries({ queryKey: ['trash'] });
             queryClient.invalidateQueries({ queryKey: ['folders'] });
+            queryClient.invalidateQueries({ queryKey: ['searchlist'] });
         }
     };
 
@@ -125,6 +128,7 @@ export const FolderItem: React.FC<FolderItemProps> = ({
         await copyEntity(currentId, currentFolderId, isFolder);
         setActiveFolderMenuId(null);
         queryClient.invalidateQueries({ queryKey: ['folders', folderId] });
+        queryClient.invalidateQueries({ queryKey: ['searchlist'] });
     };
 
     const handleFolderDoubleClick = async (e: React.MouseEvent, link: string) => {

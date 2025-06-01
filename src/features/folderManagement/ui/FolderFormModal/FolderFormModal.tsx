@@ -50,6 +50,7 @@ export const FolderFormModal = ({ mode, folderId, initialData, onClose }: Folder
         },
         onSuccess: async () => {
             queryClient.invalidateQueries({ queryKey: ['folders'] });
+            queryClient.invalidateQueries({ queryKey: ['searchlist'] });
 
             await queryClient.prefetchQuery({
                 queryKey: ['folders', currentFolderId],

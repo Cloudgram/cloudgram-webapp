@@ -14,6 +14,9 @@ export const Breadcrumbs = () => {
     const { handleDrop } = useDragAndDrop();
     const [dragOverId, setDragOverId] = useState<string | null>(null);
     const filterState = useAppSelectot(state => state.filter);
+    const currentFolder = folderPath[folderPath.length - 1];
+    const currentFolderName =
+        currentFolder?.id === rootFolderId ? 'Мой диск' : currentFolder?.title;
 
     const handleDragOver = (id: string) => (e: React.DragEvent<HTMLElement>) => {
         e.preventDefault();
@@ -59,10 +62,10 @@ export const Breadcrumbs = () => {
     }, [folderPath]);
 
     return (
-        <div className={styles.breadcrumb}>
+        <>
             {folderId === rootFolderId ? (
                 <span
-                    className={`${styles.breadcrumb__home} ${
+                    className={`${styles.breadcrumb__home__mobile} ${
                         dragOverId === rootFolderId ? styles.breadcrumb__dragover : ''
                     }`}
                     onDragOver={handleDragOver(rootFolderId)}
@@ -72,49 +75,76 @@ export const Breadcrumbs = () => {
                     {getFilterName(filterState)}
                 </span>
             ) : (
-                folderPath.map((folder, index) => (
-                    <Fragment key={folder.id}>
-                        {index === folderPath.length - 1 ? (
-                            <span
-                                className={`${styles.breadcrumb__link} ${
-                                    styles.breadcrumb__link_current
-                                } ${dragOverId === folder.id ? styles.breadcrumb__dragover : ''}`}
-                                onDragOver={handleDragOver(folder.id)}
-                                onDragLeave={handleDragLeave}
-                                onDrop={handleDropWrapper(folder.id)}
-                            >
-                                {folder.id === rootFolderId ? 'Мой диск' : folder.title}
-                            </span>
-                        ) : (
-                            <Link
-                                onClick={() => handleBreadcrumbClick(index)}
-                                to={`/folder/${folder.id}`}
-                                className={`${styles.breadcrumb__link} ${
-                                    dragOverId === folder.id ? styles.breadcrumb__dragover : ''
-                                }`}
-                                onDragOver={handleDragOver(folder.id)}
-                                onDragLeave={handleDragLeave}
-                                onDrop={handleDropWrapper(folder.id)}
-                            >
-                                {folder.id === rootFolderId ? 'Мой диск' : folder.title}
-                            </Link>
-                        )}
-                        {index < folderPath.length - 1 && (
-                            <span className={styles.breadcrumb__separator}>
-                                <svg
-                                    width='24px'
-                                    height='24px'
-                                    viewBox='0 0 24 24'
-                                    focusable='false'
-                                    fill='currentColor'
-                                >
-                                    <path d='M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z'></path>
-                                </svg>
-                            </span>
-                        )}
-                    </Fragment>
-                ))
+                <span
+                    className={`${styles.breadcrumb__home__mobile} ${
+                        dragOverId === rootFolderId ? styles.breadcrumb__dragover : ''
+                    }`}
+                    onDragOver={handleDragOver(rootFolderId)}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDropWrapper(rootFolderId)}
+                >
+                    {currentFolderName}
+                </span>
             )}
-        </div>
+            <div className={styles.breadcrumb}>
+                {folderId === rootFolderId ? (
+                    <span
+                        className={`${styles.breadcrumb__home} ${
+                            dragOverId === rootFolderId ? styles.breadcrumb__dragover : ''
+                        }`}
+                        onDragOver={handleDragOver(rootFolderId)}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDropWrapper(rootFolderId)}
+                    >
+                        {getFilterName(filterState)}
+                    </span>
+                ) : (
+                    folderPath.map((folder, index) => (
+                        <Fragment key={folder.id}>
+                            {index === folderPath.length - 1 ? (
+                                <span
+                                    className={`${styles.breadcrumb__link} ${
+                                        styles.breadcrumb__link_current
+                                    } ${
+                                        dragOverId === folder.id ? styles.breadcrumb__dragover : ''
+                                    }`}
+                                    onDragOver={handleDragOver(folder.id)}
+                                    onDragLeave={handleDragLeave}
+                                    onDrop={handleDropWrapper(folder.id)}
+                                >
+                                    {folder.id === rootFolderId ? 'Мой диск' : folder.title}
+                                </span>
+                            ) : (
+                                <Link
+                                    onClick={() => handleBreadcrumbClick(index)}
+                                    to={`/folder/${folder.id}`}
+                                    className={`${styles.breadcrumb__link} ${
+                                        dragOverId === folder.id ? styles.breadcrumb__dragover : ''
+                                    }`}
+                                    onDragOver={handleDragOver(folder.id)}
+                                    onDragLeave={handleDragLeave}
+                                    onDrop={handleDropWrapper(folder.id)}
+                                >
+                                    {folder.id === rootFolderId ? 'Мой диск' : folder.title}
+                                </Link>
+                            )}
+                            {index < folderPath.length - 1 && (
+                                <span className={styles.breadcrumb__separator}>
+                                    <svg
+                                        width='24px'
+                                        height='24px'
+                                        viewBox='0 0 24 24'
+                                        focusable='false'
+                                        fill='currentColor'
+                                    >
+                                        <path d='M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z'></path>
+                                    </svg>
+                                </span>
+                            )}
+                        </Fragment>
+                    ))
+                )}
+            </div>
+        </>
     );
 };

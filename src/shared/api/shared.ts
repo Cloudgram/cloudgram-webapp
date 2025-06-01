@@ -1,3 +1,4 @@
+import { SearchListType } from '@shared/types/SearchListType';
 import { requestInstance } from './requestInstance';
 
 export const copyEntity = async (
@@ -44,6 +45,16 @@ export const repairEntity = async (idsMassive: string[]): Promise<void> => {
         const { data } = await requestInstance.patch('/trash/repair', {
             ids: idsMassive,
         });
+        return data;
+    } catch (error) {
+        console.error('Ошибка при выполнении запроса:', error);
+        throw error;
+    }
+};
+
+export const getSearchList = async (): Promise<SearchListType> => {
+    try {
+        const { data } = await requestInstance.get('/user/fs_items');
         return data;
     } catch (error) {
         console.error('Ошибка при выполнении запроса:', error);

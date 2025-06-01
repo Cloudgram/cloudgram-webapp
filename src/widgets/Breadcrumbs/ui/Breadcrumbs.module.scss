@@ -40,6 +40,10 @@ $transition-ease: ease-in-out;
             background-color: $color-hover-bg;
             color: black;
         }
+
+        &__mobile {
+            display: none;
+        }
     }
 
     &__link {
@@ -96,5 +100,17 @@ $transition-ease: ease-in-out;
 @media (max-width: 450px) {
     .breadcrumb {
         display: none;
+
+        &__home {
+            &__mobile {
+                font-size: $font-size-regular;
+                padding: $padding-link;
+                font-weight: $font-weight-regular;
+                font-family: $font-family-regular;
+                border: 2px solid transparent;
+                box-sizing: border-box;
+                display: flex;
+            }
+        }
     }
 }

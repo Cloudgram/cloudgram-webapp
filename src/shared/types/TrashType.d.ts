@@ -11,13 +11,6 @@ export const TrashFolderSchema = z.object({
             owner: z.boolean(),
             share: z.string(),
             tags: z.array(z.string()),
-            color: z.object({
-                id: z.string(),
-                title: z.string(),
-                hex: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/),
-                background_hex: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/),
-                back_hex: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/),
-            }),
         })
     ),
     folders: z.array(
