@@ -5,10 +5,12 @@ on:
         branches:
             - main
             - development/alpha
+            - fsd-architecture
     pull_request:
         branches:
             - main
             - development/alpha
+            - fsd-architecture
 
 jobs:
     build:
@@ -54,8 +56,8 @@ jobs:
             - name: 🏗 Build and push with Docker Compose
               run: |
                   if [ "${{ github.ref }}" == "refs/heads/main" ]; then
-                    docker compose build
-                    docker compose push
-                  elif [ "${{ github.ref }}" == "refs/heads/development/alpha" ]; then
-                    echo "Skipping Docker push for development/alpha branch"
+                      docker compose build
+                      docker compose push
+                  else
+                      echo "Skipping Docker push for non-main branch"
                   fi

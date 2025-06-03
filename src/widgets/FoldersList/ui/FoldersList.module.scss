@@ -1,0 +1,505 @@
+.list__title {
+    font-size: 20px;
+    font-weight: 500;
+    font-family: "GR", sans-serif;
+    color: black;
+}
+
+.resently__svg {
+    margin-left: 10px;
+}
+
+.list__container {
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.list__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 20px;
+    flex-shrink: 0; // предотвращает сжатие заголовка
+
+    &_active {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin: 20px;
+        margin-bottom: 10px;
+        padding: 5px;
+        border-radius: 20px;
+        border: 1px solid black;
+    }
+}
+
+.list__orientation {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    margin-right: 10px;
+    transition: all 0.2s ease-in-out;
+}
+
+.list__item {
+    position: relative;
+    padding: 16px;
+    height: 120px; // фиксированная высота вместо fit-content
+    box-sizing: border-box;
+    border: 2px solid transparent;
+    border-radius: 20px;
+    font-family: "GR", sans-serif;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none; // для Safari
+    -moz-user-select: none; // для Firefox
+    -ms-user-select: none;
+    transition:
+        transform 0.1s ease-in-out,
+        box-shadow 0.1s ease-in-out;
+
+    &:hover {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    // &:focus {
+    //     border: 1px dashed black;
+    // }
+
+    &.dragging {
+        opacity: 0.5;
+        cursor: move;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    &.dragover {
+        border: 2px dashed rgba(0, 0, 0, 0.3);
+        transform: scale(1.02);
+        transition: all 0.2s ease;
+        opacity: 1; // явно указываем, что элемент должен быть непрозрачным
+    }
+
+    &_line {
+        position: relative;
+        padding: 15px;
+        border-radius: 10px;
+        border: 2px solid transparent;
+        background-color: rgba(0, 0, 0, 0.1);
+        text-decoration: none;
+        user-select: none;
+        -webkit-user-select: none; // для Safari
+        -moz-user-select: none; // для Firefox
+        -ms-user-select: none;
+        transition:
+            transform 0.1s ease-in-out,
+            box-shadow 0.1s ease-in-out;
+
+        &.dragging {
+            opacity: 0.5;
+            cursor: move;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        &.dragover {
+            border: 2px dashed rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+            opacity: 1;
+        }
+
+        &__folder {
+            cursor: pointer;
+
+            &:hover {
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            }
+
+            // &:focus {
+            //     border: 1px solid black;
+            // }
+
+            &:active {
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            }
+        }
+
+        // &:focus {
+        //     border: 1px solid black;
+        // }
+
+        &:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+    }
+
+    &__folder {
+        cursor: pointer;
+        user-select: none;
+        &:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        &:active {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2) !important;
+        }
+    }
+
+    &[draggable="true"] {
+        &:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+    }
+}
+
+.actions__menu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    width: 80px;
+    // gap: 10px;
+}
+
+.action__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 100px;
+    transition: background-color 0.1s ease-in-out;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.folders__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin: 15px;
+    padding: 10px;
+    overflow-y: auto;
+    padding-right: 10px;
+    border-radius: 20px;
+    height: calc(100vh - 230px); // фиксированная высота с учетом отступов
+    box-sizing: border-box;
+    grid-auto-rows: 120px; // фиксированная высота строк
+
+    &::-webkit-scrollbar {
+        width: 6px;
+        margin-left: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-button {
+        display: none;
+    }
+
+    &_line {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        overflow-y: auto;
+        margin: 15px;
+        padding: 10px;
+        padding-right: 10px;
+        border-radius: 10px;
+        height: calc(100vh - 230px); // такая же высота для line view
+        box-sizing: border-box;
+
+        &::-webkit-scrollbar {
+            width: 6px;
+            margin-left: 10px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-button {
+            display: none;
+        }
+    }
+}
+
+.folders__item {
+    &_line {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        // color: black;
+    }
+}
+
+.folder__icons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+
+    &_line {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+}
+
+.more__actions__button {
+    &_line {
+        display: none;
+    }
+}
+
+.folder__title {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 5px;
+    font-size: 17px;
+    font-weight: 500;
+    width: 100%;
+
+    &_line {
+        width: 400px;
+        // font-size: 17px;
+        font-weight: 500;
+        color: black;
+    }
+}
+
+.folder__descr {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 400;
+
+    &_line {
+        display: flex;
+        flex-direction: row;
+        color: black;
+    }
+}
+
+.folder__createdAt {
+    margin-right: 10px;
+
+    &_line {
+        display: flex;
+        align-items: center;
+        color: black;
+    }
+}
+
+.view__container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    &_line {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+        align-items: center;
+        color: black;
+        // justify-content: center;
+    }
+}
+
+.view__svg {
+    width: 10px;
+    height: 10px;
+
+    &_line {
+        width: 15px;
+        height: 15px;
+    }
+}
+
+.block__orientation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    rect {
+        stroke: #b0c0d0;
+    }
+
+    &_active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        rect {
+            stroke: black;
+        }
+    }
+}
+
+.line__orientation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    path {
+        stroke: #b0c0d0;
+    }
+
+    &_active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        path {
+            stroke: black;
+        }
+    }
+}
+
+.more__actions__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // width: 15px;
+    padding: 10px;
+    border-radius: 100px;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+}
+
+@media (max-width: 1200px) {
+    .folder {
+        &__title {
+            &_line {
+                width: 200px;
+            }
+        }
+    }
+}
+
+@media (max-width: 1000px) {
+    .actions__menu {
+        display: none;
+    }
+
+    .more__actions__button {
+        &_line {
+            padding: 0 10px;
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    .view__container {
+        &_line {
+            display: none;
+        }
+    }
+
+    .folder {
+        &__title {
+            &_line {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 100px;
+            }
+        }
+    }
+}
+
+@media (max-width: 800px) {
+    .folder {
+        &__title {
+            &_line {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 30px;
+            }
+        }
+    }
+}
+
+@media (max-width: 650px) {
+    .folders__list {
+        margin: 5px;
+        height: calc(100vh - 285px);
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+
+        &_line {
+            margin: 5px;
+            // height: calc(100vh - 295px);
+            height: calc(100vh - 285px);
+        }
+    }
+
+    .list__header {
+        margin: 10px;
+        justify-content: space-between;
+    }
+
+    .folder {
+        &__title {
+            &_line {
+                white-space: wrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 100px;
+            }
+        }
+    }
+}
+
+@media (max-width: 450px) {
+    .folder {
+        &__createdAt {
+            &_line {
+                display: none;
+            }
+        }
+
+        &__title {
+            &_line {
+                white-space: wrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 150px;
+            }
+        }
+    }
+}
