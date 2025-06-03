@@ -1,4 +1,4 @@
-@use "@/shared/styles/gifs.scss";
+@use "../../../shared/styles/gifs.scss" as background;
 
 .header {
     display: flex;
@@ -72,7 +72,7 @@
             padding: 5px 0;
             padding-left: 5px;
             cursor: pointer;
-            background-image: url("@shared/assets/images/background.gif");
+            background-image: background.$userPanelgif;
             background-position: center;
             background-size: cover;
             background-repeat: no-repeat;
