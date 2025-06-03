@@ -1,4 +1,6 @@
-@use "../../../app/styles/gifs" as gifs;
+:root {
+    --user-panel-gif: url("@/shared/assets/images/background.gif");
+}
 
 .user {
     display: flex;
@@ -20,7 +22,7 @@
         user-select: none;
         border-top-left-radius: 20px;
         border-top-right-radius: 20px;
-        background-image: gifs.$userPanelgif;
+        background-image: var(--user-panel-gif);
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
