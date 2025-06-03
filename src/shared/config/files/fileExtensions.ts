@@ -113,7 +113,6 @@ const EXTENSIONS_PROGRAMMING = [
     'md',
     'markdown',
     'mdx',
-    'txt',
     'log',
 
     // XML

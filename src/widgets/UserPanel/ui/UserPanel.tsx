@@ -1,13 +1,14 @@
-import { useLogoutMutation } from '@/shared/hooks/mutations/useLogoutMutation';
-import { useUserQuery } from '@/shared/hooks/queries/useUserQuery';
+import { useLogoutMutation } from '@shared/hooks/mutations/useLogoutMutation';
+import { useUserQuery } from '@shared/hooks/queries/useUserQuery';
 import { animateUserPanel } from '@shared/lib/animations';
 import { FC, useEffect } from 'react';
 import styles from './UserPanel.module.scss';
 import { dateFormat } from '@shared/lib/utils/date';
 import { cooldownDate } from '@shared/lib/utils/date';
-import { calcSum } from '@/shared/lib/utils/file/calcSumUpload';
+import { calcSum } from '@shared/lib/utils/file/calcSumUpload';
 import { ButtonLoad } from '@shared/ui/Loader/ui/ButtonLoad';
-import { generateUserIcon } from '@/shared/lib';
+import { generateUserIcon } from '@shared/lib';
+import { useIsPremium } from '@shared/hooks';
 
 interface IUserPanel {
     cardRef: React.RefObject<HTMLDivElement>;
@@ -16,6 +17,7 @@ interface IUserPanel {
 export const UserPanel: FC<IUserPanel> = ({ cardRef }) => {
     const { data: user } = useUserQuery();
     const { mutate, isPending } = useLogoutMutation();
+    const premium = useIsPremium();
     const size = 25;
 
     const handleLogoutClick = () => {
@@ -29,7 +31,10 @@ export const UserPanel: FC<IUserPanel> = ({ cardRef }) => {
     return (
         <div className={styles.user} ref={cardRef}>
             <div className={styles.user__container}>
-                <div className={styles.user__top}>&#64;{user?.username}</div>
+                <div style={premium ? { color: 'white' } : {}} className={styles.user__top}>
+                    &#64;{user?.username}
+                </div>
+                {premium && <div className={styles.user__background}></div>}
                 <div className={styles.user__main}>
                     <div className={styles.user__info}>
                         {user?.avatar ? (
@@ -41,11 +46,20 @@ export const UserPanel: FC<IUserPanel> = ({ cardRef }) => {
                         ) : (
                             generateUserIcon(user?.full_name || 'Unknown', styles.user__avatar_no)
                         )}
-                        {user?.subscriber ? (
-                            <span className={styles.user__fullname}>{user?.full_name}</span>
-                        ) : (
-                            <span className={styles.user__fullname}>{user?.full_name}</span>
-                        )}
+                        <span
+                            style={
+                                premium
+                                    ? {
+                                          color: 'white',
+                                          fontWeight: 'regular',
+                                          border: '2px solid white',
+                                      }
+                                    : {}
+                            }
+                            className={styles.user__fullname}
+                        >
+                            {user?.full_name}
+                        </span>
                     </div>
                     <div className={styles.user__stats}>
                         <div className={styles.user__createdat}>
@@ -85,7 +99,7 @@ export const UserPanel: FC<IUserPanel> = ({ cardRef }) => {
                                 />
                             </svg>
 
-                            {user?.subscriber ? (
+                            {premium ? (
                                 <span className={styles.user__premium_end}>
                                     {cooldownDate(user?.subscriber.end || '')} до окончания
                                 </span>
@@ -112,7 +126,7 @@ export const UserPanel: FC<IUserPanel> = ({ cardRef }) => {
                                     />
                                 </g>
                             </svg>
-                            {user?.subscriber ? (
+                            {premium ? (
                                 <span className={styles.user__storage_value}>
                                     {`${calcSum(user?.uploaded_sum ?? 0)} из `}
                                     <svg

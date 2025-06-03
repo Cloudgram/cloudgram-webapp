@@ -1,14 +1,40 @@
+@use "../../../app/styles/gifs" as gifs;
+
 .user {
     display: flex;
     position: absolute;
     top: 12%;
     left: 1.5%;
     z-index: 100;
+    border: 1.5px solid rgba(0, 0, 0);
+    border-radius: 20px;
+
+    &__background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 49.49%;
+        z-index: 1;
+        display: flex;
+        user-select: none;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        background-image: gifs.$userPanelgif;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        // filter: blur(1px);
+        -webkit-user-select: none; // для Safari
+        -moz-user-select: none; // для Firefox
+        -ms-user-select: none; // для IE/Edge
+    }
 
     &__top {
         font-weight: 500;
         font-size: 15px;
         font-family: "RB", sans-serif;
+        z-index: 2;
     }
 
     &__container {
@@ -29,6 +55,7 @@
         align-items: center;
         width: 100%;
         gap: 10px;
+        z-index: 2;
     }
 
     &__stats {

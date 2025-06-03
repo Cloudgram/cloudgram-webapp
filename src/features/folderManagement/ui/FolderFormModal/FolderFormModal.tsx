@@ -2,7 +2,6 @@ import styles from './FolderFormModal.module.scss';
 import { changeFolder, createFolder, getFolders } from '@shared/api/Folders';
 import { queryClient } from '@shared/api/queryClient';
 import { useGetColors } from '@/shared/hooks/queries/useGetColors';
-import { useUserQuery } from '@/shared/hooks/queries/useUserQuery';
 import { usePathfinder } from '@/shared/hooks/usePathFinder';
 import { ColorType } from '@shared/types';
 import { useMutation } from '@tanstack/react-query';
@@ -11,6 +10,7 @@ import { ModalWindow } from '@shared/ui/ModalWindow/ui/ModalWindow';
 import { ButtonLoad } from '@shared/ui/Loader/ui/ButtonLoad';
 import { FormControl, FormLabel, Box } from '@mui/material';
 import { FolderFormProps } from '../../model/types';
+import { useIsPremium } from '@/shared/hooks';
 
 export const FolderFormModal = ({ mode, folderId, initialData, onClose }: FolderFormProps) => {
     const [folderTitle, setFolderTitle] = useState<string>(initialData?.title ?? '');
@@ -21,7 +21,7 @@ export const FolderFormModal = ({ mode, folderId, initialData, onClose }: Folder
     );
     const currentFolderId = usePathfinder();
     const { data: colorsData } = useGetColors();
-    const { data: user } = useUserQuery();
+    const premium = useIsPremium();
 
     const title = mode === 'create' ? 'Создать папку' : 'Изменить папку';
     const buttonText = mode === 'create' ? 'Создать' : 'Сохранить';
@@ -35,7 +35,7 @@ export const FolderFormModal = ({ mode, folderId, initialData, onClose }: Folder
     const { mutate, isPending } = useMutation({
         mutationFn: () => {
             if (folderId) {
-                if (user?.subscriber) {
+                if (premium) {
                     return changeFolder(
                         folderId,
                         currentFolderId,
@@ -98,7 +98,7 @@ export const FolderFormModal = ({ mode, folderId, initialData, onClose }: Folder
                     onKeyDown={handleEnterKey}
                     autoFocus
                 />
-                {user?.subscriber && (
+                {premium && (
                     <FormControl
                         sx={{
                             mt: 2,

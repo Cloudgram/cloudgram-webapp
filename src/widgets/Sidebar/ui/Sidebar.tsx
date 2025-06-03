@@ -13,6 +13,7 @@ import styles from './Sidebar.module.scss';
 import { Load } from '@shared/ui/Loader/ui/Load';
 import { FILTERS } from '@/shared/config/routes/filters';
 import { FolderFormModal } from '@/features/folderManagement';
+import { getColors } from '@/shared/api/colors';
 
 export const Sidebar = () => {
     const [isPanelVisible, setIsPanelVisible] = useState(false);
@@ -53,9 +54,14 @@ export const Sidebar = () => {
         animatePanel(menuRef, isPanelVisible);
     }, [isPanelVisible, menuRef]);
 
-    const openModal = () => {
+    const openModal = async () => {
         setCreateModal(true);
         setIsPanelVisible(false);
+
+        await queryClient.prefetchQuery({
+            queryKey: ['colors'],
+            queryFn: () => getColors(),
+        });
     };
 
     const closeModal = () => {
