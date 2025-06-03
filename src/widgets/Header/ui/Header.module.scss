@@ -1,6 +1,4 @@
-:root {
-    --user-panel-gif: url("@/shared/assets/images/background.gif");
-}
+@use "@/shared/styles/gifs.scss";
 
 .header {
     display: flex;
@@ -73,19 +71,12 @@
             gap: 15px;
             padding: 5px 0;
             padding-left: 5px;
-            // padding-right: 15px;
             cursor: pointer;
-            // background-image: url("../../../shared/assets/images/background.gif");
-            // background-image: url("https://media1.tenor.com/m/MNVxgsGfaUQAAAAC/in-space-national-space-day.gif");
-            background-image: var(--user-panel-gif);
-            // filter: blur(0.5px);
+            background-image: url("@shared/assets/images/background.gif");
             background-position: center;
             background-size: cover;
             background-repeat: no-repeat;
             border-radius: 100px;
-            // opacity: 0.8;
-            // filter: blur(1px);
-            // box-sizing: border-box;
         }
     }
 
