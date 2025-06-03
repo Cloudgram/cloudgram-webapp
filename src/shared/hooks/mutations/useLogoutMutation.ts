@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { logoutSession } from '@shared/api/Auth';
 import { AxiosError } from 'axios';
+import { queryClient } from '@/shared/api/queryClient';
 
 export const useLogoutMutation = () => {
     const navigate = useNavigate();
@@ -9,6 +10,7 @@ export const useLogoutMutation = () => {
         mutationFn: () => logoutSession(),
         onSuccess() {
             localStorage.removeItem('folderHistory');
+            queryClient.removeQueries({ queryKey: ['user'] });
             navigate('/auth', { replace: true });
         },
         onError(error: AxiosError) {

@@ -1,14 +1,17 @@
 import { useAuthMutation } from '@/shared/hooks/mutations/useAuthMutation';
 import { AxiosError } from 'axios';
 import { useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import styles from './AuthPage.module.scss';
 import { ButtonLoad } from '@shared/ui/Loader/ui/ButtonLoad';
 import { devBotUrl } from '@/shared/config/app/cloudgramBotUrl';
+import { useUserQuery } from '@shared/hooks';
 
 export const AuthPage = () => {
+    const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const { mutate, isPending, isError, error } = useAuthMutation();
+    const { data: user, isSuccess: isUserSuccess } = useUserQuery();
     const userSecret = searchParams.get('secret') || '';
 
     useEffect(() => {
@@ -16,6 +19,12 @@ export const AuthPage = () => {
             mutate(userSecret);
         }
     }, [userSecret, mutate]);
+
+    useEffect(() => {
+        if (isUserSuccess && user) {
+            navigate('/my-drive', { replace: true });
+        }
+    }, [isUserSuccess, user, navigate]);
 
     const errorMessage = () => {
         if (error instanceof AxiosError) {
