@@ -1,4 +1,5 @@
 .header {
+    // position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -24,6 +25,7 @@
     &__user {
         position: relative;
         display: flex;
+        overflow: hidden;
         user-select: none;
         -webkit-user-select: none; // для Safari
         -moz-user-select: none; // для Firefox
@@ -31,9 +33,10 @@
         max-height: 60px;
         align-items: center;
         gap: 15px;
-        padding: 5px 0;
-        padding-left: 5px;
-        padding-right: 15px;
+        padding: 5px;
+        padding-right: 10px;
+        // padding-left: 5px;
+        // padding-right: 15px;
         cursor: pointer;
         transition:
             color 0.1s ease-in-out,
@@ -66,9 +69,8 @@
             -ms-user-select: none; // для IE/Edge
             max-height: 60px;
             align-items: center;
-            gap: 15px;
-            padding: 5px 0;
-            padding-left: 5px;
+            padding: 5px;
+            padding-right: 10px;
             cursor: pointer;
             background-position: center;
             background-size: cover;
@@ -247,6 +249,10 @@
 
         &__user {
             padding: 5px;
+
+            &_background {
+                padding: 5px;
+            }
         }
 
         &__username {

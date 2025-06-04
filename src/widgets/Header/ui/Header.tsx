@@ -56,13 +56,11 @@ export const Header = () => {
             {mobileSearch && <SearchInput className={styles.mobile__search} />}
             <div className={styles.header__left}>
                 <div className={styles.header__user} onClick={() => toggleUserPanel()}>
-                    {premium ? (
+                    {premium && (
                         <div
                             style={{ backgroundImage: `url(${ACTIVE_BACKGROUND})` }}
                             className={styles.header__user_background}
                         ></div>
-                    ) : (
-                        <></>
                     )}
                     <div className={styles.icon__container}>
                         {user?.avatar ? (
