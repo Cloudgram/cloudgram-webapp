@@ -1,7 +1,7 @@
 export const GIFS = {
     UserPanel: {
-        local_aqua: '/public/backgrounds/background.gif',
-        local_stars: '/public/backgrounds/userpanel-background.gif',
+        local_aqua: '/user/background.gif',
+        local_stars: '/user/userpanel-background.gif',
         variants: {
             space: 'https://media1.tenor.com/m/MNVxgsGfaUQAAAAC/in-space-national-space-day.gif',
             beach: 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExb3gwcjN5endlYzFtNTdlZGRxN3J5Y3hkbTQzdXc1dTJkczFobnZpeCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/k5GcybwY1yybmGwrFg/giphy.gif',

@@ -29,7 +29,7 @@
     margin-bottom: 10px;
     padding: 5px;
     border-radius: 20px;
-    flex-shrink: 0; // предотвращает сжатие заголовка
+    flex-shrink: 0;
 
     &_active {
         display: flex;
