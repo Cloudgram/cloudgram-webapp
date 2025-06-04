@@ -12,6 +12,7 @@ import { UserPanel } from '@widgets/UserPanel';
 import { Link } from 'react-router-dom';
 import { generateUserIcon } from '@/shared/lib';
 import { useIsPremium } from '@shared/hooks';
+import { ACTIVE_BACKGROUND } from '@shared/config/images/images';
 
 export const Header = () => {
     const { data: user } = useUserQuery();
@@ -55,7 +56,14 @@ export const Header = () => {
             {mobileSearch && <SearchInput className={styles.mobile__search} />}
             <div className={styles.header__left}>
                 <div className={styles.header__user} onClick={() => toggleUserPanel()}>
-                    {premium ? <div className={styles.header__user_background}></div> : <></>}
+                    {premium ? (
+                        <div
+                            style={{ backgroundImage: `url(${ACTIVE_BACKGROUND})` }}
+                            className={styles.header__user_background}
+                        ></div>
+                    ) : (
+                        <></>
+                    )}
                     <div className={styles.icon__container}>
                         {user?.avatar ? (
                             <img

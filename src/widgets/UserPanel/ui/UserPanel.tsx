@@ -9,6 +9,7 @@ import { calcSum } from '@shared/lib/utils/file/calcSumUpload';
 import { ButtonLoad } from '@shared/ui/Loader/ui/ButtonLoad';
 import { generateUserIcon } from '@shared/lib';
 import { useIsPremium } from '@shared/hooks';
+import { ACTIVE_BACKGROUND } from '@shared/config/images/images';
 
 interface IUserPanel {
     cardRef: React.RefObject<HTMLDivElement>;
@@ -34,7 +35,12 @@ export const UserPanel: FC<IUserPanel> = ({ cardRef }) => {
                 <div style={premium ? { color: 'white' } : {}} className={styles.user__top}>
                     &#64;{user?.username}
                 </div>
-                {premium && <div className={styles.user__background}></div>}
+                {premium && (
+                    <div
+                        style={{ backgroundImage: `url(${ACTIVE_BACKGROUND})` }}
+                        className={styles.user__background}
+                    ></div>
+                )}
                 <div className={styles.user__main}>
                     <div className={styles.user__info}>
                         {user?.avatar ? (

@@ -1,5 +1,3 @@
-@use "@shared/styles/gifs.scss" as background;
-
 .user {
     display: flex;
     position: absolute;
@@ -20,7 +18,6 @@
         user-select: none;
         border-top-left-radius: 20px;
         border-top-right-radius: 20px;
-        background-image: background.$userPanelgif;
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
