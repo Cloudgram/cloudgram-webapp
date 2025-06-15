@@ -1,6 +1,8 @@
 .actionMenu {
     position: absolute;
     display: flex;
+    justify-content: center;
+    align-items: center;
     top: 40%;
     right: 9%;
     width: fit-content;
@@ -10,6 +12,14 @@
     border-radius: 10px;
     z-index: 10;
     padding: 10px;
+
+    &__loader {
+        width: 25px;
+        height: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }
 
 .actionMenu__button {

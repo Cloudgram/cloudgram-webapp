@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom';
 import { generateUserIcon } from '@/shared/lib';
 import { useIsPremium } from '@shared/hooks';
 import { ACTIVE_BACKGROUND } from '@shared/config/images/images';
+import { prodBotUrl } from '@/shared/config/app/cloudgramBotUrl';
 
 export const Header = () => {
     const { data: user } = useUserQuery();
@@ -152,11 +153,7 @@ export const Header = () => {
                     </Link>
                 </li>
                 <li className={styles.header__item}>
-                    <Link
-                        to='https://t.me/CloudgramWeb_bot'
-                        target='_blank'
-                        className={styles.header__button}
-                    >
+                    <Link to={prodBotUrl} target='_blank' className={styles.header__button}>
                         <svg
                             xmlns='http://www.w3.org/2000/svg'
                             width={size}

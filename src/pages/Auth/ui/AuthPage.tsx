@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import styles from './AuthPage.module.scss';
 import { ButtonLoad } from '@shared/ui/Loader/ui/ButtonLoad';
-import { devBotUrl } from '@/shared/config/app/cloudgramBotUrl';
+import { prodBotUrl } from '@/shared/config/app/cloudgramBotUrl';
 import { useUserQuery } from '@shared/hooks';
 
 export const AuthPage = () => {
@@ -80,7 +80,7 @@ export const AuthPage = () => {
                     {isError && error && errorMessage()}
                     {!userSecret && (
                         <a
-                            href={devBotUrl}
+                            href={prodBotUrl}
                             target='_blank'
                             className={`${styles.auth__button} ${styles.auth__button_bot}`}
                         >

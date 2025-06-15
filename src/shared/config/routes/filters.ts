@@ -4,4 +4,6 @@ export const FILTERS = {
     FAV: 'favorite',
     RECENT: 'recent',
     TRASH: 'trash',
+    LIMITED: 'limited',
+    ALIEN: 'alien',
 };

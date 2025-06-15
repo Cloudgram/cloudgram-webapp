@@ -13,12 +13,19 @@ import { dateFormat } from '@/shared/lib/utils/date/formatDate';
 import { getFileColor } from '@/shared/lib/utils/file/getFileColor';
 import { getFileIcon } from '@/shared/lib/utils/file/getFileIcon';
 import { FC, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 
 interface IFileItemProps {
     file: RootFolderType['files'][number];
     index: number;
     view: ViewType;
 }
+
+type downloadFileProps = {
+    id: string;
+    name: string;
+    extension: string;
+};
 
 export const FileItem: FC<IFileItemProps> = ({ file, index, view }) => {
     const fileColors = getFileColor(file.extension);
@@ -39,10 +46,10 @@ export const FileItem: FC<IFileItemProps> = ({ file, index, view }) => {
     };
 
     const handleDelete = async (id: string) => {
-        if (!window.confirm('Вы действительно хотите удалить этот файл?')) {
+        if (!window.confirm(`Вы действительно хотите удалить файл ${file.title}?`)) {
             return;
         } else {
-            await deleteFile([id]);
+            await mutateDelete([id]);
             queryClient.invalidateQueries({ queryKey: ['folders', folderId] });
             queryClient.invalidateQueries({ queryKey: ['searchlist'] });
         }
@@ -60,16 +67,21 @@ export const FileItem: FC<IFileItemProps> = ({ file, index, view }) => {
     };
 
     const handleEleminate = async (id: string) => {
-        if (!window.confirm('Вы действительно хотите стереть этот файл?')) {
+        if (
+            !window.confirm(
+                `Вы действительно хотите стереть файл ${file.title}? Это необратимое действие`
+            )
+        ) {
             return;
         } else {
             await eleminateEntity([id]);
             queryClient.invalidateQueries({ queryKey: ['trash'] });
+            queryClient.invalidateQueries({ queryKey: ['searchList'] });
         }
     };
 
     const handleRepair = async (id: string) => {
-        if (!window.confirm('Вы действительно хотите восстановить этот файл?')) {
+        if (!window.confirm(`Вы действительно хотите восстановить файл ${file.title}?`)) {
             return;
         } else {
             await repairEntity([id]);
@@ -79,9 +91,30 @@ export const FileItem: FC<IFileItemProps> = ({ file, index, view }) => {
         }
     };
 
+    const { mutate: mutateDownload, isPending: downloadPending } = useMutation<
+        void,
+        unknown,
+        downloadFileProps
+    >({
+        mutationFn: ({ id, name, extension }) => downloadFile(id, name, extension),
+        onSuccess: () => {
+            setActiveFileMenuId(null);
+        },
+    });
+
+    const { mutate: mutateDelete, isPending: deletePending } = useMutation<void, unknown, string[]>(
+        {
+            mutationFn: ids => deleteFile(ids),
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ['trash'] });
+                queryClient.invalidateQueries({ queryKey: ['folders', folderId] });
+                queryClient.invalidateQueries({ queryKey: ['searchlist'] });
+            },
+        }
+    );
+
     const handleFileDownload = async (id: string, name: string, extension: string) => {
-        await downloadFile(id, name, extension);
-        setActiveFileMenuId(null);
+        mutateDownload({ id, name, extension });
     };
 
     return (
@@ -139,6 +172,8 @@ export const FileItem: FC<IFileItemProps> = ({ file, index, view }) => {
                                         onCopy={() =>
                                             handleCopyFolder(file.id.toString(), folderId, false)
                                         }
+                                        downloadPending={downloadPending}
+                                        deletePending={deletePending}
                                     />
                                 ))}
                         </div>
@@ -238,6 +273,7 @@ export const FileItem: FC<IFileItemProps> = ({ file, index, view }) => {
                                             file.extension
                                         )
                                     }
+                                    downloadPending={downloadPending}
                                     onDelete={() => handleDelete(file.id)}
                                     onCopy={() =>
                                         handleCopyFolder(file.id.toString(), folderId, false)

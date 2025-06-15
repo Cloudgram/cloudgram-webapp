@@ -52,9 +52,19 @@ export const repairEntity = async (idsMassive: string[]): Promise<void> => {
     }
 };
 
-export const getSearchList = async (): Promise<SearchListType> => {
+export const getFilteredList = async (): Promise<SearchListType> => {
     try {
-        const { data } = await requestInstance.get('/user/fs_items');
+        const { data } = await requestInstance.get(`/user/fs_items`, {
+            params: {
+                folders: true,
+                files: true,
+                recent: false,
+                favorite: false,
+                public: false,
+                limited: false,
+                alien: false,
+            },
+        });
         return data;
     } catch (error) {
         console.error('Ошибка при выполнении запроса:', error);

@@ -7,11 +7,12 @@ export interface ILoader {
     color?: string;
     title?: string;
     size: number;
+    className?: string;
 }
 
-export const ButtonLoad = ({ type, bgColor, color, title, size }: ILoader) => {
+export const ButtonLoad = ({ type, bgColor, color, title, size, className }: ILoader) => {
     return (
-        <div className={styles.button__loader}>
+        <div className={className ?? styles.button__loader}>
             <Loader type={type} bgColor={bgColor} color={color} title={title} size={size} />
         </div>
     );

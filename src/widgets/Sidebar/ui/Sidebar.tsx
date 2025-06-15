@@ -68,7 +68,7 @@ export const Sidebar = () => {
         setCreateModal(false);
     };
 
-    const uploadMutation = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: (file: File) => uploadFile(file, folderId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['folders', folderId] });
@@ -91,7 +91,7 @@ export const Sidebar = () => {
 
         for (const file of fileArray) {
             try {
-                await uploadMutation.mutateAsync(file);
+                await mutate(file);
             } catch (error) {
                 console.error('Ошибка загрузки файла:', error);
             }
@@ -100,7 +100,7 @@ export const Sidebar = () => {
 
     return (
         <div className={styles.filters}>
-            {uploadMutation.status === 'pending' && (
+            {isPending && (
                 <Load
                     type='box-rotate-z'
                     bgColor={'black'}
