@@ -128,10 +128,16 @@
     }
 }
 
+.upload__loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}
+
 @media (max-width: 650px) {
     .filters {
         position: absolute;
-        display: block;
+        display: flex;
         max-width: 100%;
         height: auto;
         background-color: white;
@@ -161,6 +167,13 @@
         &__title {
             font-size: 14px;
         }
+    }
+
+    .upload__loading {
+        position: fixed;
+        top: 40%;
+        left: 40%;
+        // box-sizing: border-box;
     }
 
     .create__container {
@@ -205,5 +218,12 @@
         &__title {
             display: none;
         }
+    }
+
+    .upload__loading {
+        position: fixed;
+        top: 40%;
+        left: 40%;
+        // box-sizing: border-box;
     }
 }

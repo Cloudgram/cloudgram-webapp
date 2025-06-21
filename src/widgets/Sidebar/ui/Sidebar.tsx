@@ -107,6 +107,7 @@ export const Sidebar = () => {
                     color={'black'}
                     title={'Загрузка...'}
                     size={100}
+                    className={styles.upload__loading}
                 />
             )}
             <div className={styles.filters__up}>
