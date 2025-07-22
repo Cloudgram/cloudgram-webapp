@@ -1,1 +1,0 @@
-export { generateUserIcon } from './generateUserIcon';

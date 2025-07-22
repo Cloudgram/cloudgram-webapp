@@ -1,0 +1,12 @@
+.mainLayout {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+
+    &__content {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: 100vh;
+    }
+}

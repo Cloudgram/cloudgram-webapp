@@ -1,0 +1,68 @@
+@use "@shared/config/CloudLayoutColors.scss" as colors;
+
+.header {
+    display: flex;
+    padding: 12px 16px;
+    max-height: 56px;
+
+    &__container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    &__left {
+        display: flex;
+        align-items: center;
+    }
+
+    &__right {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 32px;
+    }
+
+    &__user {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        padding: 5px;
+        border-radius: 100px;
+        font-size: 14px;
+        font-weight: 600;
+
+        &_avatar {
+            width: 24px;
+            height: 24px;
+            background-color: colors.$bg-color-black;
+            color: colors.$text-white-default;
+        }
+
+        &:hover {
+            cursor: pointer;
+            background-color: colors.$text-gray-default;
+        }
+    }
+
+    &__title {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    &__button {
+        display: flex;
+        align-items: center;
+        padding: 6px 12px;
+        max-width: 125px;
+        max-height: 32px;
+        border-radius: 8px;
+        background-color: colors.$button-bg-color;
+    }
+}

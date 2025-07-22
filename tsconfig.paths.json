@@ -4,11 +4,12 @@
         "paths": {
             "@/*": ["./src/*"],
             "@app/*": ["./src/app/*"],
-            "@pages/*": ["./src/pages/*"],
-            "@widgets/*": ["./src/widgets/*"],
-            "@features/*": ["./src/features/*"],
             "@entities/*": ["./src/entities/*"],
-            "@shared/*": ["./src/shared/*"]
+            "@features/*": ["./src/features/*"],
+            "@layouts/*": ["./src/layouts/*"],
+            "@pages/*": ["./src/pages/*"],
+            "@shared/*": ["./src/shared/*"],
+            "@widgets/*": ["./src/widgets/*"]
         }
     }
 }
