@@ -1,28 +1,29 @@
+import type { AuthError } from '@features/auth/model/authTypes';
+import { useGetUserQuery } from '@shared/api/appApi';
+import { toaster } from '@shared/components/Toaster/toaster';
+import { Box, Spinner } from '@chakra-ui/react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 export const RouterGuard = () => {
-    // const { data: user, isLoading } = useUserQuery();
-    const user = true;
+    const { data: user, isLoading, status, error } = useGetUserQuery();
 
-    // if (isOffline && user) {
-    //     return <Outlet />;
-    // }
+    if (isLoading) {
+        return (
+            <Box w='100vw' h='100vh' display='flex' justifyContent='center' alignItems='center'>
+                <Spinner color='teal.500' size='xl' />
+            </Box>
+        );
+    }
 
-    // if (isOffline && !user) {
-    //     return <Navigate to='/offline' replace />;
-    // }
-
-    // if (isLoading) {
-    //     return (
-    //         <Load
-    //             type='box-rotate-z'
-    //             bgColor={'black'}
-    //             color={'black'}
-    //             title={'Загрузка...'}
-    //             size={100}
-    //         />
-    //     );
-    // }
+    if (status === 'rejected') {
+        const errorMessage = error as AuthError;
+        toaster.create({
+            title: 'User is not logged in',
+            description: errorMessage.data.detail.msg,
+            type: 'error',
+        });
+        return <Navigate to='/auth' replace />;
+    }
 
     return user ? <Outlet /> : <Navigate to='/auth' replace />;
 };

@@ -1,7 +1,9 @@
+@import "@app/styles/globals.css";
 .mainLayout {
     display: flex;
     flex-direction: row;
     height: 100vh;
+    background-color: var(--bg-primary);
 
     &__content {
         display: flex;

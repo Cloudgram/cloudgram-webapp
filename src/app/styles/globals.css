@@ -1,0 +1,47 @@
+/* globals.css */
+:root {
+    /* Цвета фона */
+    --bg-primary: white;
+    --bg-secondary: #f7fafc;
+    --bg-card: white;
+
+    /* Цвета текста */
+    --text-primary: #1a202c;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+
+    /* Тени и границы */
+    --shadow-primary: rgba(0, 0, 0, 0.1);
+    --shadow-card: rgba(0, 0, 0, 0.2);
+    --border-primary: #e2e8f0;
+
+    /* Акцентные цвета */
+    --accent-primary: #319795;
+    --accent-hover: #2c7a7b;
+}
+
+[data-theme="dark"] {
+    /* Цвета фона */
+    --bg-primary: #1a202c;
+    --bg-secondary: #2d3748;
+    --bg-card: #2d3748;
+
+    /* Цвета текста */
+    --text-primary: #f7fafc;
+    --text-secondary: #e2e8f0;
+    --text-muted: #a0aec0;
+
+    /* Тени и границы */
+    --shadow-primary: rgba(0, 0, 0, 0.3);
+    --shadow-card: rgba(255, 255, 255, 0.1);
+    --border-primary: #4a5568;
+
+    /* Акцентные цвета */
+    --accent-primary: #4fd1c7;
+    --accent-hover: #38b2ac;
+}
+
+/* Плавные переходы для всех элементов */
+* {
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}

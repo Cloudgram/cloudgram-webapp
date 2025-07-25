@@ -1,9 +1,11 @@
-// import { Text } from '@chakra-ui/react';
 import { Avatar, Button, Text } from '@chakra-ui/react';
 import styles from './Header.module.scss';
 import { UploadIcon } from '@/shared/assets/icons/UploadIcon';
+import { useGetUserQuery } from '@shared/api/appApi';
 
 export const Header = () => {
+    const { data: user } = useGetUserQuery();
+
     return (
         <div className={styles.header}>
             <div className={styles.header__container}>
@@ -33,10 +35,10 @@ export const Header = () => {
                     </Button>
                     <div className={styles.header__user}>
                         <Avatar.Root className={styles.header__user_avatar}>
-                            <Avatar.Fallback fontSize={'0.875rem'} name='Vega7' />
-                            <Avatar.Image src='' alt='Vega7' />
+                            <Avatar.Fallback fontSize={'0.875rem'} name={user?.full_name} />
+                            <Avatar.Image src={user?.avatar_url || ''} alt={user?.full_name} />
                         </Avatar.Root>
-                        <Text>Vega7</Text>
+                        <Text>{user?.full_name}</Text>
                     </div>
                 </div>
             </div>
