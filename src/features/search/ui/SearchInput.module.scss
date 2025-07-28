@@ -1,0 +1,12 @@
+.searchInput {
+    &__container {
+        width: 100%;
+    }
+
+    &__input {
+        height: fit-content;
+        font-size: 20px;
+        padding: 12px 16px;
+        border-radius: 8px;
+    }
+}

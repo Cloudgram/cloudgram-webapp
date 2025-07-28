@@ -1,5 +1,6 @@
 import { Button } from '@chakra-ui/react';
 import styles from './Sidebar.module.scss';
+import { useNavigate } from 'react-router-dom';
 
 interface SidebarItemProps {
     icon: React.ReactNode;
@@ -8,12 +9,22 @@ interface SidebarItemProps {
 }
 
 export const SidebarItem = ({ icon, label, route }: SidebarItemProps) => {
+    const navigate = useNavigate();
+
+    const handleRoute = (route: string | undefined) => {
+        if (route) {
+            navigate(route);
+        }
+    };
+
     return (
-        <Button asChild variant='ghost' className={styles.sidebar__button}>
-            <a href={route}>
-                {icon}
-                {label}
-            </a>
+        <Button
+            onClick={() => handleRoute(route)}
+            variant='ghost'
+            className={styles.sidebar__button}
+        >
+            {icon}
+            {label}
         </Button>
     );
 };

@@ -33,6 +33,10 @@ export const Header = () => {
                         <UploadIcon />
                         Upload File
                     </Button>
+                    <Button variant='solid' colorPalette='blue' className={styles.header__button}>
+                        <UploadIcon />
+                        Create Folder
+                    </Button>
                     <div className={styles.header__user}>
                         <Avatar.Root className={styles.header__user_avatar}>
                             <Avatar.Fallback fontSize={'0.875rem'} name={user?.full_name} />
