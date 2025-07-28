@@ -9,9 +9,11 @@ interface SidebarItemProps {
 
 export const SidebarItem = ({ icon, label, route }: SidebarItemProps) => {
     return (
-        <Button variant='ghost' className={styles.sidebar__button}>
-            {icon}
-            {label}
+        <Button asChild variant='ghost' className={styles.sidebar__button}>
+            <a href={route}>
+                {icon}
+                {label}
+            </a>
         </Button>
     );
 };
