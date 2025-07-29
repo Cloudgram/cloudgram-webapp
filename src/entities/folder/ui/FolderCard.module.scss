@@ -1,0 +1,22 @@
+@use "../../../shared/config/colors.scss" as colors;
+
+.folderCard {
+    &__container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+        padding: 11px 12px;
+        border-radius: 8px;
+        max-width: 180px;
+        background-color: colors.$foldercard-bg-color;
+        color: colors.$text-black-default;
+    }
+
+    &__title {
+        font-size: 13px;
+        line-height: 18px;
+        font-family: "Inter", sans-serif;
+        font-weight: 500;
+    }
+}

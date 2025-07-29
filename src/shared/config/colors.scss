@@ -1,0 +1,25 @@
+$text-black-default: black;
+$text-gray-default: rgba(0, 0, 0, 0.3);
+$text-white-default: white;
+$text-gray-for-filters: #5b5b5b;
+
+$bg-color-black: black;
+
+$button-bg-color: #497fff;
+
+/* Borders Colors */
+$border-default: rgba(0, 0, 0, 0.15);
+
+/* Sidebar Colors */
+$color-text-default: #5b5b5b;
+$color-text-hover-focus: #497fff;
+$color-text-active: #222222;
+
+$sidebar-bg-color: rgba(0, 0, 0, 5%);
+$sidebar-shadow: 0 0 4px rgba(1, 1, 1, 0.2);
+
+$color-bg-hover-focus: rgba(73, 127, 255, 0.1);
+$color-bg-active: var(--chakra-colors-gray-300);
+
+/* FolderCard Colors */
+$foldercard-bg-color: rgba(73, 127, 255, 0.05);

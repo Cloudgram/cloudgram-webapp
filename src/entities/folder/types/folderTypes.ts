@@ -1,3 +1,9 @@
-export type getFolderArgs = {
-    folder_id: string;
+import type { FolderType } from '../model/folderSchema';
+
+export type apiFolderArgs = {
+    folderID: string;
+};
+
+export type folderCardArgs = {
+    folderData: FolderType;
 };

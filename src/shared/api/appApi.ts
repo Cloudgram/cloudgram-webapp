@@ -3,7 +3,7 @@ import { baseQuery } from './baseQuery';
 import type { CreateSessionPayload, SessionResponse } from '@/features/auth/model/authTypes';
 import type { UserType } from '@/entities/user/model/userSchema';
 import type { RootFolderType } from '@/entities/folder/model/folderSchema';
-import type { getFolderArgs } from '@/entities/folder/types/folderTypes';
+import type { apiFolderArgs } from '@/entities/folder/types/folderTypes';
 
 export const appApi = createApi({
     reducerPath: 'appApi',
@@ -34,9 +34,9 @@ export const appApi = createApi({
 
         // =========== User ===========
 
-        getFolder: builder.query<RootFolderType, getFolderArgs>({
-            query: ({ folder_id }) => ({
-                url: `/folder/${folder_id}`,
+        getFolder: builder.query<RootFolderType, apiFolderArgs>({
+            query: ({ folderID }) => ({
+                url: `/folder/${folderID}`,
                 method: 'GET',
             }),
         }),
@@ -47,6 +47,7 @@ export const {
     useCreateSessionMutation,
     useDeleteSessionMutation,
     useGetUserQuery,
+    useGetFolderQuery,
     // useGetFsItemsQuery,
     // useInitFileUploadMutation,
     // useUploadFilePreviewMutation,
@@ -58,7 +59,6 @@ export const {
     // useCopyFileMutation,
     // useShareFileMutation,
     // useCreateFolderMutation,
-    // useGetFolderQuery,
     // useTagFolderMutation,
     // useRemoveTagFolderMutation,
     // useEditFolderMutation,

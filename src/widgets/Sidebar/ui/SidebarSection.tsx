@@ -2,7 +2,6 @@
 import { VStack, Text } from '@chakra-ui/react';
 import type React from 'react';
 import styles from './Sidebar.module.scss';
-// import { useState } from 'react';
 
 interface SidebarSectionProps {
     title: string;

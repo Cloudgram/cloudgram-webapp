@@ -36,7 +36,7 @@ const fileSchema = z.object({
 export const rootFolderSchema = z.object({
     success: z.boolean(),
     id: z.string(),
-    folder_id: z.string().nullable(),
+    parent_folder_id: z.string().nullable(),
     title: z.string(),
     created_at: z.date(),
     owner: z.boolean(),
@@ -47,4 +47,5 @@ export const rootFolderSchema = z.object({
     files: z.array(fileSchema),
 });
 
+export type FolderType = z.infer<typeof folderSchema>;
 export type RootFolderType = z.infer<typeof rootFolderSchema>;
