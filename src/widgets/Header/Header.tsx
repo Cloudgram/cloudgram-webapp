@@ -1,7 +1,9 @@
-import { Avatar, Button, Text } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
 import styles from './Header.module.scss';
 import { UploadIcon } from '@/shared/assets/icons/UploadIcon';
 import { useGetUserQuery } from '@shared/api/appApi';
+import { UserAvatar } from '@/entities/user/ui/UserAvatar';
+import { UserName } from '@/entities/user/ui/UserName';
 
 export const Header = () => {
     const { data: user } = useGetUserQuery();
@@ -38,11 +40,8 @@ export const Header = () => {
                         Create Folder
                     </Button>
                     <div className={styles.header__user}>
-                        <Avatar.Root className={styles.header__user_avatar}>
-                            <Avatar.Fallback fontSize={'0.875rem'} name={user?.full_name} />
-                            <Avatar.Image src={user?.avatar_url || ''} alt={user?.full_name} />
-                        </Avatar.Root>
-                        <Text>{user?.full_name}</Text>
+                        <UserAvatar userData={user} />
+                        <UserName username={user?.full_name} />
                     </div>
                 </div>
             </div>

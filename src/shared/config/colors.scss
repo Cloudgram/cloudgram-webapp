@@ -7,6 +7,9 @@ $bg-color-black: black;
 
 $button-bg-color: #497fff;
 
+/* Header Colors */
+$header-user-bg-hover: rgba(0, 0, 0, 0.15);
+
 /* Borders Colors */
 $border-default: rgba(0, 0, 0, 0.15);
 
@@ -20,6 +23,10 @@ $sidebar-shadow: 0 0 4px rgba(1, 1, 1, 0.2);
 
 $color-bg-hover-focus: rgba(73, 127, 255, 0.1);
 $color-bg-active: var(--chakra-colors-gray-300);
+
+/* ViewToggle Colors*/
+$view-toggle-bg-color-active: rgba(73, 127, 255, 0.1);
+$view-toggle-svg-color-active: #497fff;
 
 /* FolderCard Colors */
 $foldercard-bg-color: rgba(73, 127, 255, 0.05);

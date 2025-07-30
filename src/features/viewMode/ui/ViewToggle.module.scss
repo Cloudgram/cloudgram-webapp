@@ -1,0 +1,26 @@
+@use "../../../shared/config/colors.scss" as colors;
+
+.viewToggle {
+    &__container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    &__button {
+        padding: 6px;
+        width: 26px;
+        height: 26px;
+        border-radius: 4px;
+        box-sizing: border-box;
+
+        &__active {
+            background-color: colors.$view-toggle-bg-color-active;
+
+            svg path {
+                stroke: colors.$view-toggle-svg-color-active;
+                stroke-opacity: 1;
+            }
+        }
+    }
+}

@@ -1,0 +1,13 @@
+@use "../../../shared/config/colors.scss" as colors;
+
+.user {
+    &__avatar {
+        width: 30px;
+        height: 30px;
+        background-color: colors.$bg-color-black;
+        color: colors.$text-white-default;
+    }
+
+    &__name {
+    }
+}
