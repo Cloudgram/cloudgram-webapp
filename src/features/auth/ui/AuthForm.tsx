@@ -11,7 +11,7 @@ export const AuthForm = ({ isLoading = false }: AuthFormProps) => {
             <VStack gap={8} className={styles.auth__stack}>
                 <Heading className={styles.auth__title}>
                     <Icon size='2xl'>
-                        <img src='/favicon.ico' />
+                        <img alt='Cloudgram logo' src='/favicon.ico' />
                     </Icon>
                     Cloudgram
                 </Heading>
@@ -24,10 +24,19 @@ export const AuthForm = ({ isLoading = false }: AuthFormProps) => {
                 ) : (
                     <VStack gap={5} className={styles.auth__stack_content}>
                         <Text className={styles.auth__stack_content_text} textAlign='center'>
-                            To log in to Cloudgram, log in via Telegram
+                            To log in to Cloudgram,
+                            <br /> log in via Telegram bot
                         </Text>
                         <Button asChild className={styles.auth__stack_content_button}>
-                            <a href='https://t.me/cloudgram_web_bot' target='_blank'>
+                            <a
+                                href={
+                                    import.meta.env.MODE === 'development'
+                                        ? import.meta.env.VITE_DEVELOPMENT_URL_BOT
+                                        : import.meta.env.VITE_PRODUCTION_URL_BOT
+                                }
+                                target='_blank'
+                                rel='noopener noreferrer'
+                            >
                                 Log in with Telegram
                             </a>
                         </Button>
