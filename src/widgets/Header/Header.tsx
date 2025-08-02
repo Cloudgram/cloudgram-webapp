@@ -4,9 +4,16 @@ import { UploadIcon } from '@/shared/assets/icons/UploadIcon';
 import { useGetUserQuery } from '@shared/api/appApi';
 import { UserAvatar } from '@/entities/user/ui/UserAvatar';
 import { UserName } from '@/entities/user/ui/UserName';
+import { UserProfileModal } from '@/features/userProfileModal/ui/UserProfileModal';
+import { useState } from 'react';
 
 export const Header = () => {
     const { data: user } = useGetUserQuery();
+    const [isUserProfileModalOpen, setIsUserProfileModalOpen] = useState<boolean>(false);
+
+    const handleOpenUserProfile = () => {
+        setIsUserProfileModalOpen(!isUserProfileModalOpen);
+    };
 
     return (
         <div className={styles.header}>
@@ -39,10 +46,16 @@ export const Header = () => {
                         <UploadIcon />
                         Create Folder
                     </Button>
-                    <div className={styles.header__user}>
+                    <Button
+                        colorPalette={'ghost'}
+                        onClick={handleOpenUserProfile}
+                        className={styles.header__user}
+                        aria-label='Open user profile'
+                    >
                         <UserAvatar userData={user} />
                         <UserName username={user?.full_name} />
-                    </div>
+                    </Button>
+                    <UserProfileModal isOpen={isUserProfileModalOpen} userData={user} />
                 </div>
             </div>
         </div>

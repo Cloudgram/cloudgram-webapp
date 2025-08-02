@@ -3,8 +3,8 @@ export const ROUTES = {
         DASHBOARD: {
             HOME: '/home',
             WORKSPACES: '/workspaces',
-            SEARCH: '/search',
         },
+        FOLDER: '/folder/:currentFolderID',
         FILES: {
             PHOTOS: '/photos',
             VIDEOS: '/videos',

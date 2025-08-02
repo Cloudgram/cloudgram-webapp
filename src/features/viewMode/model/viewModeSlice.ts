@@ -4,16 +4,8 @@ import { loadViewModeFromLS } from '../lib/persist';
 
 const defaultState: ViewModeState = {
     main: 'grid',
-    favorites: 'grid',
-    recent: 'grid',
-    search: 'grid',
-    shared: 'grid',
-    documents: 'grid',
-    audio: 'grid',
-    photos: 'grid',
-    videos: 'grid',
-    trash: 'grid',
-    workspaces: 'grid',
+    folderViewerFolders: 'grid',
+    folderViewerFiles: 'grid',
 };
 
 const initialState: ViewModeState = loadViewModeFromLS() || defaultState;

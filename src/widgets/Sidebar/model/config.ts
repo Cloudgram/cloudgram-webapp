@@ -6,7 +6,7 @@ import { SharedIcon } from '@shared/assets/icons/SharedIcon';
 import { AudioIcon } from '@shared/assets/icons/AudioIcon';
 import { HomeIcon } from '@shared/assets/icons/HomeIcon';
 import { WorkspacesIcon } from '@shared/assets/icons/WorkspacesIcon';
-import { SearchIcon } from '@shared/assets/icons/SearchIcon';
+// import { SearchIcon } from '@shared/assets/icons/SearchIcon';
 import { TrashIcon } from '@shared/assets/icons/TrashIcon';
 import { SettingsIcon } from '@shared/assets/icons/SettingsIcon';
 
@@ -21,11 +21,11 @@ export const sidebarMainItems = [
         label: 'Workspaces',
         route: '/workspaces',
     },
-    {
-        icon: SearchIcon,
-        label: 'Search',
-        route: '/search',
-    },
+    // {
+    //     icon: SearchIcon,
+    //     label: 'Search',
+    //     route: '/search',
+    // },
 ];
 
 export const sidebarCategoriesItems = [

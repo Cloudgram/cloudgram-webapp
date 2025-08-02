@@ -14,6 +14,7 @@ import { AudioPage } from '@pages/audio/AudioPage';
 import { SharedPage } from '@pages/shared/SharedPage';
 import { TrashPage } from '@pages/trash/TrashPage';
 import { CloudLayout } from '@/layouts/CloudLayout/CloudLayout';
+import { FolderPage } from '@/pages/folder/FolderPage';
 
 export const AppRoutes = () => {
     return (
@@ -29,7 +30,7 @@ export const AppRoutes = () => {
                                 path={ROUTES.PRIVATE.DASHBOARD.WORKSPACES}
                                 element={<WorkSpacesPage />}
                             />
-                            {/* <Route path={ROUTES.PRIVATE.DASHBOARD.SEARCH} element={<MainLayout />} /> */}
+                            <Route path={ROUTES.PRIVATE.FOLDER} element={<FolderPage />} />
                             <Route path={ROUTES.PRIVATE.FILES.PHOTOS} element={<PhotosPage />} />
                             <Route path={ROUTES.PRIVATE.FILES.VIDEOS} element={<VideosPage />} />
                             <Route path={ROUTES.PRIVATE.FILES.AUDIO} element={<AudioPage />} />
