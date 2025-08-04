@@ -8,20 +8,26 @@ import { useAppSelector } from '@shared/hooks/useRedux';
 import { FileListViewer } from './FileListViewer';
 import { BackButton } from './BackButton';
 import { Box, Spinner } from '@chakra-ui/react';
+import { queryStateHelper } from '@/shared/lib/queryStateHelper';
 
 export const FolderViewer = () => {
     const foldersSection = 'folderViewerFolders' as const;
     const filessSection = 'folderViewerFiles' as const;
     const { currentFolderID } = useParams<{ currentFolderID: string }>();
-    const { data: folderData, isLoading } = useGetFolderQuery({
+    const {
+        data: folderData,
+        isLoading,
+        isFetching,
+    } = useGetFolderQuery({
         folderID: currentFolderID || 'root',
     });
     const viewModeFolders = useAppSelector(selectViewModeBySection(foldersSection));
     const viewModeFiles = useAppSelector(selectViewModeBySection(filessSection));
+    const loadingState = queryStateHelper(isLoading, isFetching);
 
     return (
         <div className={styles.folderViewer}>
-            {isLoading ? (
+            {loadingState ? (
                 <Box
                     className={styles.folderViewer__spinnerBox}
                     height={'100%'}

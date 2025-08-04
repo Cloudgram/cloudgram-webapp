@@ -9,7 +9,7 @@ interface UserAvatarProps {
 
 export const UserAvatar = ({ userData, className }: UserAvatarProps) => {
     return (
-        <Avatar.Root className={styles.user__avatar ?? className}>
+        <Avatar.Root className={className ?? styles.user__avatar}>
             <Avatar.Fallback fontSize={'0.875rem'} name={userData?.full_name} />
             <Avatar.Image src={userData?.avatar_url || ''} alt={userData?.full_name} />
         </Avatar.Root>

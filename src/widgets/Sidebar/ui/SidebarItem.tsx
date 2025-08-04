@@ -1,30 +1,30 @@
 import { Button } from '@chakra-ui/react';
 import styles from './Sidebar.module.scss';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useActiveRoute } from '@/shared/hooks/useActiveRoute';
 
 interface SidebarItemProps {
     icon: React.ReactNode;
     label: string;
-    route?: string;
+    route: string;
 }
 
 export const SidebarItem = ({ icon, label, route }: SidebarItemProps) => {
-    const navigate = useNavigate();
-
-    const handleRoute = (route: string | undefined) => {
-        if (route) {
-            navigate(route);
-        }
-    };
-
+    const activePage = useActiveRoute(route);
     return (
         <Button
-            onClick={() => handleRoute(route)}
+            asChild
             variant='ghost'
-            className={styles.sidebar__button}
+            className={
+                activePage
+                    ? `${styles.sidebar__button} ${styles.sidebar__button__active}`
+                    : styles.sidebar__button
+            }
         >
-            {icon}
-            {label}
+            <Link to={route}>
+                {icon}
+                {label}
+            </Link>
         </Button>
     );
 };

@@ -45,6 +45,26 @@
         font-weight: 500;
         gap: 12px;
 
+        &__active {
+            background-color: colors.$color-bg-hover-focus;
+            color: colors.$color-text-hover-focus;
+
+            svg path {
+                stroke: colors.$color-text-hover-focus;
+                stroke-opacity: 1;
+            }
+
+            svg line {
+                stroke: colors.$color-text-hover-focus;
+                stroke-opacity: 1;
+            }
+
+            svg circle {
+                stroke: colors.$color-text-hover-focus;
+                stroke-opacity: 1;
+            }
+        }
+
         &:hover {
             background-color: colors.$color-bg-hover-focus;
             color: colors.$color-text-hover-focus;

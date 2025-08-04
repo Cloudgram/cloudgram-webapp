@@ -5,6 +5,7 @@ import { ViewToggle } from '@/features/viewMode/ui/ViewToggle';
 import { useAppDispatch } from '@shared/hooks/useRedux';
 import { setViewMode } from '@features/viewMode/model/viewModeSlice';
 import type { ViewSection } from '@/features/viewMode/model/types';
+import { useNavigate } from 'react-router-dom';
 
 interface FolderListViewerProps {
     foldersArray: RootFolderType['folders'];
@@ -14,6 +15,7 @@ interface FolderListViewerProps {
 
 export const FolderListViewer = ({ foldersArray, viewMode, section }: FolderListViewerProps) => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     return (
         <div className={styles.folderViewer__folders__container}>
@@ -40,7 +42,11 @@ export const FolderListViewer = ({ foldersArray, viewMode, section }: FolderList
                         }
                         key={folder.id}
                     >
-                        <FolderCard key={folder.id} folderData={folder} />
+                        <FolderCard
+                            onDoubleClick={() => navigate(`/folder/${folder.id}`)}
+                            key={folder.id}
+                            folderData={folder}
+                        />
                     </div>
                 ))}
             </div>

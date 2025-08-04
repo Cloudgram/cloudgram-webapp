@@ -6,10 +6,18 @@
         flex-direction: row;
         align-items: center;
         gap: 12px;
-        padding: 11px 12px;
+        padding: 10px 12px;
         border-radius: 8px;
         background-color: colors.$foldercard-bg-color;
         color: colors.$text-black-default;
+        cursor: pointer;
+        user-select: none;
+        box-sizing: border-box;
+        border: 1px solid transparent;
+
+        &:active {
+            border: 1px solid black;
+        }
     }
 
     &__title {

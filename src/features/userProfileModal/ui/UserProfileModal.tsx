@@ -20,14 +20,25 @@ export const UserProfileModal = ({ userData, isOpen }: UserProfileModalProps) =>
             className={styles.userProfileModal}
         >
             <Card.Body p='20px' gap={4} flexDirection='column'>
-                <Stack alignItems='center' flexDirection='row'>
-                    <Avatar.Root size='2xl' shape='rounded'>
+                <Stack
+                    className={userData?.subscriber ? styles.userProfileModal__avatar__premium : ''}
+                    alignItems='center'
+                    flexDirection='row'
+                >
+                    <Avatar.Root
+                        className={styles.userProfileModal__avatar}
+                        size='2xl'
+                        shape='rounded'
+                    >
                         <Avatar.Image src={userData?.avatar_url || ''} />
-                        <Avatar.Fallback name='Nue Camp' />
+                        <Avatar.Fallback name={userData?.full_name} />
                     </Avatar.Root>
                     <Stack gap='0'>
                         <Card.Title fontWeight='10px'>{userData?.full_name}</Card.Title>
-                        <Card.Description fontSize='12px'>
+                        <Card.Description
+                            color={userData?.subscriber ? 'white' : ''}
+                            fontSize='12px'
+                        >
                             {userData?.subscriber
                                 ? `Premium until: ${dateFormat(userData.subscriber.end)}`
                                 : 'No subscription'}

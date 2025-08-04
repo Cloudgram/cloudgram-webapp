@@ -6,4 +6,5 @@ export type apiFolderArgs = {
 
 export type folderCardArgs = {
     folderData: FolderType;
+    onDoubleClick?: () => void;
 };

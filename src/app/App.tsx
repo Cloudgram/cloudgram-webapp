@@ -1,5 +1,5 @@
 import { Toaster } from '@/shared/components/Toaster/toaster';
-import { RouterProvider } from './providers/Router/RouterProvider';
+import { RouterProvider } from './providers/RouterProvider';
 
 function App() {
     return (

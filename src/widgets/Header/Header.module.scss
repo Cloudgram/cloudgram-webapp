@@ -57,6 +57,23 @@
         gap: 8px;
         font-size: 14px;
         font-weight: 600;
+
+        &__icon {
+            svg path {
+                stroke: colors.$color-text-hover-focus;
+                stroke-opacity: 1;
+            }
+
+            svg line {
+                stroke: colors.$color-text-hover-focus;
+                stroke-opacity: 1;
+            }
+
+            svg circle {
+                stroke: colors.$color-text-hover-focus;
+                stroke-opacity: 1;
+            }
+        }
     }
 
     &__button {
@@ -67,5 +84,15 @@
         max-height: 32px;
         border-radius: 8px;
         background-color: colors.$button-bg-color;
+    }
+
+    &__search {
+        max-width: 540px;
+        width: 100%;
+        margin: 0 16px;
+        &__input {
+            max-width: 540px;
+            max-height: 32px;
+        }
     }
 }

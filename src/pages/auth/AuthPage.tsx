@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { toaster } from '@shared/components/Toaster/toaster';
 import type { ErrorResponse } from '@/features/auth/model/authTypes';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { ROUTES } from '@/app/providers/Router/routes.config';
+import { ROUTES } from '@/app/Router/routes.config';
 
 type ApiError = FetchBaseQueryError & {
     data: ErrorResponse;
@@ -44,6 +44,7 @@ export const AuthPage = () => {
                 },
             });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [status]);
 
     return (
