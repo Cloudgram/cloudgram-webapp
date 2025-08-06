@@ -4,7 +4,6 @@ export const ROUTES = {
             HOME: '/home',
             WORKSPACES: '/workspaces',
         },
-        FOLDER: '/folder/:currentFolderID',
         FILES: {
             PHOTOS: '/photos',
             VIDEOS: '/videos',
@@ -13,9 +12,11 @@ export const ROUTES = {
             SHARED: '/shared',
             TRASH: '/trash',
         },
+        FOLDER: '/folder/:currentFolderID',
+        SETTINGS: '/settings',
     },
     PUBLIC: {
         AUTH: '/auth',
-        NOT_FOUND: '/404',
+        NOT_FOUND: '/not-found',
     },
 } as const;

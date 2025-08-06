@@ -84,6 +84,14 @@
         max-height: 32px;
         border-radius: 8px;
         background-color: colors.$button-bg-color;
+
+        &:hover {
+            background-color: colors.$button-bg-color-hover;
+        }
+
+        &:active {
+            background-color: colors.$button-bg-color-active;
+        }
     }
 
     &__search {

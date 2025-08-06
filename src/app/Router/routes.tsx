@@ -15,6 +15,7 @@ import { SharedPage } from '@pages/shared/SharedPage';
 import { TrashPage } from '@pages/trash/TrashPage';
 import { CloudLayout } from '@/layouts/CloudLayout/CloudLayout';
 import { FolderPage } from '@/pages/folder/FolderPage';
+import { SettingsPage } from '@/pages/settings/SettingsPage';
 
 export const AppRoutes = () => {
     return (
@@ -36,6 +37,7 @@ export const AppRoutes = () => {
                             <Route path={ROUTES.PRIVATE.FILES.AUDIO} element={<AudioPage />} />
                             <Route path={ROUTES.PRIVATE.FILES.SHARED} element={<SharedPage />} />
                             <Route path={ROUTES.PRIVATE.FILES.TRASH} element={<TrashPage />} />
+                            <Route path={ROUTES.PRIVATE.SETTINGS} element={<SettingsPage />} />
                             <Route
                                 path={ROUTES.PRIVATE.FILES.DOCUMENTS}
                                 element={<DocumentsPage />}

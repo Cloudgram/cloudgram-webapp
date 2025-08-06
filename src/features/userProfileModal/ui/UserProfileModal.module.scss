@@ -4,15 +4,15 @@
     position: absolute;
     right: 0;
     top: 45px;
-    max-width: 300px;
-    width: 100%;
+    width: 290px;
+    box-shadow: 0 0px 10px var(--shadow-card);
 
     &__avatar {
         border-radius: 8px;
         background-color: colors.$bg-color-black;
         color: colors.$text-white-default;
         &__premium {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5)), url("/public/og-image.gif");
+            background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5)), url("/og-image.gif");
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center 55%;
