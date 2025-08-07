@@ -13,9 +13,9 @@ import { WorkSpacesPage } from '@pages/workspaces/WorkSpacesPage';
 import { AudioPage } from '@pages/audio/AudioPage';
 import { SharedPage } from '@pages/shared/SharedPage';
 import { TrashPage } from '@pages/trash/TrashPage';
-import { CloudLayout } from '@/layouts/CloudLayout/CloudLayout';
-import { FolderPage } from '@/pages/folder/FolderPage';
-import { SettingsPage } from '@/pages/settings/SettingsPage';
+import { CloudLayout } from '@layouts/CloudLayout/CloudLayout';
+import { FolderPage } from '@pages/folder/FolderPage';
+import { SettingsPage } from '@pages/settings/SettingsPage';
 
 export const AppRoutes = () => {
     return (

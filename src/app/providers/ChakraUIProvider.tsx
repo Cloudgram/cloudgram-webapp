@@ -1,7 +1,8 @@
 // provider.tsx
 import { ChakraProvider } from '@chakra-ui/react';
+import { ColorModeScript } from '@chakra-ui/color-mode';
 import { system } from '@shared/theme/theme';
-import { ThemeProvider } from 'next-themes';
+import { config } from '@shared/theme/theme.config';
 
 interface AppProviderProps {
     children: React.ReactNode;
@@ -9,13 +10,9 @@ interface AppProviderProps {
 
 export const ChakraUIProvider = ({ children }: AppProviderProps) => {
     return (
-        <ThemeProvider
-            attribute='data-theme'
-            defaultTheme='light'
-            enableSystem={true}
-            themes={['light', 'dark']}
-        >
-            <ChakraProvider value={system}>{children}</ChakraProvider>
-        </ThemeProvider>
+        <ChakraProvider value={system}>
+            <ColorModeScript initialColorMode={config.initialColorMode} />
+            {children}
+        </ChakraProvider>
     );
 };
