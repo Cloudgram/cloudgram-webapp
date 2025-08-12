@@ -8,7 +8,7 @@ import {
     sidebarMainItems,
     sidebarCategoriesItems,
     sidebarSettingsItems,
-} from '../../widgets/Sidebar/model/config';
+} from '../../features/sidebar/model/config';
 
 export const getSidebarLabelByPath = (pathname: string): SidebarItem | null => {
     const items = [...sidebarMainItems, ...sidebarCategoriesItems, ...sidebarSettingsItems];

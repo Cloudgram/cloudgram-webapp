@@ -29,13 +29,14 @@ export const FileExplorer = ({ viewMode }: FileExplorerProps) => {
                     <Spinner color='teal.500' size='xl' />
                 </Box>
             ) : (
-                <div
+                <Box
+                    as={'ul'}
                     className={
                         viewMode === 'grid' ? styles.fileExplorer__grid : styles.fileExplorer__list
                     }
                 >
                     {folderData?.folders.map(folder => (
-                        <div
+                        <li
                             className={
                                 viewMode === 'grid'
                                     ? styles.fileExplorer__item
@@ -48,9 +49,9 @@ export const FileExplorer = ({ viewMode }: FileExplorerProps) => {
                                 key={folder.id}
                                 folderData={folder}
                             />
-                        </div>
+                        </li>
                     ))}
-                </div>
+                </Box>
             )}
         </>
     );

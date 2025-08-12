@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { ViewMode, ViewModeState, ViewSection } from './types';
+import type { ViewMode, ViewModeState, ViewSection } from './viewMode.types';
 import { loadViewModeFromLS } from '../lib/persist';
 
 const defaultState: ViewModeState = {

@@ -3,8 +3,8 @@ import styles from './FolderPage.module.scss';
 
 export const FolderPage = () => {
     return (
-        <div className={styles.folderPage}>
+        <section className={styles.folderPage}>
             <FolderViewerWidget />
-        </div>
+        </section>
     );
 };

@@ -1,13 +1,15 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from './baseQuery';
-import type { CreateSessionPayload, SessionResponse } from '@/features/auth/model/authTypes';
+import type { CreateSessionPayload, SessionResponse } from '@/features/auth/model/auth.types';
 import type { UserType } from '@/entities/user/model/userSchema';
 import type { RootFolderType } from '@/entities/folder/model/folderSchema';
-import type { apiFolderArgs } from '@/entities/folder/types/folderTypes';
+import type { apiFolderArgs, createFolderArgs } from '@/entities/folder/types/folder.types';
+import type { ColorResponseType, ColorType } from '@/entities/colors/model/colorSchema';
 
 export const appApi = createApi({
     reducerPath: 'appApi',
     baseQuery,
+    tagTypes: ['Folders'],
     endpoints: builder => ({
         createSession: builder.mutation<SessionResponse, CreateSessionPayload>({
             query: ({ secret }) => ({
@@ -32,13 +34,37 @@ export const appApi = createApi({
             }),
         }),
 
-        // =========== User ===========
+        // =========== Folders ===========
 
         getFolder: builder.query<RootFolderType, apiFolderArgs>({
             query: ({ folderID }) => ({
                 url: `/folder/${folderID}`,
                 method: 'GET',
             }),
+            providesTags: (_result, _error, { folderID }) => [{ type: 'Folders', id: folderID }],
+        }),
+
+        createFolder: builder.mutation<void, createFolderArgs>({
+            query: ({ parent_folder_id, title, color_id }) => ({
+                url: `/folder`,
+                method: 'POST',
+                body: {
+                    parent_folder_id,
+                    title,
+                    color_id,
+                },
+            }),
+            invalidatesTags: ['Folders'],
+        }),
+
+        // =========== Folders ===========
+
+        getColors: builder.query<ColorType[], void>({
+            query: () => ({
+                url: `/color`,
+                method: 'GET',
+            }),
+            transformResponse: (response: ColorResponseType) => response.data,
         }),
     }),
 });
@@ -48,6 +74,8 @@ export const {
     useDeleteSessionMutation,
     useGetUserQuery,
     useGetFolderQuery,
+    useCreateFolderMutation,
+    useGetColorsQuery,
     // useGetFsItemsQuery,
     // useInitFileUploadMutation,
     // useUploadFilePreviewMutation,
@@ -58,7 +86,6 @@ export const {
     // useEditFileMutation,
     // useCopyFileMutation,
     // useShareFileMutation,
-    // useCreateFolderMutation,
     // useTagFolderMutation,
     // useRemoveTagFolderMutation,
     // useEditFolderMutation,
@@ -68,7 +95,6 @@ export const {
     // useDeleteTrashMutation,
     // useMoveToTrashMutation,
     // useRepairTrashMutation,
-    // useGetColorsQuery,
     // useGetGratitudeQuery,
     // useGetHealthQuery,
 } = appApi;

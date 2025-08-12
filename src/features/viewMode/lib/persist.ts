@@ -1,4 +1,4 @@
-import type { ViewModeState } from '../model/types';
+import type { ViewModeState } from '../model/viewMode.types';
 
 const STORAGE_KEY = 'viewMode';
 

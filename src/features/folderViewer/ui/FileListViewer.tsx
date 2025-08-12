@@ -3,7 +3,8 @@ import styles from './FolderViewer.module.scss';
 import { ViewToggle } from '@/features/viewMode/ui/ViewToggle';
 import { useAppDispatch } from '@shared/hooks/useRedux';
 import { setViewMode } from '@features/viewMode/model/viewModeSlice';
-import type { ViewSection } from '@/features/viewMode/model/types';
+import type { ViewSection } from '@/features/viewMode/model/viewMode.types';
+import { Box } from '@chakra-ui/react';
 
 interface FileListViewerProps {
     filesArray: RootFolderType['files'];
@@ -16,14 +17,15 @@ export const FileListViewer = ({ filesArray, viewMode, section }: FileListViewer
 
     return (
         <div className={styles.folderViewer__files__container}>
-            <div className={styles.folderViewer__header}>
+            <Box className={styles.folderViewer__header}>
                 <h3 className={styles.folderViewer__header__title}>Files</h3>
                 <ViewToggle
                     value={viewMode}
                     onChange={mode => dispatch(setViewMode({ section, mode }))}
                 />
-            </div>
-            <div
+            </Box>
+            <Box
+                as={'ul'}
                 className={
                     viewMode === 'grid'
                         ? styles.folderViewer__files__grid
@@ -31,7 +33,7 @@ export const FileListViewer = ({ filesArray, viewMode, section }: FileListViewer
                 }
             >
                 {filesArray.map(file => (
-                    <div
+                    <li
                         className={
                             viewMode === 'grid'
                                 ? styles.folderViewer__item
@@ -41,9 +43,9 @@ export const FileListViewer = ({ filesArray, viewMode, section }: FileListViewer
                     >
                         {file.title}
                         {/* <FolderCard key={file.id} folderData={file} /> */}
-                    </div>
+                    </li>
                 ))}
-            </div>
+            </Box>
         </div>
     );
 };

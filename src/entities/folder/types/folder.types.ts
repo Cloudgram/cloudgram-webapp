@@ -8,3 +8,9 @@ export type folderCardArgs = {
     folderData: FolderType;
     onDoubleClick?: () => void;
 };
+
+export type createFolderArgs = {
+    parent_folder_id: string;
+    title: string;
+    color_id: string;
+};

@@ -5,9 +5,9 @@ import React from 'react';
 
 export const HomePage = React.memo(() => {
     return (
-        <div className={styles.homepage}>
+        <section className={styles.homepage}>
             <SearchWidget searchInputClassName={styles.searchInput} />
             <FileExplorerWidget />
-        </div>
+        </section>
     );
 });

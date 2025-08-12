@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useCreateSessionMutation } from '@/shared/api/appApi';
 import { useEffect } from 'react';
 import { toaster } from '@shared/components/Toaster/toaster';
-import type { ErrorResponse } from '@/features/auth/model/authTypes';
+import type { ErrorResponse } from '@/features/auth/model/auth.types';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { ROUTES } from '@/app/Router/routes.config';
 

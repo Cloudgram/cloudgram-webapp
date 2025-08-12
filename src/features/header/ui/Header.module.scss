@@ -1,4 +1,4 @@
-@use "../../shared/config/colors.scss" as colors;
+@use "../../../shared/config/colors.scss" as colors;
 
 .header {
     display: flex;
@@ -103,4 +103,16 @@
             max-height: 32px;
         }
     }
+}
+
+.headerActionMenu {
+    position: absolute;
+    gap: 20px;
+    top: 40px;
+    right: 98px;
+    box-shadow: 0 0px 10px var(--shadow-card);
+    padding: 12px;
+    z-index: 2;
+    background-color: colors.$header-bg-white;
+    border-radius: 8px;
 }

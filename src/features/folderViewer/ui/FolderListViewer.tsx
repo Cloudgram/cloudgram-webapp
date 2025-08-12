@@ -4,8 +4,9 @@ import { FolderCard } from '@/entities/folder/ui/FolderCard';
 import { ViewToggle } from '@/features/viewMode/ui/ViewToggle';
 import { useAppDispatch } from '@shared/hooks/useRedux';
 import { setViewMode } from '@features/viewMode/model/viewModeSlice';
-import type { ViewSection } from '@/features/viewMode/model/types';
+import type { ViewSection } from '@/features/viewMode/model/viewMode.types';
 import { useNavigate } from 'react-router-dom';
+import { Box } from '@chakra-ui/react';
 
 interface FolderListViewerProps {
     foldersArray: RootFolderType['folders'];
@@ -19,14 +20,15 @@ export const FolderListViewer = ({ foldersArray, viewMode, section }: FolderList
 
     return (
         <div className={styles.folderViewer__folders__container}>
-            <div className={styles.folderViewer__header}>
+            <Box className={styles.folderViewer__header}>
                 <h3 className={styles.folderViewer__header__title}>Folders</h3>
                 <ViewToggle
                     value={viewMode}
                     onChange={mode => dispatch(setViewMode({ section, mode }))}
                 />
-            </div>
-            <div
+            </Box>
+            <Box
+                as={'ul'}
                 className={
                     viewMode === 'grid'
                         ? styles.folderViewer__folders__grid
@@ -34,7 +36,7 @@ export const FolderListViewer = ({ foldersArray, viewMode, section }: FolderList
                 }
             >
                 {foldersArray.map(folder => (
-                    <div
+                    <li
                         className={
                             viewMode === 'grid'
                                 ? styles.folderViewer__item
@@ -47,9 +49,9 @@ export const FolderListViewer = ({ foldersArray, viewMode, section }: FolderList
                             key={folder.id}
                             folderData={folder}
                         />
-                    </div>
+                    </li>
                 ))}
-            </div>
+            </Box>
         </div>
     );
 };

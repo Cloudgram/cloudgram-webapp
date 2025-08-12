@@ -1,7 +1,13 @@
-export const CreateFolderMoadl = () => {
+import { Box } from '@chakra-ui/react';
+import styles from './CreateFolder.module.scss';
+import { CreateFolderForm } from './CreateFolderForm';
+
+export const CreateFolderModal = () => {
     return (
-        <>
-            <h1>CreateFolderMoadl</h1>
-        </>
+        <Box className={styles.createFolderModal}>
+            <Box className={styles.createFolderModal__container}>
+                <CreateFolderForm />
+            </Box>
+        </Box>
     );
 };

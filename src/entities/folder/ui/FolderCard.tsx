@@ -1,5 +1,5 @@
 import { FolderIconSmall } from '@/shared/assets/icons/FolderIconSmall';
-import type { folderCardArgs } from '../types/folderTypes';
+import type { folderCardArgs } from '../types/folder.types';
 import styles from './FolderCard.module.scss';
 
 export const FolderCard = ({ folderData, onDoubleClick }: folderCardArgs) => {
