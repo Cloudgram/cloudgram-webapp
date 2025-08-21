@@ -12,7 +12,7 @@ import { queryStateHelper } from '@/shared/lib/queryStateHelper';
 
 export const FolderViewer = () => {
     const foldersSection = 'folderViewerFolders' as const;
-    const filessSection = 'folderViewerFiles' as const;
+    const filesSection = 'folderViewerFiles' as const;
     const { currentFolderID } = useParams<{ currentFolderID: string }>();
     const {
         data: folderData,
@@ -22,7 +22,7 @@ export const FolderViewer = () => {
         folderID: currentFolderID || 'root',
     });
     const viewModeFolders = useAppSelector(selectViewModeBySection(foldersSection));
-    const viewModeFiles = useAppSelector(selectViewModeBySection(filessSection));
+    const viewModeFiles = useAppSelector(selectViewModeBySection(filesSection));
     const loadingState = queryStateHelper(isLoading, isFetching);
 
     return (
@@ -51,7 +51,7 @@ export const FolderViewer = () => {
                     )}
                     {folderData?.files && folderData.files.length > 0 && (
                         <FileListViewer
-                            section={filessSection}
+                            section={filesSection}
                             viewMode={viewModeFiles}
                             filesArray={folderData?.files || []}
                         />

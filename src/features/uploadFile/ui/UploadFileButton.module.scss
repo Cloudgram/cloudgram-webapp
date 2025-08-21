@@ -1,0 +1,15 @@
+.fileUpload {
+    &__input {
+        display: none;
+        position: absolute;
+        width: 0;
+        height: 0;
+        opacity: 0;
+        inset: 0;
+        overflow: hidden;
+    }
+
+    &__button {
+        width: 100%;
+    }
+}

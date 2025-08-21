@@ -1,3 +1,4 @@
+import { fileSchema } from '@entities/file/model/fileShema';
 import z from 'zod';
 
 const colorSchema = z.object({
@@ -18,19 +19,6 @@ const folderSchema = z.object({
     share: z.string(),
     tags: z.array(z.string()),
     color: colorSchema.nullable(),
-});
-
-const fileSchema = z.object({
-    fs_type: z.literal('file'),
-    id: z.string(),
-    title: z.string(),
-    views: z.number(),
-    extension: z.string(),
-    created_at: z.string(),
-    preview_file_id: z.number().nullable(),
-    owner: z.boolean(),
-    share: z.string(),
-    tags: z.array(z.string()),
 });
 
 export const rootFolderSchema = z.object({

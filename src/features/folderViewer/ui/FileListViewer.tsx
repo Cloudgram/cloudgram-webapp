@@ -1,10 +1,11 @@
 import type { RootFolderType } from '@/entities/folder/model/folderSchema';
 import styles from './FolderViewer.module.scss';
-import { ViewToggle } from '@/features/viewMode/ui/ViewToggle';
+import { ViewToggle } from '@features/viewMode/ui/ViewToggle';
 import { useAppDispatch } from '@shared/hooks/useRedux';
 import { setViewMode } from '@features/viewMode/model/viewModeSlice';
-import type { ViewSection } from '@/features/viewMode/model/viewMode.types';
+import type { ViewSection } from '@features/viewMode/model/viewMode.types';
 import { Box } from '@chakra-ui/react';
+import { FileCard } from '@entities/file/ui/FileCard';
 
 interface FileListViewerProps {
     filesArray: RootFolderType['files'];
@@ -41,8 +42,7 @@ export const FileListViewer = ({ filesArray, viewMode, section }: FileListViewer
                         }
                         key={file.id}
                     >
-                        {file.title}
-                        {/* <FolderCard key={file.id} folderData={file} /> */}
+                        <FileCard fileData={file} viewMode={viewMode ?? 'grid'} />
                     </li>
                 ))}
             </Box>

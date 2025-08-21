@@ -1,4 +1,4 @@
-import { FolderIconSmall } from '@/shared/assets/icons/FolderIconSmall';
+import { FolderIconSmall } from '@/shared/assets/icons/all/FolderIconSmall';
 import type { folderCardArgs } from '../types/folder.types';
 import styles from './FolderCard.module.scss';
 

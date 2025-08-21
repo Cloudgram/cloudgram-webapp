@@ -1,15 +1,22 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from './baseQuery';
-import type { CreateSessionPayload, SessionResponse } from '@/features/auth/model/auth.types';
-import type { UserType } from '@/entities/user/model/userSchema';
-import type { RootFolderType } from '@/entities/folder/model/folderSchema';
-import type { apiFolderArgs, createFolderArgs } from '@/entities/folder/types/folder.types';
-import type { ColorResponseType, ColorType } from '@/entities/colors/model/colorSchema';
+import type { CreateSessionPayload, SessionResponse } from '@features/auth/model/auth.types';
+import type { UserType } from '@entities/user/model/userSchema';
+import type { RootFolderType } from '@entities/folder/model/folderSchema';
+import type { apiFolderArgs, createFolderArgs } from '@entities/folder/types/folder.types';
+import type { ColorResponseType, ColorType } from '@entities/colors/model/colorSchema';
+import type {
+    FSItemsArgs,
+    FSItemsResponseType,
+    InitFileArgs,
+    InitFileResponse,
+} from '@entities/file/types/file.types';
+import type { FileType } from '@/entities/file/model/fileShema';
 
 export const appApi = createApi({
     reducerPath: 'appApi',
     baseQuery,
-    tagTypes: ['Folders'],
+    tagTypes: ['Folders', 'FS_Files'],
     endpoints: builder => ({
         createSession: builder.mutation<SessionResponse, CreateSessionPayload>({
             query: ({ secret }) => ({
@@ -57,7 +64,53 @@ export const appApi = createApi({
             invalidatesTags: ['Folders'],
         }),
 
-        // =========== Folders ===========
+        // =========== Files ===========
+
+        initFileUpload: builder.mutation<InitFileResponse, InitFileArgs>({
+            query: body => ({
+                url: '/file',
+                method: 'POST',
+                body,
+            }),
+        }),
+
+        uploadFilePreview: builder.mutation<void, { file_id: string; preview: Blob }>({
+            query: ({ file_id, preview }) => {
+                const formData = new FormData();
+                formData.append('preview', preview, 'preview.jpg');
+                return {
+                    url: `/file/${file_id}/preview`,
+                    method: 'POST',
+                    body: formData,
+                };
+            },
+        }),
+
+        uploadFileChunk: builder.mutation<void, { file_id: string; chunk: Blob }>({
+            query: ({ file_id, chunk }) => {
+                const formData = new FormData();
+                formData.append('chunk', chunk);
+
+                return {
+                    url: `/file/${file_id}/chunk`,
+                    method: 'POST',
+                    body: formData,
+                };
+            },
+        }),
+
+        getFilePreview: builder.query<string | null, { preview_id: string | null }>({
+            query: ({ preview_id }) => ({
+                url: `/file/${preview_id}`,
+                method: 'GET',
+                responseHandler: async response => {
+                    const blob = await response.blob();
+                    return URL.createObjectURL(blob);
+                },
+            }),
+        }),
+
+        // =========== Colors ===========
 
         getColors: builder.query<ColorType[], void>({
             query: () => ({
@@ -65,6 +118,21 @@ export const appApi = createApi({
                 method: 'GET',
             }),
             transformResponse: (response: ColorResponseType) => response.data,
+        }),
+
+        // =========== Filters ===========
+
+        getAllFiles: builder.query<FileType[], FSItemsArgs>({
+            query: args => {
+                const params = new URLSearchParams(args as Record<string, string>).toString();
+                console.log(params);
+                return {
+                    url: `/user/fs_items?${params}`,
+                    method: 'GET',
+                };
+            },
+            providesTags: () => [{ type: 'FS_Files' }],
+            transformResponse: (response: FSItemsResponseType) => response.data,
         }),
     }),
 });
@@ -76,6 +144,11 @@ export const {
     useGetFolderQuery,
     useCreateFolderMutation,
     useGetColorsQuery,
+    useInitFileUploadMutation,
+    useUploadFileChunkMutation,
+    useUploadFilePreviewMutation,
+    useGetFilePreviewQuery,
+    useGetAllFilesQuery,
     // useGetFsItemsQuery,
     // useInitFileUploadMutation,
     // useUploadFilePreviewMutation,

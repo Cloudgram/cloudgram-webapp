@@ -13,6 +13,7 @@
     &__folders {
         &__grid {
             display: grid;
+            height: 100%;
             grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
             gap: 20px;
             grid-auto-rows: auto;
@@ -29,6 +30,7 @@
     &__files {
         &__grid {
             display: grid;
+            height: 100%;
             grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
             gap: 20px;
             grid-auto-rows: auto;

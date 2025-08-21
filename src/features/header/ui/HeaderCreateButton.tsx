@@ -1,7 +1,7 @@
 import styles from './Header.module.scss';
 import { useRef, useState } from 'react';
-import { UploadIcon } from '@shared/assets/icons/UploadIcon';
-import { ActionMenu } from '@/features/header/ui/HeaderActionMenu';
+import { UploadIcon } from '@/shared/assets/icons/all/UploadIcon';
+import { HeaderActionMenu } from '@/features/header/ui/HeaderActionMenu';
 import { Button } from '@chakra-ui/react';
 import { useClickOutside } from '@/shared/hooks/useClickOutside';
 
@@ -30,7 +30,7 @@ export const HeaderCreateButton = () => {
                 <UploadIcon />
                 Create
             </Button>
-            <ActionMenu ref={actionMenuRef} isOpen={isActionMenuOpen} />
+            <HeaderActionMenu ref={actionMenuRef} isOpen={isActionMenuOpen} />
         </>
     );
 };

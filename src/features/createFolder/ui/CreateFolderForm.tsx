@@ -1,6 +1,6 @@
 import styles from './CreateFolder.module.scss';
 import { Box, Button, Input, InputGroup, Spinner } from '@chakra-ui/react';
-import { FolderIconSmall } from '@/shared/assets/icons/FolderIconSmall';
+import { FolderIconSmall } from '@/shared/assets/icons/all/FolderIconSmall';
 import { useCreateFolderForm } from '../model/useCreateFolderForm';
 
 export const CreateFolderForm = () => {

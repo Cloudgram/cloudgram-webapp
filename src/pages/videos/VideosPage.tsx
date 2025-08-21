@@ -1,7 +1,10 @@
+import { CategoryViewerWidget } from '@/widgets/CategoryViewer/CategoryViewerWidget';
+import styles from '../pages.module.scss';
+
 export const VideosPage = () => {
     return (
-        <section>
-            <h1>Videos Page</h1>
+        <section className={styles.pageSection}>
+            <CategoryViewerWidget />
         </section>
     );
 };

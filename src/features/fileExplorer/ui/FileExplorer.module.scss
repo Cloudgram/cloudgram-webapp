@@ -1,18 +1,44 @@
 @use "../../../shared/config/colors.scss" as colors;
 
 .fileExplorer {
-    &__grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-        gap: 20px;
-        grid-auto-rows: auto;
-        overflow-y: auto;
-    }
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 310px);
 
     &__list {
         display: flex;
         flex-direction: column;
         gap: 12px;
+        flex: 1; // растягивается по высоте
+        overflow-y: auto; // скролл только внутри
+        padding-right: 5px;
+
+        &::-webkit-scrollbar {
+            width: 6px;
+            margin-left: 10px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-button {
+            display: none;
+        }
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+        grid-auto-rows: max-content;
+        gap: 20px;
+        flex: 1;
+        overflow-y: auto;
     }
 
     &__item {

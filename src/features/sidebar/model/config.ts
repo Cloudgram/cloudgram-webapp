@@ -1,12 +1,12 @@
-import { PhotosIcon } from '@shared/assets/icons/PhotosIcon';
-import { VideosIcon } from '@shared/assets/icons/VideosIcon';
-import { DocumentsIcon } from '@shared/assets/icons/DocumentsIcon';
-import { SharedIcon } from '@shared/assets/icons/SharedIcon';
-import { AudioIcon } from '@shared/assets/icons/AudioIcon';
-import { HomeIcon } from '@shared/assets/icons/HomeIcon';
-import { WorkspacesIcon } from '@shared/assets/icons/WorkspacesIcon';
-import { TrashIcon } from '@shared/assets/icons/TrashIcon';
-import { SettingsIcon } from '@shared/assets/icons/SettingsIcon';
+import { PhotosIcon } from '@/shared/assets/icons/all/PhotosIcon';
+import { VideosIcon } from '@/shared/assets/icons/all/VideosIcon';
+import { DocumentsIcon } from '@/shared/assets/icons/all/DocumentsIcon';
+import { SharedIcon } from '@/shared/assets/icons/all/SharedIcon';
+import { AudioIcon } from '@/shared/assets/icons/all/AudioIcon';
+import { HomeIcon } from '@/shared/assets/icons/all/HomeIcon';
+import { WorkspacesIcon } from '@/shared/assets/icons/all/WorkspacesIcon';
+import { TrashIcon } from '@/shared/assets/icons/all/TrashIcon';
+import { SettingsIcon } from '@/shared/assets/icons/all/SettingsIcon';
 
 export const sidebarMainItems = [
     {

@@ -6,6 +6,7 @@ const defaultState: ViewModeState = {
     main: 'grid',
     folderViewerFolders: 'grid',
     folderViewerFiles: 'grid',
+    categoryViewerFiles: 'grid',
 };
 
 const initialState: ViewModeState = loadViewModeFromLS() || defaultState;

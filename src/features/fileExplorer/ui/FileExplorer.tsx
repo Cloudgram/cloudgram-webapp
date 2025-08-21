@@ -4,6 +4,7 @@ import { useGetFolderQuery } from '@/shared/api/appApi';
 import { Box, Spinner } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { queryStateHelper } from '@/shared/lib/queryStateHelper';
+import { FileCard } from '@/entities/file/ui/FileCard';
 
 interface FileExplorerProps {
     viewMode?: 'grid' | 'list';
@@ -15,7 +16,7 @@ export const FileExplorer = ({ viewMode }: FileExplorerProps) => {
     const loadingState = queryStateHelper(isLoading, isFetching);
 
     return (
-        <>
+        <div className={styles.fileExplorer}>
             {loadingState ? (
                 <Box
                     className={styles.folderViewer__spinnerBox}
@@ -51,8 +52,20 @@ export const FileExplorer = ({ viewMode }: FileExplorerProps) => {
                             />
                         </li>
                     ))}
+                    {folderData?.files.map(file => (
+                        <li
+                            className={
+                                viewMode === 'grid'
+                                    ? styles.fileExplorer__item
+                                    : styles.fileExplorer__item__list
+                            }
+                            key={file.id}
+                        >
+                            <FileCard fileData={file} viewMode={viewMode ?? 'grid'} />
+                        </li>
+                    ))}
                 </Box>
             )}
-        </>
+        </div>
     );
 };
