@@ -1,12 +1,14 @@
 @use "../../../shared/config/colors.scss" as colors;
 
 .categoryViewer {
-    height: calc(100vh - 120px);
+    height: calc(100vh - 190px);
     display: flex;
     flex-direction: column;
     gap: 40px;
 
     &__container {
+        display: flex;
+        flex-direction: column;
         height: 100%;
         box-sizing: border-box;
         overflow: hidden;
@@ -20,8 +22,8 @@
 
         &__title {
             font-size: 14px;
-            font-weight: 600;
-            color: colors.$color-text-default;
+            font-weight: 700;
+            font-family: "Inter", sans-serif;
         }
     }
 
@@ -33,12 +35,52 @@
             gap: 20px;
             grid-auto-rows: max-content;
             overflow-y: auto;
+            padding-right: 5px;
+
+            &::-webkit-scrollbar {
+                width: 6px;
+                margin-left: 10px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: rgba(0, 0, 0, 0.3);
+                border-radius: 10px;
+            }
+
+            &::-webkit-scrollbar-button {
+                display: none;
+            }
         }
 
         &__list {
             display: flex;
             flex-direction: column;
             gap: 12px;
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 5px;
+
+            &::-webkit-scrollbar {
+                width: 6px;
+                margin-left: 10px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: rgba(0, 0, 0, 0.3);
+                border-radius: 10px;
+            }
+
+            &::-webkit-scrollbar-button {
+                display: none;
+            }
         }
     }
 

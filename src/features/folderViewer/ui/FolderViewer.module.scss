@@ -71,4 +71,11 @@
         font-weight: 600;
         color: colors.$text-black-default;
     }
+
+    &__backButton {
+        width: fit-content;
+        padding-left: 0;
+        font-size: 14px;
+        font-weight: 600;
+    }
 }

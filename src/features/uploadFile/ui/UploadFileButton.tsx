@@ -73,8 +73,6 @@ export const UploadFileButton = () => {
                 justifyContent={'flex-start'}
                 variant={'ghost'}
                 onClick={() => document.getElementById('fileInput')?.click()}
-                paddingLeft={'10px'}
-                paddingRight={'10px'}
                 className={styles.fileUpload__button}
             >
                 <DocumentsIcon />

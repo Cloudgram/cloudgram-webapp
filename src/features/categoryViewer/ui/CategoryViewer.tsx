@@ -19,7 +19,7 @@ export const CategoryViewer = () => {
         <div className={styles.categoryViewer}>
             {loadingState ? (
                 <Box
-                    className={styles.folderViewer__spinnerBox}
+                    className={styles.categoryViViewer__spinnerBox}
                     height={'80vh'}
                     margin={'0 auto'}
                     display='flex'

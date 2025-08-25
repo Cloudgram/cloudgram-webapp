@@ -20,7 +20,6 @@
     &__section {
         display: flex;
         flex-direction: column;
-        gap: 4px;
         &_title {
             font-size: 14px;
             font-weight: 500;
@@ -35,6 +34,14 @@
         flex-direction: column;
         gap: 40px;
         max-width: 260px;
+
+        &__list {
+            gap: 4px;
+        }
+    }
+
+    &__lower {
+        gap: 4px;
     }
 
     &__button {

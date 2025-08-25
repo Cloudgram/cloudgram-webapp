@@ -3,11 +3,12 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { setCreateFolderModalState } from './createFolderModalSlice';
 import { useDispatch } from 'react-redux';
+import { toaster } from '@/shared/components/Toaster/toaster';
 
 export const useCreateFolderForm = () => {
     const dispatch = useDispatch();
     const { currentFolderID } = useParams<{ currentFolderID: string }>();
-    const [folderTitle, setFolderTitle] = useState<string>('');
+    const [folderTitle, setFolderTitle] = useState<string>();
     const [selectedColor, setSelectedColor] = useState<string>('folder_blue');
     const { data: user } = useGetUserQuery();
     const { data: colors, isLoading } = useGetColorsQuery();
@@ -20,8 +21,15 @@ export const useCreateFolderForm = () => {
     };
 
     const handleCreateFolder = () => {
-        triggerCreateFolder(folderProps);
-        dispatch(setCreateFolderModalState());
+        if (!folderTitle || folderTitle.length === 0) {
+            toaster.create({
+                title: 'The folder name is required',
+                type: 'error',
+            });
+        } else {
+            triggerCreateFolder(folderProps);
+            dispatch(setCreateFolderModalState());
+        }
     };
 
     const handleClose = () => {

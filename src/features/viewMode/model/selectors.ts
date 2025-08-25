@@ -1,5 +1,7 @@
 import type { RootState } from '@app/store/store';
-import type { ViewSection } from './viewMode.types';
+import type { ViewMode, ViewSection } from './viewMode.types';
 
-export const selectViewModeBySection = (section: ViewSection) => (state: RootState) =>
-    state.viewMode[section] ?? 'grid';
+export const selectViewModeBySection =
+    (section: ViewSection) =>
+    (state: RootState): ViewMode =>
+        state.viewMode[section] ?? 'grid';

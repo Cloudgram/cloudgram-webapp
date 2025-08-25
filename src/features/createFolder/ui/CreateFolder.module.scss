@@ -17,11 +17,17 @@
     }
 }
 
-.CreateFolderForm {
+.createFolderForm {
     display: flex;
     flex-direction: column;
     gap: 10px;
     width: 300px;
+
+    &__title {
+        font-size: 16px;
+        font-weight: 600;
+        font-family: "Inter", system-ui, sans-serif;
+    }
 
     &__buttons {
         display: flex;

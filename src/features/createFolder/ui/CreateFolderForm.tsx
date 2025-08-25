@@ -16,16 +16,16 @@ export const CreateFolderForm = () => {
     } = useCreateFolderForm();
 
     return (
-        <Box className={styles.CreateFolderForm}>
-            <h1>New Folder</h1>
+        <Box className={styles.createFolderForm}>
+            <h1 className={styles.createFolderForm__title}>New Folder</h1>
             {user?.subscriber &&
                 (isLoading ? (
                     <Spinner justifySelf='center' color='teal.500' size='md' />
                 ) : (
-                    <Box className={styles.CreateFolderForm__container}>
+                    <Box className={styles.createFolderForm__container}>
                         {colors?.map(colorItem => (
                             <Box
-                                className={styles.CreateFolderForm__container__color}
+                                className={styles.createFolderForm__container__color}
                                 key={colorItem.id}
                                 as='button'
                                 onClick={() => setSelectedColor(colorItem.id)}
@@ -56,7 +56,7 @@ export const CreateFolderForm = () => {
             >
                 <Input placeholder='Folder title' onChange={e => setFolderTitle(e.target.value)} />
             </InputGroup>
-            <Box className={styles.CreateFolderForm__buttons}>
+            <Box className={styles.createFolderForm__buttons}>
                 <Button onClick={handleClose} variant={'ghost'} colorPalette={'blue'}>
                     Cancel
                 </Button>

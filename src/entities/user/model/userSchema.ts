@@ -26,7 +26,7 @@ export const userSchema = z.object({
     id: z.string(),
     tg_id: z.number(),
     created_at: z.date(),
-    upload_sum: z.number(),
+    uploaded_sum: z.number(),
     referrals: z.array(referalShema).nullable(),
     username: z.string(),
     full_name: z.string(),

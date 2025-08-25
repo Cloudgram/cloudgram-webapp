@@ -7,6 +7,7 @@ import {
     officeExtensions,
     videoExtensions,
     wordExtensions,
+    pdfExtensions,
 } from '@/shared/lib/fileExtensions';
 
 const imageExts = imageExtensions as string[];
@@ -15,6 +16,7 @@ const audioExts = audioExtensions as string[];
 const wordExts = wordExtensions as string[];
 const excelExts = excelExtensions as string[];
 const officeExts = officeExtensions as string[];
+const pdfExts = pdfExtensions as string[];
 
 export const CATEGORY_FILTERS = {
     [ROUTES.PRIVATE.FILES.PHOTOS]: (file: FileType) => imageExts.includes(file.extension),
@@ -23,7 +25,8 @@ export const CATEGORY_FILTERS = {
     [ROUTES.PRIVATE.FILES.DOCUMENTS]: (file: FileType) =>
         wordExts.includes(file.extension) ||
         excelExts.includes(file.extension) ||
-        officeExts.includes(file.extension),
+        officeExts.includes(file.extension) ||
+        pdfExts.includes(file.extension),
     [ROUTES.PRIVATE.FILES.SHARED]: (file: FileType) =>
         ['public', 'limited', 'send'].includes(file.share),
 };

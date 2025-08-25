@@ -10,10 +10,6 @@ export const BackButton = () => {
 
     return (
         <Button
-            width='fit-content'
-            paddingLeft={0}
-            fontSize={'14px'}
-            fontWeight={600}
             variant='plain'
             onClick={handleBackClick}
             className={styles.folderViewer__backButton}
