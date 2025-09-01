@@ -1,5 +1,5 @@
 import { ROUTES } from '@/app/Router/routes.config';
-import type { FileType } from '@/entities/file/model/fileShema';
+import type { FileType } from '@/entities/file/model/fileSchema';
 import {
     audioExtensions,
     excelExtensions,

@@ -1,4 +1,4 @@
-import type { FileType } from '../model/fileShema';
+import type { FileType } from '../model/fileSchema';
 
 export type InitFileArgs = {
     file_name: string;

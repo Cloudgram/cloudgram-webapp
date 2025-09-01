@@ -11,7 +11,8 @@ import type {
     InitFileArgs,
     InitFileResponse,
 } from '@entities/file/types/file.types';
-import type { FileType } from '@/entities/file/model/fileShema';
+import type { FileType } from '@/entities/file/model/fileSchema';
+import type { SearchItemResponseType, SearchItemType } from '@/features/search/model/search.types';
 
 export const appApi = createApi({
     reducerPath: 'appApi',
@@ -134,6 +135,19 @@ export const appApi = createApi({
             providesTags: () => [{ type: 'FS_Files' }],
             transformResponse: (response: FSItemsResponseType) => response.data,
         }),
+
+        getSearchResults: builder.query<SearchItemType[], FSItemsArgs>({
+            query: args => {
+                const params = new URLSearchParams(args as Record<string, string>).toString();
+                console.log(params);
+                return {
+                    url: `/user/fs_items?${params}`,
+                    method: 'GET',
+                };
+            },
+            providesTags: () => [{ type: 'FS_Files' }],
+            transformResponse: (response: SearchItemResponseType) => response.data,
+        }),
     }),
 });
 
@@ -149,6 +163,7 @@ export const {
     useUploadFilePreviewMutation,
     useGetFilePreviewQuery,
     useGetAllFilesQuery,
+    useGetSearchResultsQuery,
     // useGetFsItemsQuery,
     // useInitFileUploadMutation,
     // useUploadFilePreviewMutation,

@@ -1,0 +1,58 @@
+.search-results {
+    position: absolute;
+    top: 42px;
+    padding: 30px 16px 24px 16px;
+    box-shadow: 0px 0px 10px 0px #0000001c;
+    border-radius: 8px;
+    width: 100%;
+    background-color: #fff;
+    z-index: 2;
+    animation: fadeIn 0.3s ease;
+    transition: all 0.3s;
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .result {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            .label-name {
+                font-size: 12px;
+                margin-top: 5px;
+            }
+        }
+    }
+
+    .items {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-left: 13px;
+
+        .item {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: capitalize;
+            cursor: pointer;
+        }
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
