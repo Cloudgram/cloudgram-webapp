@@ -12,13 +12,20 @@ export const SearchWidget = ({
     searchInputClassName,
     searchResultClassName,
 }: SearchWidgetProps) => {
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState('');
     const [focus, setFocus] = useState(false);
 
     return (
         <div className={styles.search__widget}>
-            <SearchInput className={searchInputClassName} value={value} setValue={setValue} setFocus={setFocus}/>
-            <SearchResult className={searchResultClassName} isOpen={focus && value.length > 1} />
-        </div> 
+            <SearchInput
+                className={searchInputClassName}
+                value={value}
+                setValue={setValue}
+                setFocus={setFocus}
+            />
+            {focus && value.length > 0 && (
+                <SearchResult className={searchResultClassName} value={value} />
+            )}
+        </div>
     );
 };

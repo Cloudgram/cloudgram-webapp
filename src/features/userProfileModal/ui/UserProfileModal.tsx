@@ -18,7 +18,7 @@ export const UserProfileModal = React.forwardRef<HTMLDivElement, UserProfileModa
         return (
             <Card.Root
                 ref={ref}
-                zIndex={2}
+                zIndex={4}
                 display={isOpen ? 'block' : 'none'}
                 className={styles.userProfileModal}
             >

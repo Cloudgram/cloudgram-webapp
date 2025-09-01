@@ -1,0 +1,84 @@
+.searchResults {
+    position: absolute;
+    top: 42px;
+    padding: 16px;
+    padding-top: 20px;
+    box-shadow: 0 0 10px 0 #0000001c;
+    border-radius: 8px;
+    width: 100%;
+    max-height: 500px;
+    overflow-y: auto;
+    background-color: #fff;
+    z-index: 2;
+    animation: fadeIn 0.3s ease;
+    transition: all 0.3s;
+
+    &__loading {
+        display: flex;
+        justify-content: center;
+    }
+
+    &::-webkit-scrollbar {
+        width: 6px;
+        margin-left: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-button {
+        display: none;
+    }
+
+    &__container {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    &__result {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    &__label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    &__labelName {
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    &__items {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-left: 13px;
+    }
+
+    &__item {
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: capitalize;
+        cursor: pointer;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
