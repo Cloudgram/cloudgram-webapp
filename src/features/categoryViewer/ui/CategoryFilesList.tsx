@@ -1,7 +1,7 @@
 import styles from './CategoryViewer.module.scss';
 import { FileCard } from '@entities/file/ui/FileCard';
 import type { ViewSection } from '@features/viewMode/model/viewMode.types';
-import type { FileType } from '@entities/file/model/fileShema';
+import type { FileType } from '@/entities/file/model/fileSchema';
 import { getFilteredCategoryFiles } from '../model/useFilterCategoryFiles';
 import { Box } from '@chakra-ui/react';
 import { ViewToggle } from '@features/viewMode/ui/ViewToggle';

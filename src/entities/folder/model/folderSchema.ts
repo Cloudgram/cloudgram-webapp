@@ -1,4 +1,4 @@
-import { fileSchema } from '@entities/file/model/fileShema';
+import { fileSchema } from '@/entities/file/model/fileSchema';
 import z from 'zod';
 
 const colorSchema = z.object({
