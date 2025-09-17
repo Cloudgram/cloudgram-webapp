@@ -1,3 +1,4 @@
+import type { createFolderMenuActions } from '@/features/folder/createFolderMenuActions';
 import type { FolderType } from '../model/folderSchema';
 
 export type apiFolderArgs = {
@@ -7,6 +8,8 @@ export type apiFolderArgs = {
 export type folderCardArgs = {
     folderData: FolderType;
     onDoubleClick?: () => void;
+    viewMode: 'grid' | 'list';
+    menuActions: ReturnType<typeof createFolderMenuActions>;
 };
 
 export type createFolderArgs = {
