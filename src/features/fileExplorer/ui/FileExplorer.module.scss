@@ -10,7 +10,7 @@
         flex-direction: column;
         gap: 12px;
         flex: 1; // растягивается по высоте
-        overflow-y: auto; // скролл только внутри
+        overflow-y: auto;
         padding-right: 5px;
 
         &::-webkit-scrollbar {
@@ -38,7 +38,7 @@
         grid-auto-rows: max-content;
         gap: 20px;
         flex: 1;
-        overflow-y: auto;
+        // overflow-y: auto;
     }
 
     &__item {

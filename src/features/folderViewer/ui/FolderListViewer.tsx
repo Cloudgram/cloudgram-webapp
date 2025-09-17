@@ -7,6 +7,7 @@ import { setViewMode } from '@features/viewMode/model/viewModeSlice';
 import type { ViewSection } from '@/features/viewMode/model/viewMode.types';
 import { useNavigate } from 'react-router-dom';
 import { Box } from '@chakra-ui/react';
+import { createFolderMenuActions } from '@/features/folder/createFolderMenuActions';
 
 interface FolderListViewerProps {
     foldersArray: RootFolderType['folders'];
@@ -45,9 +46,11 @@ export const FolderListViewer = ({ foldersArray, viewMode, section }: FolderList
                         key={folder.id}
                     >
                         <FolderCard
-                            onDoubleClick={() => navigate(`/folder/${folder.id}`)}
                             key={folder.id}
+                            onDoubleClick={() => navigate(`/folder/${folder.id}`)}
                             folderData={folder}
+                            viewMode={viewMode}
+                            menuActions={createFolderMenuActions(folder.id)}
                         />
                     </li>
                 ))}

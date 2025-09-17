@@ -5,6 +5,7 @@ import { Box, Spinner } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { queryStateHelper } from '@/shared/lib/queryStateHelper';
 import { FileCard } from '@/entities/file/ui/FileCard';
+import { createFolderMenuActions } from '@/features/folder/createFolderMenuActions';
 
 interface FileExplorerProps {
     viewMode?: 'grid' | 'list';
@@ -46,9 +47,11 @@ export const FileExplorer = ({ viewMode }: FileExplorerProps) => {
                             key={folder.id}
                         >
                             <FolderCard
-                                onDoubleClick={() => navigate(`/folder/${folder.id}`)}
                                 key={folder.id}
+                                onDoubleClick={() => navigate(`/folder/${folder.id}`)}
                                 folderData={folder}
+                                viewMode={viewMode ?? 'grid'}
+                                menuActions={createFolderMenuActions(folder.id)}
                             />
                         </li>
                     ))}
