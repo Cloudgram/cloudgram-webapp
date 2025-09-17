@@ -77,10 +77,3 @@ npm run build
 ```
 npm run preview
 ```
-
----
-
-## 👤 Разработчики
-
-> **Vega7** - Frontend Developer  
-> [Telegram](https://t.me/Vega781) • [Портфолио](https://vega781.github.io/Portfolio/)
