@@ -6,6 +6,17 @@
 
 ---
 
+## 🖼️ Превью интерфейса
+
+![](public/previews/CreateFolder.jpg)
+![](public/previews/HomePage.jpg)
+![](public/previews/ImgViewer.jpg)
+![](public/previews/Menu.jpg)
+![](public/previews/TileView.jpg)
+![](public/previews/Workspaces.jpg)
+
+---
+
 ## 🚀 Функциональность
 
 <!-- -   🌙 Переключение темы (светлая/тёмная) -->
